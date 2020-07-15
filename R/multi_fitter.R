@@ -1,0 +1,103 @@
+multi_fitter = function(time_col,
+                        intensity_col,
+                        data,
+                        strata_cols ,
+                        guess_y0,
+                        guess_r,
+                        guess_K,
+                        maxiter,
+                        nlin = FALSE,
+                        estimate_K = FALSE){
+  if (missing(data)) {
+    stop(gettextf("Missing 'data' argument"))
+  }
+  if (missing(intensity_col)) {
+    stop(gettextf("Missing 'intensity_col' argument"))
+  }
+  if (missing(time_col)) {
+    stop(gettextf("Missing 'time_col' argument"))
+  }
+  if (nlin==T & missing(guess_y0)) {
+    stop(gettextf("Missing 'guess_y0' value"))
+  }
+  if (nlin==T & missing(guess_r)) {
+    stop(gettextf("Missing 'guess_r' value"))
+  }
+  if (estimate_K == T & missing(guess_K)) {
+    stop(gettextf("Missing 'guess_K' value"))
+  }
+
+
+
+
+  box = data.frame()
+  strata_col = strata_cols
+  if(is.null(strata_col)){
+    data_uni=data %>%
+      dplyr::mutate(strata = "")
+    strata_col= "strata"
+  }else{
+    data_uni = data %>%
+      tidyr::unite(strata, strata_col, sep = "---")
+  }
+
+  STRATA = data_uni[["strata"]]
+  strata = as.character(unique(STRATA))
+
+  for(i in 1:length(strata)){
+    rowi = data_uni[["strata"]]==strata[i]
+    datai = data_uni[rowi,]
+
+    if(nlin == T & estimate_K == T ){
+      model = fit_nlin2(time = datai[[time_col]],
+                        y = datai[[intensity_col]],
+                        guess_y0 = guess_y0,
+                        guess_r = guess_r,
+                        guess_K = guess_K,
+                        maxiter=maxiter)
+    }
+    if(nlin == T & estimate_K == F ){
+      model = fit_nlin(time = datai[[time_col]],
+                                  y = datai[[intensity_col]],
+                                  guess_y0 = guess_y0,
+                                  guess_r = guess_r,
+                                  maxiter = maxiter)}
+
+    if(nlin == F & estimate_K == F){
+      model = fit_lin(time = datai[[time_col]],
+                                 y = datai[[intensity_col]])
+    }
+    if(nlin == F & estimate_K == T){
+      model = fit_lin(time = datai[[time_col]],
+                                 y = datai[[intensity_col]])
+      gettextf("'K' is not estimated when nlin = F. To estimate K, use nlin = T and estimate_K = T ")
+    }
+
+
+
+
+
+
+    lil_box = model$stats_all %>%
+      dplyr::mutate(strata = strata[i])
+
+
+    box = box %>%
+      dplyr::bind_rows(lil_box)
+
+  }
+  colnames = colnames(lil_box)[colnames(lil_box)!="strata"]
+
+  box2 = box %>%
+    dplyr::select("strata",colnames) %>%
+    tidyr::separate(strata,into = strata_col, sep = "---")
+
+  if(nlin == F & estimate_K == T){
+    message("'K' is not estimated when nlin = F. To estimate K, use nlin = T and estimate_K = T ")
+  }
+
+
+  return(box2)
+
+
+}

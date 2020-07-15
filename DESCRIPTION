@@ -1,0 +1,18 @@
+Package: epifitter
+Version: 0.1.0
+Type: Package
+Title: Analysis and simulation of plant disease progress curves
+Version: 0.1.0
+Author: Kaique S Alves; Emerson M Del Ponte
+Maintainer: Kaique Alves <kaique.alves@ufv.br>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+Authors@R: c(
+    person("Kaique", "Alves", , "kaique.alves@ufv.br", c("aut", "cre")),
+    person("Emerson", "Del Ponte", , role = "aut"))
+Depends: R (>= 3.2)
+Imports: deSolve, dplyr, stats, ggplot2, tidyr, DescTools, minpack.lm, magrittr, tibble
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Date: 2020-03-22 22:30:00 UTC

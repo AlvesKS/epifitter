@@ -5,7 +5,7 @@ multi_fitter = function(time_col,
                         guess_y0,
                         guess_r,
                         guess_K,
-                        maxiter,
+                        maxiter=500,
                         nlin = FALSE,
                         estimate_K = FALSE){
   if (missing(data)) {
@@ -31,6 +31,8 @@ multi_fitter = function(time_col,
 
 
   box = data.frame()
+  pred_box = data.frame()
+
   strata_col = strata_cols
   if(is.null(strata_col)){
     data_uni=data %>%
@@ -73,31 +75,40 @@ multi_fitter = function(time_col,
       gettextf("'K' is not estimated when nlin = F. To estimate K, use nlin = T and estimate_K = T ")
     }
 
+# Predictions
+    lil_pred_box= model$data %>%
+      dplyr::mutate(strata = strata[i])
+    pred_box = pred_box %>%
+      dplyr::bind_rows(lil_pred_box)
 
-
-
-
-
+#Parameters
     lil_box = model$stats_all %>%
       dplyr::mutate(strata = strata[i])
-
 
     box = box %>%
       dplyr::bind_rows(lil_box)
 
   }
   colnames = colnames(lil_box)[colnames(lil_box)!="strata"]
+  colnames_prbox = colnames(lil_pred_box)[colnames(lil_pred_box)!="strata"]
+
 
   box2 = box %>%
     dplyr::select("strata",colnames) %>%
     tidyr::separate(strata,into = strata_col, sep = "---")
 
+  pred_box2 = pred_box %>%
+    dplyr::select("strata",colnames_prbox) %>%
+    tidyr::separate(strata,into = strata_col, sep = "---")
   if(nlin == F & estimate_K == T){
     message("'K' is not estimated when nlin = F. To estimate K, use nlin = T and estimate_K = T ")
   }
 
 
-  return(box2)
+  a = list(Parameters = box2,
+           Data = pred_box2)
+
+  return(a)
 
 
 }

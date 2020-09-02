@@ -11,6 +11,7 @@ Authors@R: c(
     person("Emerson", "Del Ponte", , role = "aut"))
 Depends: R (>= 3.2)
 Imports: deSolve, dplyr, stats, ggplot2, knitr, tidyr, DescTools, minpack.lm, magrittr, tibble
+Suggests: rmarkdown, ggridges, cowplot
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

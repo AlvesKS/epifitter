@@ -1,4 +1,4 @@
-# *epifitter*: an R package for the analysis and simulation of plant disease progress curves <img width = 200px align = right src="man/figures/logo.png" />
+# *epifitter*: Analysis and simulation of plant disease progress curves <img width = 200px align = right src="man/figures/logo.png" />
 
 ## Introduction
 

@@ -1,6 +1,7 @@
 destination: docs
 template:
   params:
+    ganalytics: UA-177181576-1
     bootswatch: simplex
 home:
   title: An R package for analysis and simulation of plant disease progress curves

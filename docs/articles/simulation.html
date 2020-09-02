@@ -23,7 +23,13 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-177181576-1"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-177181576-1');
+</script>
 </head>
 <body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
@@ -136,11 +142,11 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">exp_model</span>)</pre></body></html></div>
 <pre><code>##   replicates time          y   random_y
 ## 1          1    0 0.01000000 0.01000000
-## 2          1    5 0.01252459 0.01000000
-## 3          1   10 0.01568619 0.01601970
-## 4          1   15 0.01964549 0.01865682
-## 5          1   20 0.02460372 0.03641447
-## 6          1   25 0.03081292 0.03172780</code></pre>
+## 2          1    5 0.01252459 0.01056449
+## 3          1   10 0.01568619 0.01137782
+## 4          1   15 0.01964549 0.02176880
+## 5          1   20 0.02460372 0.02219244
+## 6          1   25 0.03081292 0.02531524</code></pre>
 <p>The function returns a <code>data.frame</code> object with four columns. <code>replicates</code> indicate each respective replicate, in <code>time</code> we have the time steps, <code>y</code> contains the simulated values of disease intensity, and <code>random_y</code> contains values of disease intensity after inserting a variation.</p>
 <p>Use the <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a> package to build impressive graphics!</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">exp_plot</span> <span class="kw">=</span> <span class="no">exp_model</span> <span class="kw">%&gt;%</span>
@@ -155,7 +161,7 @@
     <span class="kw">x</span> <span class="kw">=</span> <span class="st">"Time"</span>
   )
 <span class="no">exp_plot</span></pre></body></html></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
 <p><img src="simulation_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
 <div id="the-monomolecular-model" class="section level3">
@@ -171,13 +177,13 @@
   <span class="kw">n</span> <span class="kw">=</span> <span class="fl">7</span>
 )
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">mono_model</span>)</pre></body></html></div>
-<pre><code>##   replicates time         y   random_y
-## 1          1    0 0.0100000 0.01156491
-## 2          1    5 0.2289861 0.27167077
-## 3          1   10 0.3995322 0.50238784
-## 4          1   15 0.5323535 0.56258105
-## 5          1   20 0.6357949 0.65631663
-## 6          1   25 0.7163551 0.72755178</code></pre>
+<pre><code>##   replicates time         y  random_y
+## 1          1    0 0.0100000 0.0100000
+## 2          1    5 0.2289861 0.2086627
+## 3          1   10 0.3995322 0.4525419
+## 4          1   15 0.5323535 0.5306048
+## 5          1   20 0.6357949 0.6604834
+## 6          1   25 0.7163551 0.7311493</code></pre>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">mono_plot</span> <span class="kw">=</span> <span class="no">mono_model</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">y</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">random_y</span>), <span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">"gray"</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">.1</span>) +
@@ -204,12 +210,12 @@
 )
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">logist_model</span>)</pre></body></html></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01067826
-## 2          1    5 0.01638216 0.01869812
-## 3          1   10 0.02672677 0.02502679
-## 4          1   15 0.04331509 0.02957396
-## 5          1   20 0.06946352 0.06367623
-## 6          1   25 0.10958806 0.11534622</code></pre>
+## 1          1    0 0.01000000 0.01000000
+## 2          1    5 0.01638216 0.01538859
+## 3          1   10 0.02672677 0.02760405
+## 4          1   15 0.04331509 0.04729072
+## 5          1   20 0.06946352 0.06429420
+## 6          1   25 0.10958806 0.14446616</code></pre>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">logist_plot</span> <span class="kw">=</span> <span class="no">logist_model</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">y</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">random_y</span>), <span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>,<span class="kw">color</span> <span class="kw">=</span> <span class="st">"gray"</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">.1</span>) +
@@ -236,12 +242,12 @@
 )
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">gomp_model</span>)</pre></body></html></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01053463
-## 2          1    5 0.03896283 0.03861749
-## 3          1   10 0.10158896 0.09000606
-## 4          1   15 0.19958740 0.22085870
-## 5          1   20 0.32122825 0.24191490
-## 6          1   25 0.44922018 0.36414896</code></pre>
+## 1          1    0 0.01000000 0.01000000
+## 2          1    5 0.03896283 0.04271029
+## 3          1   10 0.10158896 0.08219794
+## 4          1   15 0.19958740 0.20122909
+## 5          1   20 0.32122825 0.32189074
+## 6          1   25 0.44922018 0.49554319</code></pre>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">gomp_plot</span> <span class="kw">=</span> <span class="no">gomp_model</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">y</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">random_y</span>), <span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>,<span class="kw">color</span> <span class="kw">=</span> <span class="st">"gray"</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">.1</span>) +
@@ -264,7 +270,7 @@
           <span class="no">mono_plot</span>,
           <span class="no">logist_plot</span>,
           <span class="no">gomp_plot</span>)</pre></body></html></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
 <p><img src="simulation_files/figure-html/unnamed-chunk-10-1.png" width="768"></p>
 </div>
 </div>

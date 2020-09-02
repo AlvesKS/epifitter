@@ -1,4 +1,4 @@
-fit_nlin <- function(time, y, guess_y0, guess_r, maxiter = 50) {
+fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter = 50) {
 
   if (missing(y)) {
     stop(gettextf("Missing 'y' vector"))
@@ -6,12 +6,12 @@ fit_nlin <- function(time, y, guess_y0, guess_r, maxiter = 50) {
   if (missing(time)) {
     stop(gettextf("Missing 'time' vector"))
   }
-  if (missing(guess_y0)) {
-    stop(gettextf("Missing 'guess_y0' value"))
-  }
-  if (missing(guess_r)) {
-    stop(gettextf("Missing 'guess_r' value"))
-  }
+  # if (missing(starting_par)) {
+  #   stop(gettextf("Missing 'guess_y0' value"))
+  # }
+  # if (missing(guess_r)) {
+  #   stop(gettextf("Missing 'guess_r' value"))
+  # }
 
   epi <- data.frame(time, y)
   model  =
@@ -43,27 +43,31 @@ fit_nlin <- function(time, y, guess_y0, guess_r, maxiter = 50) {
     y = NULL
 
   result_exponential <- minpack.lm::nlsLM(y ~ y0 * exp(r * time),
-    start = list(y0 = guess_y0, r = guess_r),
+    start = starting_par,#list(y0 = guess_y0, r = guess_r),
     data = epi,
+    lower = c(-Inf, 0),
     control = nls.lm.control(maxiter = maxiter)
   )
 
   result_monomolecular <- minpack.lm::nlsLM(y ~ 1 - (1 - y0) * exp(-r * time),
-    start = list(y0 = guess_y0, r = guess_r),
+    start = starting_par,#list(y0 = guess_y0, r = guess_r),
     data = epi,
+    lower = c(-Inf, 0),
     control = nls.lm.control(maxiter = maxiter)
   )
 
   result_logistic <- minpack.lm::nlsLM(y ~ 1 / (1 + ((1 - y0) / y0) * exp(-r * time)),
-    start = list(y0 = guess_y0, r = guess_r),
+    start = starting_par,#list(y0 = guess_y0, r = guess_r),
     data = epi,
+    lower = c(-Inf, 0),
     control = nls.lm.control(maxiter = maxiter)
   )
 
 
   result_gompertz <- minpack.lm::nlsLM(y ~ 1 * exp(log(y0 / 1) * exp(-r * time)),
-    start = list(y0 = guess_y0, r = guess_r),
+    start =  starting_par,#list(y0 = guess_y0, r = guess_r),
     data = epi,
+    lower = c(-Inf, 0),
     control = nls.lm.control(maxiter = maxiter)
   )
 

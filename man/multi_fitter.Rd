@@ -9,11 +9,9 @@ Estimate model parameters for multiple disease progress curves
 multi_fitter(time_col,
              intensity_col,
              data,
-             strata_cols,
-             guess_y0,
-             guess_r,
-             guess_K,
-             maxiter,
+             strata_cols ,
+             starting_par = list(y0 = 0.01, r = 0.03, K =  0.8),
+             maxiter=500,
              nlin = FALSE,
              estimate_K = FALSE)
 }
@@ -31,15 +29,7 @@ Character name specifying the culumn for the disease intensity.
   \item{strata_cols}{
 Character name or vector specifying the culumns for stratification.
 }
-\item{guess_y0}{
-Starting value for initial inoculun parameter.
-}
-\item{guess_r}{
- Starting value for apparent infection rate parameter.
-}
-\item{guess_K}{
- starting value for Maximun disease intensity parameter. If you want to estmate K, please set \code{estimate_K = TRUE}
-}
+\item{starting_par}{Starting value for initial inoculun (y0) and apparent infection rate (r). Please informe in that especific order}
 \item{maxiter}{
  Maximun number of iterations. Only used if is \code{nlin = TRUE}
 }
@@ -86,8 +76,7 @@ multi_fitter(time_col = "time",
              intensity_col = "random_y",
              data = data,
              strata_col = c("fun","cultivar"),
-             guess_y0 = 0.01,
-             guess_r = 0.3,
+             starting_par = list(y0 = 0.01, r = 0.03),
              maxiter = 1024,
              nlin = FALSE,
              estimate_K = FALSE)

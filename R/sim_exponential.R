@@ -20,11 +20,11 @@ sim_exponential <- function(N = 10, dt = 1, y0 = 0.01, r, n, alpha = 0.2) {
 
   for (j in 1:n) {
     for (i in 1:length(time)) {
-      w[i] <- stats::rnorm(1, y[i], sd = alpha * y[i] * (1 - y[i]))
+      w[i] <- stats::rnorm(1, y[i], sd = alpha * y[i]) #* (1 - y[i]))
 
-      if (w[i] > 1) {
-        w[i] <- 0.999
-      }
+      # if (w[i] > 1) {
+      #   w[i] <- 0.999
+      # }
       if (w [i] < y0) {
         w[i] <- y0
       }

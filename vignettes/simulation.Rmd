@@ -1,0 +1,167 @@
+---
+title: "Simulating disease progress curves"
+author: "Kaique S Alves"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simulating disease progress curves}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+Use `epiffiter` to simulate disease progress curves (DPCs). You can simulate using the classic epidemiological models: Exponential, Monomolecular, Logistic, and Gompertz. 
+
+# Hands On
+
+## Packages
+
+Here are some packages we'll need. 
+
+```{r message=FALSE, warning=FALSE}
+library(epifitter)
+library(magrittr)
+library(ggplot2)
+library(cowplot)
+```
+
+## Simulating DPCs for different models
+### The exponential model
+
+Use the function `sim_exponential()` to simulate DPCs using the exponential model. The `N` defines the total time course of the epidemic.  Define `dt`, which is the time interval between disease intensity values. Define initial inoculum `y0` and the apparent infection rate `r`. The function allow you to simulate more than one value of disease intesity per time point, that is, replicates! So you need to define the number of replicates at `n`. The argument `alpha` is the variation parameter for the replicates. (see details at `?sim_exponential`).
+
+```{r}
+exp_model <- sim_exponential(
+  N = 100,
+  y0 = 0.01,
+  dt = 5,
+  r = 0.045,
+  alpha = 0.2,
+  n = 7
+)
+head(exp_model)
+```
+
+The function returns a `data.frame` object with four columns. `replicates` indicate each respective replicate, in `time` we have the time steps, `y` contains the simulated values of disease intensity, and `random_y` contains values of disease intensity after inserting a variation. 
+
+Use the [`ggplot2`](https://ggplot2.tidyverse.org/) package to build impressive graphics!
+
+
+```{r}
+exp_plot = exp_model %>%
+  ggplot(aes(time, y)) +
+  geom_jitter(aes(time, random_y), size = 3,color = "gray", width = .1) +
+  geom_line(size = 1) +
+  theme_minimal_hgrid() +
+  ylim(0,1)+
+  labs(
+    title = "Exponential",
+    y = "Disease intensity",
+    x = "Time"
+  )
+exp_plot
+```
+
+### The Monomolecular model
+
+For the other models is exactly the same pipeline.
+
+```{r}
+mono_model <- sim_monomolecular(
+  N = 100,
+  y0 = 0.01,
+  dt = 5,
+  r = 0.05,
+  alpha = 0.2,
+  n = 7
+)
+head(mono_model)
+```
+
+```{r}
+mono_plot = mono_model %>%
+  ggplot(aes(time, y)) +
+  geom_jitter(aes(time, random_y), size = 3, color = "gray", width = .1) +
+  geom_line(size = 1) +
+  theme_minimal_hgrid() +
+  labs(
+    title = "Monomolecular",
+    y = "Disease intensity",
+    x = "Time"
+  )
+mono_plot
+```
+
+### The Logistic model
+
+
+```{r}
+logist_model <- sim_logistic(
+  N = 100,
+  y0 = 0.01,
+  dt = 5,
+  r = 0.1,
+  alpha = 0.2,
+  n = 7
+)
+head(logist_model)
+```
+
+```{r}
+logist_plot = logist_model %>%
+  ggplot(aes(time, y)) +
+  geom_jitter(aes(time, random_y), size = 3,color = "gray", width = .1) +
+  geom_line(size = 1) +
+  theme_minimal_hgrid() +
+  labs(
+    title = "Logistic",
+    y = "Disease intensity",
+    x = "Time"
+  )
+logist_plot
+```
+
+### The Gompertz model
+
+
+```{r}
+gomp_model <- sim_gompertz(
+  N = 100,
+  y0 = 0.01,
+  dt = 5,
+  r = 0.07,
+  alpha = 0.2,
+  n = 7
+)
+head(gomp_model)
+```
+
+```{r}
+gomp_plot = gomp_model %>%
+  ggplot(aes(time, y)) +
+  geom_jitter(aes(time, random_y), size = 3,color = "gray", width = .1) +
+  geom_line(size = 1) +
+  theme_minimal_hgrid() +
+  labs(
+    title = "Gompertz",
+    y = "Disease intensity",
+    x = "Time"
+  )
+gomp_plot
+```
+
+## Combo
+
+Use the function `plot_grid()` from the [`cowplot`](https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html) package to gather all plots into a grid
+
+```{r fig.height=6, fig.width=8}
+plot_grid(exp_plot,
+          mono_plot,
+          logist_plot,
+          gomp_plot)
+```
+
+
+
+
+

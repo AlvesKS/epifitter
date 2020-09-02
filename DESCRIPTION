@@ -10,8 +10,12 @@ Authors@R: c(
     person("Kaique", "Alves", , "kaique.alves@ufv.br", c("aut", "cre")),
     person("Emerson", "Del Ponte", , role = "aut"))
 Depends: R (>= 3.2)
-Imports: deSolve, dplyr, stats, ggplot2, tidyr, DescTools, minpack.lm, magrittr, tibble
+Imports: deSolve, dplyr, stats, ggplot2, knitr, tidyr, DescTools, minpack.lm, magrittr, tibble
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+VignetteBuilder: knitr
 Date: 2020-03-22 22:30:00 UTC
+URL: https://github.com/AlvesKS/epifitter
+BugReports:https://github.com/AlvesKS/epifitter/issues
+X-schema.org-applicationCategory: Tools

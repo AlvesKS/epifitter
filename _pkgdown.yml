@@ -1,0 +1,7 @@
+destination: docs
+template:
+  params:
+    bootswatch: simplex
+home:
+  strip_header: true
+  title: An R package for analysis and simulation of plant disease progress curves

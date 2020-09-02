@@ -2,9 +2,7 @@ multi_fitter = function(time_col,
                         intensity_col,
                         data,
                         strata_cols ,
-                        guess_y0,
-                        guess_r,
-                        guess_K,
+                        starting_par = list(y0 = 0.01, r = 0.03, K =  0.8),
                         maxiter=500,
                         nlin = FALSE,
                         estimate_K = FALSE){
@@ -17,15 +15,15 @@ multi_fitter = function(time_col,
   if (missing(time_col)) {
     stop(gettextf("Missing 'time_col' argument"))
   }
-  if (nlin==T & missing(guess_y0)) {
-    stop(gettextf("Missing 'guess_y0' value"))
-  }
-  if (nlin==T & missing(guess_r)) {
-    stop(gettextf("Missing 'guess_r' value"))
-  }
-  if (estimate_K == T & missing(guess_K)) {
-    stop(gettextf("Missing 'guess_K' value"))
-  }
+  # if (nlin==T & missing(guess_y0)) {
+  #   stop(gettextf("Missing 'guess_y0' value"))
+  # }
+  # if (nlin==T & missing(guess_r)) {
+  #   stop(gettextf("Missing 'guess_r' value"))
+  # }
+  # if (estimate_K == T & missing(guess_K)) {
+  #   stop(gettextf("Missing 'guess_K' value"))
+  # }
 
 
 
@@ -53,17 +51,14 @@ multi_fitter = function(time_col,
     if(nlin == T & estimate_K == T ){
       model = fit_nlin2(time = datai[[time_col]],
                         y = datai[[intensity_col]],
-                        guess_y0 = guess_y0,
-                        guess_r = guess_r,
-                        guess_K = guess_K,
+                        starting_par = starting_par,
                         maxiter=maxiter)
     }
     if(nlin == T & estimate_K == F ){
       model = fit_nlin(time = datai[[time_col]],
-                                  y = datai[[intensity_col]],
-                                  guess_y0 = guess_y0,
-                                  guess_r = guess_r,
-                                  maxiter = maxiter)}
+                       y = datai[[intensity_col]],
+                       starting_par = starting_par[1:2],
+                       maxiter = maxiter)}
 
     if(nlin == F & estimate_K == F){
       model = fit_lin(time = datai[[time_col]],

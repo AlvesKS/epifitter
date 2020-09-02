@@ -1,0 +1,29 @@
+---
+title: "Fitting disease progress curves to classic epidemiological models"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fitting disease progress curves to classic epidemiological models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+# Introduction
+
+
+# Hands On
+
+
+## Data
+
+
+## Using `fin_lin()` 
+
+
+## Using `fin_nlin()`
+
+
+## Using `fin_nlin2()`
+
+
+## Using `multi_fitter`

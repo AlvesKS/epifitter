@@ -141,12 +141,12 @@
 )
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">exp_model</span>)</pre></body></html></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01164593
-## 2          1    5 0.01252459 0.01394770
-## 3          1   10 0.01568619 0.01208248
-## 4          1   15 0.01964549 0.02957591
-## 5          1   20 0.02460372 0.02565139
-## 6          1   25 0.03081292 0.02952158</code></pre>
+## 1          1    0 0.01000000 0.01000000
+## 2          1    5 0.01252459 0.01389141
+## 3          1   10 0.01568619 0.01582446
+## 4          1   15 0.01964549 0.01987844
+## 5          1   20 0.02460372 0.01696022
+## 6          1   25 0.03081292 0.03716165</code></pre>
 <p>The function returns a <code>data.frame</code> object with four columns. <code>replicates</code> indicate each respective replicate, in <code>time</code> we have the time steps, <code>y</code> contains the simulated values of disease intensity, and <code>random_y</code> contains values of disease intensity after inserting a variation.</p>
 <p>Use the <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a> package to build impressive graphics!</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">exp_plot</span> <span class="kw">=</span> <span class="no">exp_model</span> <span class="kw">%&gt;%</span>
@@ -177,13 +177,13 @@
   <span class="kw">n</span> <span class="kw">=</span> <span class="fl">7</span>
 )
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">mono_model</span>)</pre></body></html></div>
-<pre><code>##   replicates time         y  random_y
-## 1          1    0 0.0100000 0.0100000
-## 2          1    5 0.2289861 0.1715267
-## 3          1   10 0.3995322 0.4410548
-## 4          1   15 0.5323535 0.5177654
-## 5          1   20 0.6357949 0.5877692
-## 6          1   25 0.7163551 0.6863416</code></pre>
+<pre><code>##   replicates time         y   random_y
+## 1          1    0 0.0100000 0.01175541
+## 2          1    5 0.2289861 0.26938876
+## 3          1   10 0.3995322 0.46768475
+## 4          1   15 0.5323535 0.60372582
+## 5          1   20 0.6357949 0.69037453
+## 6          1   25 0.7163551 0.72352318</code></pre>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">mono_plot</span> <span class="kw">=</span> <span class="no">mono_model</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">y</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">random_y</span>), <span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">"gray"</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">.1</span>) +
@@ -210,12 +210,12 @@
 )
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">logist_model</span>)</pre></body></html></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01000000
-## 2          1    5 0.01638216 0.01794966
-## 3          1   10 0.02672677 0.01516309
-## 4          1   15 0.04331509 0.03821110
-## 5          1   20 0.06946352 0.07248385
-## 6          1   25 0.10958806 0.06684831</code></pre>
+## 1          1    0 0.01000000 0.01182410
+## 2          1    5 0.01638216 0.02243123
+## 3          1   10 0.02672677 0.03517020
+## 4          1   15 0.04331509 0.04566653
+## 5          1   20 0.06946352 0.07973668
+## 6          1   25 0.10958806 0.14630726</code></pre>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">logist_plot</span> <span class="kw">=</span> <span class="no">logist_model</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">y</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">random_y</span>), <span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>,<span class="kw">color</span> <span class="kw">=</span> <span class="st">"gray"</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">.1</span>) +
@@ -242,12 +242,12 @@
 )
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">gomp_model</span>)</pre></body></html></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01084500
-## 2          1    5 0.03896283 0.04457912
-## 3          1   10 0.10158896 0.12055135
-## 4          1   15 0.19958740 0.18258991
-## 5          1   20 0.32122825 0.36231030
-## 6          1   25 0.44922018 0.41759914</code></pre>
+## 1          1    0 0.01000000 0.01000000
+## 2          1    5 0.03896283 0.02781954
+## 3          1   10 0.10158896 0.17139308
+## 4          1   15 0.19958740 0.25500520
+## 5          1   20 0.32122825 0.29216068
+## 6          1   25 0.44922018 0.38142302</code></pre>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">gomp_plot</span> <span class="kw">=</span> <span class="no">gomp_model</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">y</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">time</span>, <span class="no">random_y</span>), <span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>,<span class="kw">color</span> <span class="kw">=</span> <span class="st">"gray"</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">.1</span>) +

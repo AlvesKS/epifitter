@@ -138,12 +138,12 @@
 )
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">dpc_data</span>)</pre></body></html></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01008471
-## 2          1    5 0.01638216 0.02003441
-## 3          1   10 0.02672677 0.02547233
-## 4          1   15 0.04331509 0.04460519
-## 5          1   20 0.06946352 0.08849958
-## 6          1   25 0.10958806 0.12452913</code></pre>
+## 1          1    0 0.01000000 0.01031702
+## 2          1    5 0.01638216 0.01859204
+## 3          1   10 0.02672677 0.03149177
+## 4          1   15 0.04331509 0.06702933
+## 5          1   20 0.06946352 0.06202469
+## 6          1   25 0.10958806 0.13625658</code></pre>
 </div>
 <div id="using-fit_lin-to-fit-dpcs-using-data-linearization" class="section level2">
 <h2 class="hasAnchor">
@@ -163,24 +163,24 @@
 ## 
 ## Stats:
 ##                  CCC r_squared    RSE
-## Logistic      0.9975    0.9950 0.2178
-## Gompertz      0.9769    0.9548 0.4787
-## Monomolecular 0.9343    0.8766 0.6383
-## Exponential   0.9110    0.8365 0.6032
+## Logistic      0.9981    0.9961 0.1904
+## Gompertz      0.9780    0.9570 0.4650
+## Monomolecular 0.9369    0.8813 0.6234
+## Exponential   0.9126    0.8393 0.5902
 ## 
 ##  Infection rate:
 ##                 Estimate  Std.error      Lower      Upper
-## Logistic      0.10057204 0.03468419 0.09939925 0.09939925
-## Gompertz      0.07214318 0.07622723 0.06956569 0.06956569
-## Monomolecular 0.05581883 0.10164278 0.05238196 0.05238196
-## Exponential   0.04475321 0.09604497 0.04150562 0.04150562
+## Logistic      0.09998100 0.03031572 0.09895593 0.09895593
+## Gompertz      0.07193012 0.07405092 0.06942622 0.06942622
+## Monomolecular 0.05572909 0.09927316 0.05237234 0.05237234
+## Exponential   0.04425191 0.09398650 0.04107393 0.04107393
 ## 
 ##  Initial inoculum:
 ##                    Estimate         Lower         Upper
-## Logistic       0.0099173808  9.266394e-03  0.0106136117
-## Gompertz       0.0000158818  2.633658e-06  0.0000744906
-## Monomolecular -1.9902384937 -2.655548e+00 -1.4460153406
-## Exponential    0.0299523831  2.477363e-02  0.0362137140</code></pre>
+## Logistic       1.032476e-02  9.730137e-03  1.095532e-02
+## Gompertz       1.843891e-05  3.307971e-06  8.134217e-05
+## Monomolecular -1.975330e+00 -2.620327e+00 -1.445246e+00
+## Exponential    3.104005e-02  2.577791e-02  3.737638e-02</code></pre>
 <div id="so-what" class="section level4">
 <h4 class="hasAnchor">
 <a href="#so-what" class="anchor"></a>So what?</h4>
@@ -191,10 +191,10 @@
 <pre><code>## # A tibble: 4 x 12
 ##   best_model model      r   r_se r_ci_lwr r_ci_upr r_squared   RSE   CCC
 ##        &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1          1 Logi~ 0.101  0.0347   0.0994   0.102      0.995 0.218 0.997
-## 2          2 Gomp~ 0.0721 0.0762   0.0696   0.0747     0.955 0.479 0.977
-## 3          3 Mono~ 0.0558 0.102    0.0524   0.0593     0.877 0.638 0.934
-## 4          4 Expo~ 0.0448 0.0960   0.0415   0.0480     0.836 0.603 0.911
+## 1          1 Logi~ 0.1000 0.0303   0.0990   0.101      0.996 0.190 0.998
+## 2          2 Gomp~ 0.0719 0.0741   0.0694   0.0744     0.957 0.465 0.978
+## 3          3 Mono~ 0.0557 0.0993   0.0524   0.0591     0.881 0.623 0.937
+## 4          4 Expo~ 0.0443 0.0940   0.0411   0.0474     0.839 0.590 0.913
 ## # ... with 3 more variables: y0 &lt;dbl&gt;, y0_ci_lwr &lt;dbl&gt;, y0_ci_upr &lt;dbl&gt;</code></pre>
 </div>
 <div id="predictions" class="section level4">
@@ -202,13 +202,13 @@
 <a href="#predictions" class="anchor"></a>Predictions</h4>
 <p>You can see the model prediction by calling the <code>data</code> using the <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> operator like above. In there you’ll find the data used for fitting (<code>y</code>) and prediction for each model (<code>predicted</code>). The column <code>linearized</code> contains the linearization of <code>y</code> for each model. And finally we have the residual in the column <code>residual</code>.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">f_lin</span>$<span class="no">data</span>)</pre></body></html></div>
-<pre><code>##   time          y       model linearized  predicted    residual
-## 1    0 0.01008471 Exponential  -4.596735 0.02995238 -0.01986767
-## 2    5 0.02003441 Exponential  -3.910304 0.03746379 -0.01742939
-## 3   10 0.02547233 Exponential  -3.670162 0.04685890 -0.02138657
-## 4   15 0.04460519 Exponential  -3.109905 0.05861010 -0.01400491
-## 5   20 0.08849958 Exponential  -2.424757 0.07330825  0.01519134
-## 6   25 0.12452913 Exponential  -2.083216 0.09169237  0.03283676</code></pre>
+<pre><code>##   time          y       model linearized  predicted     residual
+## 1    0 0.01031702 Exponential  -4.573961 0.03104005 -0.020723039
+## 2    5 0.01859204 Exponential  -3.985022 0.03872704 -0.020134996
+## 3   10 0.03149177 Exponential  -3.458029 0.04831768 -0.016825908
+## 4   15 0.06702933 Exponential  -2.702625 0.06028342  0.006745904
+## 5   20 0.06202469 Exponential  -2.780223 0.07521245 -0.013187752
+## 6   25 0.13625658 Exponential  -1.993216 0.09383860  0.042417980</code></pre>
 </div>
 <div id="plonting-using-the-function-plot_fit" class="section level3">
 <h3 class="hasAnchor">
@@ -228,7 +228,7 @@
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span>(<span class="no">f_lin</span>,
          <span class="kw">point_size</span> <span class="kw">=</span> <span class="fl">2</span>,
          <span class="kw">line_size</span> <span class="kw">=</span> <span class="fl">1</span>,
-         <span class="kw">model</span> <span class="kw">=</span> <span class="st">"Logistic"</span>) +
+         <span class="kw">models</span> <span class="kw">=</span> <span class="st">"Logistic"</span>) +
 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span>()+
 
@@ -255,24 +255,24 @@
 ## 
 ## Stats:
 ##                  CCC r_squared    RSE
-## Logistic      0.9978    0.9955 0.0266
-## Gompertz      0.9959    0.9929 0.0361
-## Monomolecular 0.9166    0.8695 0.1498
-## Exponential   0.8877    0.8254 0.1713
+## Logistic      0.9982    0.9964 0.0238
+## Gompertz      0.9958    0.9930 0.0363
+## Monomolecular 0.9162    0.8692 0.1499
+## Exponential   0.8893    0.8277 0.1701
 ## 
 ##  Infection rate:
 ##                 Estimate   Std.error      Lower      Upper
-## Logistic      0.10058231 0.001548623 0.09752152 0.09752152
-## Gompertz      0.07064066 0.001434476 0.06780547 0.06780547
-## Monomolecular 0.02363027 0.001097106 0.02146188 0.02146188
-## Exponential   0.01948411 0.001014018 0.01747994 0.01747994
+## Logistic      0.10039302 0.001384788 0.09765604 0.09765604
+## Gompertz      0.07031715 0.001429432 0.06749193 0.06749193
+## Monomolecular 0.02356200 0.001095458 0.02139688 0.02139688
+## Exponential   0.01951794 0.001007851 0.01752596 0.01752596
 ## 
 ##  Initial inoculum:
 ##                    Estimate    Std.error         Lower         Upper
-## Logistic       9.913190e-03 7.165949e-04  8.496869e-03  1.132951e-02
-## Gompertz       1.131564e-07 1.155784e-07 -1.152796e-07  3.415924e-07
-## Monomolecular -2.395385e-01 3.577497e-02 -3.102463e-01 -1.688307e-01
-## Exponential    1.789037e-01 1.477658e-02  1.496984e-01  2.081090e-01</code></pre>
+## Logistic       9.840342e-03 6.382900e-04  8.578787e-03  1.110190e-02
+## Gompertz       1.211655e-07 1.231948e-07 -1.223241e-07  3.646551e-07
+## Monomolecular -2.379647e-01 3.575995e-02 -3.086428e-01 -1.672866e-01
+## Exponential    1.783610e-01 1.464665e-02  1.494125e-01  2.073095e-01</code></pre>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span>(<span class="no">f_nlin</span>)+
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span>()</pre></body></html></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
@@ -297,27 +297,27 @@
 ## 
 ## Stats:
 ##                  CCC r_squared    RSE
-## Logistic      0.9978    0.9955 0.0213
-## Gompertz      0.9965    0.9936 0.0268
-## Monomolecular 0.9691    0.9400 0.0780
+## Logistic      0.9982    0.9964 0.0191
+## Gompertz      0.9966    0.9939 0.0264
+## Monomolecular 0.9695    0.9408 0.0774
 ## 
 ##  Infection rate:
-##                  Estimate   Std.error      Lower      Upper
-## Logistic      0.101174816 0.001913970 0.09739171 0.09739171
-## Gompertz      0.063712334 0.001738144 0.06027676 0.06027676
-## Monomolecular 0.004529155 0.001568964 0.00142798 0.00142798
+##                  Estimate   Std.error       Lower       Upper
+## Logistic      0.100376767 0.001699928 0.097016731 0.097016731
+## Gompertz      0.062764101 0.001686864 0.059429888 0.059429888
+## Monomolecular 0.004318702 0.001557153 0.001240871 0.001240871
 ## 
 ##  Initial inoculum:
 ##                    Estimate    Std.error         Lower         Upper
-## Logistic       7.759906e-03 6.473955e-04  6.480280e-03  9.039532e-03
-## Gompertz       2.642638e-06 2.247202e-06 -1.799126e-06  7.084401e-06
-## Monomolecular -1.095944e-01 1.830761e-02 -1.457808e-01 -7.340809e-02
+## Logistic       7.877001e-03 5.859176e-04  6.718890e-03  9.035111e-03
+## Gompertz       3.661695e-06 2.947223e-06 -2.163713e-06  9.487103e-06
+## Monomolecular -1.077944e-01 1.813315e-02 -1.436359e-01 -7.195285e-02
 ## 
 ##  Maximum disease intensity:
-##                Estimate   Std.error    Lower     Upper
-## Logistic      0.7979347 0.003860108 0.790305 0.8055645
-## Gompertz      0.8308642 0.006668196 0.817684 0.8440444
-## Monomolecular 2.6628753 0.771542308 1.137864 4.1878866</code></pre>
+##                Estimate   Std.error     Lower     Upper
+## Logistic      0.8000575 0.003500865 0.7931378 0.8069772
+## Gompertz      0.8344667 0.006708684 0.8212065 0.8477269
+## Monomolecular 2.7692824 0.841591083 1.1058145 4.4327504</code></pre>
 </div>
 <div id="using-multi_fitter" class="section level2">
 <h2 class="hasAnchor">
@@ -339,12 +339,12 @@
                             <span class="kw">.id</span> <span class="kw">=</span> <span class="st">"DPC"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">multi_epidemic</span>)</pre></body></html></div>
 <pre><code>##   DPC replicates time          y    random_y
-## 1   1          1    0 0.00100000 0.001645486
-## 2   1          1    5 0.01515505 0.010053438
-## 3   1          1   10 0.07878459 0.084534731
-## 4   1          1   15 0.21411521 0.267969593
-## 5   1          1   20 0.39266393 0.319749439
-## 6   1          1   25 0.56723412 0.600749185</code></pre>
+## 1   1          1    0 0.00100000 0.001050548
+## 2   1          1    5 0.01515505 0.007315233
+## 3   1          1   10 0.07878459 0.074262980
+## 4   1          1   15 0.21411521 0.136082945
+## 5   1          1   20 0.39266393 0.455707389
+## 6   1          1   25 0.56723412 0.645078397</code></pre>
 </div>
 <div id="multi-fitting" class="section level3">
 <h3 class="hasAnchor">
@@ -363,29 +363,29 @@
 
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">multi_fit</span>$<span class="no">Parameters</span>)</pre></body></html></div>
-<pre><code>##   DPC best_model         model          r      r_se   r_ci_lwr   r_ci_upr
-## 1   1          1      Gompertz 0.10361075 0.1052947 0.09762890 0.10959261
-## 2   1          2      Logistic 0.16218941 0.2515036 0.14790133 0.17647749
-## 3   1          3 Monomolecular 0.07533319 0.1308134 0.06790160 0.08276478
-## 4   1          4   Exponential 0.08685622 0.3083560 0.06933832 0.10437412
-## 5   2          1      Gompertz 0.12110745 0.0805110 0.11653357 0.12568133
-## 6   2          2 Monomolecular 0.09467656 0.1136408 0.08822055 0.10113256
-##   r_squared       RSE       CCC            y0     y0_ci_lwr    y0_ci_upr
-## 1 0.9603281 0.4017788 0.9797626  0.0006385790  0.0001129235  0.002595460
-## 2 0.9122555 0.9596766 0.9541147  0.0095755562  0.0058000037  0.015769847
-## 3 0.8923693 0.4991520 0.9431238 -0.9430202225 -1.5268916506 -0.494059939
-## 4 0.6648257 1.1766114 0.7986730  0.0187853798  0.0101120490  0.034898021
-## 5 0.9826293 0.3072104 0.9912385  0.0008916501  0.0002599506  0.002544311
-## 6 0.9455109 0.4336255 0.9719924 -1.0957027886 -1.6330507405 -0.668015777</code></pre>
+<pre><code>##   DPC best_model         model          r       r_se   r_ci_lwr   r_ci_upr
+## 1   1          1      Gompertz 0.09800471 0.10610049 0.09197707 0.10403234
+## 2   1          2 Monomolecular 0.07037473 0.10728458 0.06427982 0.07646963
+## 3   1          3      Logistic 0.15574904 0.29305701 0.13910029 0.17239780
+## 4   1          4   Exponential 0.08537431 0.32632860 0.06683538 0.10391325
+## 5   2          1      Gompertz 0.12488961 0.08759366 0.11991336 0.12986586
+## 6   2          2 Monomolecular 0.09891079 0.11770602 0.09222384 0.10559774
+##   r_squared       RSE       CCC           y0     y0_ci_lwr    y0_ci_upr
+## 1 0.9552180 0.4048537 0.9770962  0.002368252  0.0005633820  0.007557173
+## 2 0.9149457 0.4093719 0.9555839 -0.661982527 -1.0616334646 -0.339804562
+## 3 0.8759510 1.1182343 0.9338741  0.012271436  0.0068491638  0.021891733
+## 4 0.6311507 1.2451906 0.7738717  0.020648296  0.0107207652  0.039768817
+## 5 0.9807030 0.3342361 0.9902575  0.001106984  0.0002989121  0.003319003
+## 6 0.9463907 0.4491375 0.9724571 -1.091670401 -1.6495305529 -0.651268019</code></pre>
 <p>You can also see the data calling <code>Data</code>.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">multi_fit</span>$<span class="no">Data</span>)</pre></body></html></div>
 <pre><code>##   DPC time           y       model linearized  predicted    residual
-## 1   1    0 0.001645486 Exponential -6.4097197 0.01878538 -0.01713989
-## 2   1    5 0.010053438 Exponential -4.5998406 0.02900186 -0.01894842
-## 3   1   10 0.084534731 Exponential -2.4705928 0.04477460  0.03976013
-## 4   1   15 0.267969593 Exponential -1.3168818 0.06912539  0.19884420
-## 5   1   20 0.319749439 Exponential -1.1402176 0.10671943  0.21303001
-## 6   1   25 0.600749185 Exponential -0.5095778 0.16475909  0.43599010</code></pre>
+## 1   1    0 0.001050548 Exponential -6.8584429 0.02064830 -0.01959775
+## 2   1    5 0.007315233 Exponential -4.9177964 0.03164260 -0.02432737
+## 3   1   10 0.074262980 Exponential -2.6001427 0.04849089  0.02577209
+## 4   1   15 0.136082945 Exponential -1.9944907 0.07431015  0.06177280
+## 5   1   20 0.455707389 Exponential -0.7859044 0.11387702  0.34183037
+## 6   1   25 0.645078397 Exponential -0.4383834 0.17451150  0.47056689</code></pre>
 <p>If you rather use nonlinear regression, set <code>TRUE</code> in the <code>nlim</code> argument.</p>
 <div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">multi_fit2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/multi_fitter.html">multi_fitter</a></span>(<span class="kw">time_col</span> <span class="kw">=</span> <span class="st">"time"</span>,
                             <span class="kw">intensity_col</span> <span class="kw">=</span> <span class="st">"random_y"</span>,
@@ -400,29 +400,35 @@
 
 ## Warning in log(y0/1): NaNs produzidos
 
+## Warning in log(y0/1): NaNs produzidos
+
+## Warning in log(y0/1): NaNs produzidos
+
+## Warning in log(y0/1): NaNs produzidos
+
 ## Warning in log(y0/1): NaNs produzidos</code></pre>
 <div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">multi_fit2</span>$<span class="no">Parameters</span>)</pre></body></html></div>
-<pre><code>##   DPC         model            y0        y0_se          r        r_se df
-## 1   1      Gompertz  0.0013120428 0.0009961411 0.09841152 0.004886901 50
-## 2   1      Logistic  0.0329268101 0.0067716109 0.14142719 0.008430246 50
-## 3   1 Monomolecular -0.1807212651 0.0457272040 0.04270230 0.002725472 50
-## 4   1   Exponential  0.2281049579 0.0292245484 0.02758454 0.002654827 50
-## 5   2      Logistic  0.0262269832 0.0042860582 0.17641385 0.007811866 50
-## 6   2      Gompertz  0.0006622596 0.0004884337 0.11973770 0.005029057 50
+<pre><code>##   DPC         model           y0        y0_se          r        r_se df
+## 1   1      Gompertz  0.001296104 0.0010449015 0.10432432 0.005483153 50
+## 2   1      Logistic  0.033273195 0.0073210622 0.14977957 0.009582405 50
+## 3   1 Monomolecular -0.174783376 0.0454597891 0.04497860 0.002856953 50
+## 4   1   Exponential  0.248422333 0.0319258360 0.02610245 0.002689828 50
+## 5   2      Gompertz  0.001541144 0.0009968429 0.12248049 0.005356832 50
+## 6   2      Logistic  0.034609149 0.0064831980 0.17494019 0.009646537 50
 ##         CCC r_squared        RSE     y0_ci_lwr    y0_ci_upr   r_ci_lwr
-## 1 0.9890064 0.9783134 0.05650396 -0.0006887654  0.003312851 0.08859589
-## 2 0.9853736 0.9730337 0.06496266  0.0193256292  0.046527991 0.12449454
-## 3 0.9465223 0.9117200 0.11861283 -0.2725670574 -0.088875473 0.03722803
-## 4 0.8632749 0.7877935 0.18120898  0.1694057250  0.286804191 0.02225216
-## 5 0.9937110 0.9881220 0.04343323  0.0176181820  0.034835784 0.16072325
-## 6 0.9936897 0.9875053 0.04355532 -0.0003187883  0.001643308 0.10963654
+## 1 0.9883460 0.9769823 0.05824205 -0.0008026427  0.003394850 0.09331108
+## 2 0.9840874 0.9712168 0.06779563  0.0185684089  0.047977981 0.13053275
+## 3 0.9484335 0.9135407 0.11640121 -0.2660920496 -0.083474702 0.03924024
+## 4 0.8436240 0.7597141 0.19148045  0.1842974042  0.312547262 0.02069978
+## 5 0.9931240 0.9864008 0.04485695 -0.0004610733  0.003543362 0.11172097
+## 6 0.9898858 0.9816340 0.05411253  0.0215872624  0.047631035 0.15556455
 ##     r_ci_upr best_model
-## 1 0.10822715          1
-## 2 0.15835983          2
-## 3 0.04817657          3
-## 4 0.03291692          4
-## 5 0.19210444          1
-## 6 0.12983886          2</code></pre>
+## 1 0.11533755          1
+## 2 0.16902640          2
+## 3 0.05071696          3
+## 4 0.03150513          4
+## 5 0.13324000          1
+## 6 0.19431583          2</code></pre>
 </div>
 <div id="estimate-k" class="section level3">
 <h3 class="hasAnchor">
@@ -449,29 +455,33 @@
 
 ## Warning in log(y0/K): NaNs produzidos
 
+## Warning in log(y0/K): NaNs produzidos
+
+## Warning in log(y0/K): NaNs produzidos
+
 ## Warning in log(y0/K): NaNs produzidos</code></pre>
 <div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">multi_fit_K</span>$<span class="no">Parameters</span>)</pre></body></html></div>
 <pre><code>##   DPC         model            y0        y0_se          r        r_se         K
-## 1   1      Gompertz  0.0012131987 0.0011819770 0.09918505 0.007551252 0.9971403
-## 2   1      Logistic  0.0251541931 0.0064722454 0.15732201 0.011822804 0.9593950
-## 3   1 Monomolecular -0.1180844873 0.0354138221 0.01999143 0.004309417 1.5682183
-## 4   2      Logistic  0.0230899490 0.0042487104 0.18474147 0.009409985 0.9813764
-## 5   2      Gompertz  0.0008362643 0.0006824139 0.11739115 0.006538385 1.0069187
-## 6   2 Monomolecular -0.1248729337 0.0373975998 0.03079465 0.004554713 1.2994074
+## 1   1      Gompertz  0.0005698342 0.0006781808 0.11213703 0.008623058 0.9766553
+## 2   1      Logistic  0.0226307761 0.0062503894 0.17367817 0.013433391 0.9481202
+## 3   1 Monomolecular -0.1217808332 0.0380608030 0.02501109 0.004681090 1.3868889
+## 4   2      Gompertz  0.0014281111 0.0010873922 0.12342920 0.007089167 0.9974371
+## 5   2      Logistic  0.0300047128 0.0063903701 0.18563449 0.011819339 0.9773550
+## 6   2 Monomolecular -0.1263491638 0.0366498005 0.03599318 0.004569167 1.2224396
 ##         K_se df       CCC r_squared        RSE     y0_ci_lwr    y0_ci_upr
-## 1 0.02089467 49 0.9890017 0.9783188 0.05706704 -0.0011620731  0.003588470
-## 2 0.01717488 49 0.9864088 0.9745423 0.06273682  0.0121477291  0.038160657
-## 3 0.21100950 49 0.9719534 0.9454370 0.09050401 -0.1892512272 -0.046917747
-## 4 0.00999181 49 0.9940443 0.9884729 0.04245119  0.0145518458  0.031628052
-## 5 0.01270645 49 0.9937491 0.9875494 0.04385782 -0.0005350979  0.002207626
-## 6 0.09579767 49 0.9717797 0.9451085 0.09192244 -0.2000262241 -0.049719643
+## 1 0.01808597 49 0.9886055 0.9774418 0.05796747 -0.0007930212  0.001932690
+## 2 0.01567768 49 0.9862033 0.9739695 0.06301300  0.0100701483  0.035191404
+## 3 0.14565885 49 0.9684404 0.9388119 0.09546504 -0.1982668804 -0.045294786
+## 4 0.01214786 49 0.9931213 0.9864084 0.04529222 -0.0007570854  0.003613308
+## 5 0.01203870 49 0.9903700 0.9822796 0.05294823  0.0171627833  0.042846642
+## 6 0.07016895 49 0.9732815 0.9479535 0.08856646 -0.1999996953 -0.052698632
 ##     r_ci_lwr   r_ci_upr  K_ci_lwr  K_ci_upr best_model
-## 1 0.08401024 0.11435986 0.9551509 1.0391297          1
-## 2 0.13356320 0.18108082 0.9248808 0.9939093          2
-## 3 0.01133133 0.02865152 1.1441789 1.9922578          3
-## 4 0.16583140 0.20365154 0.9612971 1.0014557          1
-## 5 0.10425178 0.13053053 0.9813842 1.0324533          2
-## 6 0.02164161 0.03994769 1.1068948 1.4919200          3</code></pre>
+## 1 0.09480834 0.12946571 0.9403102 1.0130005          1
+## 2 0.14668276 0.20067358 0.9166148 0.9796257          2
+## 3 0.01560409 0.03441809 1.0941765 1.6796013          3
+## 4 0.10918298 0.13767541 0.9730251 1.0218492          1
+## 5 0.16188264 0.20938635 0.9531623 1.0015477          2
+## 6 0.02681110 0.04517527 1.0814298 1.3634493          3</code></pre>
 </div>
 </div>
 <div id="make-graphics-to-compare-curves-and-parameters" class="section level2">

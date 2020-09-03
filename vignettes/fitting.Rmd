@@ -99,7 +99,7 @@ You can also select the model(s) you want to plot in the argument `models`. Here
 plot_fit(f_lin,
          point_size = 2, 
          line_size = 1,
-         model = "Logistic") +
+         models = "Logistic") +
   
   theme_minimal()+
   

@@ -5,3 +5,5 @@ template:
     bootswatch: simplex
 home:
   title: An R package for analysis and simulation of plant disease progress curves
+  description: >
+    The epifitter is a user-friendly R package for conducting all sorts of analysis of plant disease progress data.

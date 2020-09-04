@@ -10,14 +10,14 @@ vignette: >
 ---
 # Introduction
 
-Use `epifitter` to fit the classic epidemiological models, *Exponential*, *Monomolecular*, *Logistic*, *Gompertz*, to your disease progress curves (DPCs). This package is optimized to fit theses models using data linearization approach using the function `fit_lin` and nonlinear regression using the functions `fit_nlin` and `fit_nlin2`. And if you have tons of DPCs in your dataset, I would recommend to you to use the `multi_fitter()` function, which can fit all theses model to each of your DPCs.
+Use `epifitter` to fit the classic epidemiological models, *Exponential*, *Monomolecular*, *Logistic*, *Gompertz*, to your disease progress curves (DPCs). This package is optimized to fit theses models using data linearization approach with the function `fit_lin()` and nonlinear regression with the functions `fit_nlin()` and `fit_nlin2()`. And if you have tons of DPCs in your dataset, I would recommend to you to use the `multi_fitter()` function, which can fit all theses model to each of your DPCs.
 
 In this vignette I will demonstrate the main features about these functions, using them in some simulated data. I hope you appreciate it. Have fun!
 
 # Hands on
 ## Packages
 
-First we have to load some packages. If you don't have any of theses, please install it with the function `install.packages()`.
+First we have to load some packages. If you don't have any of theses, you can install it with the function `install.packages()`.
 
 ```{r message=FALSE, warning=FALSE}
 library(epifitter)
@@ -28,7 +28,7 @@ library(dplyr)
 
 ## Data
 
-To demonstrate the fitting procedure, first we need some data. Let's use the function `sim_logistic` to do that. You can check on `?sim_logistic` to see details about this function.
+To demonstrate the fitting procedure, first we need some data. Let's use the function `sim_logistic()` to do that. You can check on `?sim_logistic` to see details about this function.
 
 ```{r}
 dpc_data <- sim_logistic(
@@ -47,7 +47,7 @@ head(dpc_data)
 The `fit_lin()` function fits DPCs to classic epidemiological models using linearization of the disease intensity. To use this function you need to provide the following arguments: 
  
 * `time`: A vector containing time steps of the DPCs.
-* `y`: A vector with the disease intensity data.
+* `y`: A vector with the disease intensity data as proportion (0 < y < 1).
 
 In our data `dpc_data` we can call these vectors using the `$` operator, like bellow:
 
@@ -58,11 +58,12 @@ f_lin
 ```
 
 #### So what?
-Note the first part of the output we have the `Stats` for each model. In this section are shown the Lin's concordance correlation coefficient `CCC` (Lin 2000) for each, the coefficient of determination `r_squared` (R<sup>2</sup>) and the residual standard deviation `RSE`. In this output the models are sorted by from the higher `CCC` to the lower `CCC`, there is, from the more accurate to the less accurate model. In our case the more accurate model is the *Logistic* model. 
 
-Right above is presented the sections `infection rate` and `Initial inoculum` . There are presented the estimated values for each models and their associated related statistics. They are also sorted by `CCC`.  
+Note the first part of the output we have the `Stats` for each model. In this section are shown the Lin's concordance correlation coefficient `CCC` (Lin 2000), the coefficient of determination `r_squared` (R<sup>2</sup>), and the residual standard deviation `RSE` for each model. In this output the models are sorted from the higher to the lower `CCC`, that is, from the more accurate to the less accurate model. In our case the more accurate model is the *Logistic* model. 
 
-If you want to give a close look at the parameters you can call the `stats_all` using the `$` operator.
+Right above is presented the sections `infection rate` and `Initial inoculum`. In these sections are presented the estimated values for each models and their associated related statistics. They are also sorted by the `CCC`.  
+
+If you want to give a closer look at the parameters you can call the `stats_all` using the `$` operator.
 
 ```{r}
 head(f_lin$stats_all)
@@ -71,16 +72,16 @@ head(f_lin$stats_all)
 
 #### Predictions
 
-You can see the model prediction by calling the `data` using the `$` operator like above. In there you'll find the data used for fitting (`y`) and prediction for each model (`predicted`). The column `linearized` contains the linearization of `y` for each model. And finally we have the residual in the column `residual`. 
+You can see the model prediction by calling the `data` using the `$` operator like above. In there you will find the data used for fitting (`y`) and prediction for each model (`predicted`). The column `linearized` contains the linearization of `y` for each respective model. And finally we have the residual in the column `residual`. 
 
 ```{r}
 head(f_lin$data)
 ```
 
+
 ### Plonting using the function `plot_fit()`
 
 Using the function `plot_fit()` you create a panel with the predictions for each model. You can also add some features of the `ggplot2` arsenal like themes and axis labels.
-
 
 ```{r}
 plot_fit(f_lin,
@@ -92,6 +93,8 @@ plot_fit(f_lin,
   labs(x = "Time",
        y = "Disease intensity")
 ```
+
+
 
 You can also select the model(s) you want to plot in the argument `models`. Here I selected just the *Logistic* model. 
 
@@ -107,13 +110,15 @@ plot_fit(f_lin,
        y = "Disease intensity")
 ```
 
+
+
 ## Using `fit_nlin()`
 
-The `fit_nlin()` offers the possibility to fit models using nonlinear regression using the Levenberg-Marquardt algorithm. It works like `fit_lin()`, you can modify the starting values for the parameter `y0` and `r` in the `starting_par` argument. The output interpretation is analogous to the `fit_lin()`.
+The `fit_nlin()` offers the possibility to fit models using nonlinear regression using the Levenberg-Marquardt algorithm. It works like `fit_lin()`. You can modify the starting values for the parameter `y0` and `r` in the `starting_par` argument. The output interpretation is analogous to the `fit_lin()`.
 
-> NOTE: If you encounter messages saying "matrix at initial parameter estimates", try to modify the starting values for the parameters, that might solve the problem. 
+> NOTE: If you encounter error messages saying "matrix at initial parameter estimates", try to modify the starting values for the parameters, that might solve the problem. 
 
-`Plot_fit` also works for this function output.
+
 
 ```{r message=FALSE, warning=FALSE}
 f_nlin <- fit_nlin(time = dpc_data$time,
@@ -124,16 +129,19 @@ f_nlin
 ```
 
 
+`plot_fit` also works for this function output.
+
 ```{r}
 plot_fit(f_nlin)+
   theme_minimal()
 ```
 
+
 ## Using `fit_nlin2()`
 
-It is not always that a DPC reaches the maximum 100% intensity. When this does happens we often wont to estimate this value of maximum disease intensity and we usually denote it as `K`. Using the function `fin_lin2` we can fit the models and estimate the maximum disease intensity for your DPCs
+It is not always that a DPC reaches the maximum 100% intensity. When this does happens we often want to estimate this value of maximum disease intensity and we usually denote it as `K`. Using the function `fin_lin2` we can fit the models and estimate the maximum disease intensity for your DPCs
 
-Let's modify our data to have a maximum disease intensity of 0.8 (80%). We do that just multiplying the data to 0.8.
+Let's modify our data to have a maximum disease intensity of about 0.8 (80%). A simple way to do that is just multiplying the data to 0.8.
 
 
 ```{r}
@@ -143,10 +151,10 @@ dpc_data2 = dpc_data %>%
 
 Now we just put the data into the `fit_nlin2()` function. Here you can modify the stating parameter as well.
 
-> NOTE: The exponential model is left aside here, becouse it doesn't have a maximum asymptote. 
+> NOTE: The exponential model is left aside here, because it doesn't have a maximum asymptote. 
 
 
-See that the estimated value of `K` is just what we were expecting 0.8!
+See that the estimated value of `K` is just what we were expecting, 0.8!
 
 ```{r message=FALSE, warning=FALSE}
 f_nlin2 <- fit_nlin2(time = dpc_data2$time,
@@ -154,15 +162,17 @@ f_nlin2 <- fit_nlin2(time = dpc_data2$time,
 f_nlin2
 ```
 
+
+
 ## Using `multi_fitter`
 
-Okay, now that we saw how to fit models to single epidemics, we are ready to see how to do it for more the one DPC. The `epifitter` also offers the option to you fit the models to various DPCs using the function `multi_fitter()`. You just need to put all your DPC data into a single `data.frame` and identify each one with strata columns.
+Okay, now that we saw how to fit models to single epidemics, we are ready to see how to do it for more the one DPC. The `epifitter` also offers the option to you to fit the models to various DPCs using the function `multi_fitter()`. You just need to put all your DPC data into a single `data.frame` and identify each one with strata columns.
 
 ### Data
 
-Here I will create a `data.frame` containing three DPCs. Note that the I change the `y0` and `r` parameter to get different DPCs.  I used the Gompertz model to simulate these data, so we expect that the best model would be the same, just like we saw  above. 
+Here I will create a `data.frame` containing three DPCs. Note that the I change the `y0` and `r` parameter to get different DPCs.  I used the Gompertz model to simulate these data, so we expect that the best model would be the same, just like we saw  above.
 
-I called the strata column 'DPC', so in it that we have the DPC 1, 2 and 3.
+I called the strata column 'DPC', so in the `data.frame` we have the DPCs 1, 2 and 3.
 
 ```{r}
 epi1 <- sim_gompertz(N = 60, y0 = 0.001, dt = 5, r = 0.1, alpha = 0.4, n = 4)
@@ -175,21 +185,24 @@ multi_epidemic <- bind_rows(epi1,
                             .id = "DPC")
 head(multi_epidemic)
 ```
+
+
+
 ### "Multi fitting"
 
-To fit the model to all your DPCs, use the function `multi_fitter`. 
+To fit the model to all your DPCs, use the function `multi_fitter()`. 
 
-For that, inform the column in which are you time steps in the `time_col` argument. 
+For that, inform the column in which are the time steps in the `time_col` argument. 
 
-In the `intensity_col` inform the name of the column where is your disease intensity data (incidence, severity, ...). 
+In the `intensity_col` inform the name of the column where is your disease intensity data (incidence, severity, ...). this data also need to be as proportion (0 < y < 1).
 
 Inform you `data.frame` in the `data` argument. 
 
-In strata_cols you have to inform the name of your strata column.In this example its name is "DPC", but you can have more than one strata column, you can inform that putting the columns names in a vector like this `c("strata1",strata2")`.
+In strata_cols you have to inform the name of your strata columns. In this example its name is "DPC", but you can have more than one strata column, you can inform that putting the columns names in a vector like this `c("strata1",strata2")`.
 
 Informing only this arguments, it fit the models using linear regression of the linearized data, like in `fit_lin()`.
 
-You can see the parameters calling `Parameters` using the `$` operator. The column `best model` gives the order of higher accuracy of the model. 
+You can see the parameters calling `Parameters` using the `$` operator. The column `best model` gives the order of accuracy of the model. 
 
 ```{r}
 multi_fit <- multi_fitter(time_col = "time",
@@ -201,14 +214,15 @@ multi_fit <- multi_fitter(time_col = "time",
 head(multi_fit$Parameters)
 ```
 
-You can also see the data calling `Data`. 
+
+You can also see the data by calling `Data`. 
 
 ```{r}
 head(multi_fit$Data)
 ```
 
 
-If you rather use nonlinear regression, set `TRUE` in the `nlim` argument. 
+If you rather use nonlinear regression, set `TRUE` in the `nlim` argument.
 
 ```{r}
 multi_fit2 <- multi_fitter(time_col = "time",
@@ -220,11 +234,12 @@ head(multi_fit2$Parameters)
 
 ```
 
+
 ### Estimate K?
 
 You might want to estimate `K` for your data. To do that, set `nlin = TRUE` and `estimate_K = TRUE`. 
 
-> NOTE: If you do not set both `TRUE`, `K` will not be estimated, because `nlin` defaut is `FALSE`. Also remember that when estimating K, we don't fit the *Exponential* model.
+> NOTE: If you do not set both arguments `TRUE`, `K` will not be estimated, because `nlin` defaut is `FALSE`. Also remember that when estimating K, we don't fit the *Exponential* model.
 
 ```{r}
 multi_fit_K <- multi_fitter(time_col = "time",
@@ -238,9 +253,11 @@ multi_fit_K <- multi_fitter(time_col = "time",
 head(multi_fit_K$Parameters)
 ```
 
+
+
 ## Make graphics to compare curves and parameters
 
-Use [`ggplot2`](https://ggplot2.tidyverse.org/) to produce elegant data visualizations of the model curves and the estimated parameters. 
+Use [`ggplot2`](https://ggplot2.tidyverse.org/) to produce elegant data visualizations of models curves and the estimated parameters. 
 
 ### Curves
 
@@ -256,7 +273,7 @@ multi_fit$Data %>%
   coord_cartesian(ylim = c(0,1))
 ```
 
-You can filter the data for specific model and plot it. To filter a model, use the function `filter()` from the `dplyr` package. 
+You can filter the data for a specific model and plot it. To filter a model, use the function `filter()` from the `dplyr` package. 
 
 ```{r}
 multi_fit$Data %>%
@@ -276,7 +293,7 @@ multi_fit$Data %>%
 
 ### Apparent infection rate
 
-Access the estimated parameters calling `multi_fit$Parameters` and plot too.
+Access the estimated parameters calling `multi_fit$Parameters` and plot them too.
 
 ```{r}
 multi_fit$Parameters %>%

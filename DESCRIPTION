@@ -1,14 +1,24 @@
 Package: epifitter
 Type: Package
-Title: Analysis and simulation of plant disease progress curves
-Version: 0.1.0
-Author: Kaique S Alves; Emerson M Del Ponte
-Maintainer: Kaique Alves <kaique.alves@ufv.br>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: Analysis and Simulation of Plant Disease Progress Curves
+Version: 0.1.0 
+Description: A tool for those interested in simulating plant disease (polycyclic and monocyclic)
+    epidemics and fitting classic epidemiological models to plant disease progress curves data.
+    Statistical methods implementation is done as described in Laurence V. Madden, Gareth Hughes,
+    and Frank van den Bosch (2007) <doi:10.1094/9780890545058>.
 Authors@R: c(
-    person("Kaique", "Alves", , "kaique.alves@ufv.br", c("aut", "cre")),
-    person("Emerson", "Del Ponte", , role = "aut"))
+    person(given = "Kaique dos S.",
+           family = "Alves", 
+           role = c("aut", "cre"),
+           email = "kaiquedsalves@gmail.com",
+           comment = c(ORCID = "0000-0001-9187-0252")),
+   person(given = "Emerson M.", 
+          family = "Del Ponte", 
+          role = "aut",
+          email = "delponte@ufv.br",
+          comment = c(ORCID = "0000-0003-4398-409X"))
+          )
+Maintainer: Kaique dos S. Alves <kaiquedsalves@gmail.com>
 Depends: R (>= 3.2)
 Imports: deSolve, dplyr, stats, ggplot2, knitr, tidyr, DescTools, minpack.lm, magrittr, tibble
 Suggests: rmarkdown, ggridges, cowplot
@@ -16,7 +26,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-Date: 2020-03-22 22:30:00 UTC
+Date: 2020-09-06 22:30:00 UTC
 URL: https://github.com/AlvesKS/epifitter
-BugReports:https://github.com/AlvesKS/epifitter/issues
+BugReports: https://github.com/AlvesKS/epifitter/issues
 X-schema.org-applicationCategory: Tools

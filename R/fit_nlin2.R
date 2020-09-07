@@ -33,6 +33,7 @@ fit_nlin2 <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03, K =  0.8
                                             start = starting_par,#list(y0 = guess_y0, r = guess_r, K = guess_K),
                                             data = epi,
                                             lower = c(-Inf, 0, 0),
+                                            upper = c(1, Inf, 1),
                                             control = nls.lm.control(maxiter = maxiter)
   )
 
@@ -40,6 +41,7 @@ fit_nlin2 <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03, K =  0.8
                                        start = starting_par,#list(y0 = guess_y0, r = guess_r, K = guess_K),
                                        data = epi,
                                        lower = c(-Inf, 0, 0),
+                                       upper = c(1, Inf, 1),
                                        control = nls.lm.control(maxiter = maxiter)
   )
 
@@ -48,6 +50,7 @@ fit_nlin2 <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03, K =  0.8
                                        start = starting_par,#list(y0 = guess_y0, r = guess_r, K = guess_K),
                                        data = epi,
                                        lower = c(-Inf, 0, 0),
+                                       upper = c(1, Inf, 1),
                                        control = nls.lm.control(maxiter = maxiter)
   )
 

@@ -191,7 +191,8 @@
 <span class='no'>fitted</span> <span class='kw'>=</span> <span class='fu'><a href='fit_lin.html'>fit_lin</a></span>( <span class='kw'>time</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>time</span>, <span class='kw'>y</span> <span class='kw'>=</span>  <span class='no'>data</span>$<span class='no'>y</span>)
 <span class='fu'>plot_fit</span>(<span class='no'>fitted</span>)</div><div class='img'><img src='plot_fit-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># adding ggplot components</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package 'ggplot2' was built under R version 3.6.3</span></div><div class='input'><span class='fu'>plot_fit</span>(<span class='no'>fitted</span>)+
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
+<span class='fu'>plot_fit</span>(<span class='no'>fitted</span>)+
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_minimal</a></span>()+
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)+
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"Disease internsity"</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"Time"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 18 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 19 row(s) containing missing values (geom_path).</span></div><div class='img'><img src='plot_fit-2.png' alt='' width='700' height='433' /></div></pre>
@@ -206,7 +207,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Kaique Alves, Emerson Del Ponte.</p>
+  <p>Developed by Kaique dos S. Alves, Emerson M. Del Ponte.</p>
 </div>
 
 <div class="pkgdown">

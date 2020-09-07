@@ -79,7 +79,7 @@ head(f_lin$data)
 ```
 
 
-### Plonting using the function `plot_fit()`
+### Ploting using the function `plot_fit()`
 
 Using the function `plot_fit()` you create a panel with the predictions for each model. You can also add some features of the `ggplot2` arsenal like themes and axis labels.
 

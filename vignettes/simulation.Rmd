@@ -152,7 +152,7 @@ gomp_plot
 
 ## Combo
 
-Use the function `plot_grid()` from the [`cowplot`](https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html) package to gather all plots into a grid
+Use the function `plot_grid()` from the [`cowplot`](https://wilkelab.org/cowplot/index.html) package to gather all plots into a grid
 
 ```{r fig.height=6, fig.width=8}
 plot_grid(exp_plot,

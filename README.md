@@ -21,10 +21,6 @@ if (!require(devtools)) {
 devtools::install_github("AlvesKS/epifitter")
 ```
 
-
-# References
->Alves, KS., Del Ponte, EM. (YYYY). *title of the paper*. Name of the journal.<https://doi.org/xxx/xxx>
-
 ## Meta
 
 Kaique S Alves, D.Sc Student, Plant pathology department, 

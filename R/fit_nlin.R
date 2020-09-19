@@ -6,12 +6,7 @@ fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter 
   if (missing(time)) {
     stop(gettextf("Missing 'time' vector"))
   }
-  # if (missing(starting_par)) {
-  #   stop(gettextf("Missing 'guess_y0' value"))
-  # }
-  # if (missing(guess_r)) {
-  #   stop(gettextf("Missing 'guess_r' value"))
-  # }
+
 
   epi <- data.frame(time, y)
   model  =

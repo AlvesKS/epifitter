@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fits epidemic models using nonlinear aproach. This function also estimates the maximum disease intensity parameter K — fit_nlin2 • epifitter</title>
+<title>Area under disease progress stairs — AUDPS • epifitter</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Fits epidemic models using nonlinear aproach. This function also estimates the maximum disease intensity parameter K — fit_nlin2" />
-<meta property="og:description" content="Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) using nonlinaer aproach for estimate parameters. This function also estimates the maximum disease intensity parameter K." />
+<meta property="og:title" content="Area under disease progress stairs — AUDPS" />
+<meta property="og:description" content="Calculates the area under disease progress stairs." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -141,83 +141,50 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fits epidemic models using nonlinear aproach. This function also estimates the maximum disease intensity parameter K</h1>
+    <h1>Area under disease progress stairs</h1>
     
-    <div class="hidden name"><code>fit_nlin2.Rd</code></div>
+    <div class="hidden name"><code>AUDPS.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) using nonlinaer aproach for estimate parameters. This function also estimates the maximum disease intensity parameter K.</p>
+    <p>Calculates the area under disease progress stairs.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fit_nlin2</span>(<span class='kw'>time</span>,
-  <span class='kw'>y</span>,
-  starting_par = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(y0 = <span class='fl'>0.01</span>, r = <span class='fl'>0.03</span>, K =  <span class='fl'>0.8</span>),
-  maxiter = <span class='fl'>50</span>)</pre>
+    <pre class="usage"><span class='fu'>AUDPS</span>(<span class='kw'>time</span>, <span class='kw'>y</span>, <span class='kw'>y_proportion</span>, type = <span class='st'>"absolute"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>time</th>
-      <td><p>Numeric vector which refers to the time steps in the epidemics.</p></td>
+      <td><p>A vector object of time.</p></td>
     </tr>
     <tr>
       <th>y</th>
-      <td><p>Numeric vector which refers to the disease intensity.</p></td>
+      <td><p>A vector object of disease intensity.</p></td>
     </tr>
     <tr>
-      <th>starting_par</th>
-      <td><p>starting value for initial inoculun (y0) and apparent infection rate (r), and maximum disease intensity (K). Please informe in that especific order</p></td>
+      <th>y_proportion</th>
+      <td><p>Logical. If disease intensity is proportion (TRUE) or percentage(FALSE)</p></td>
     </tr>
     <tr>
-      <th>maxiter</th>
-      <td><p>Maximun number of iterations.</p></td>
+      <th>type</th>
+      <td><p>Set if is absolute or relative AUDPC. type = "absolute" is default.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Simko, I., and Piepho, H.-P. 2012. The area under the disease progress stairs: Calculation, advantage, and application. Phytopathology 102:381- 389.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Kaique dos S. Alves</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
-
-<span class='kw'>epi1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sim_logistic.html'>sim_logistic</a></span>(N = <span class='fl'>30</span>,
-                     y0 = <span class='fl'>0.01</span>,
-                     dt = <span class='fl'>5</span>,
-                     r = <span class='fl'>0.3</span>,
-                     alpha = <span class='fl'>0.5</span>,
-                     n = <span class='fl'>4</span>)
-
-<span class='kw'>data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(time =  <span class='kw'>epi1</span>[,<span class='fl'>2</span>], y = <span class='kw'>epi1</span>[,<span class='fl'>4</span>])
-<span class='fu'>fit_nlin2</span>(time = <span class='kw'>data</span><span class='op'>$</span><span class='kw'>time</span>,
-          y =  <span class='kw'>data</span><span class='op'>$</span><span class='kw'>y</span>,
-          starting_par = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(y0 = <span class='fl'>0.01</span>, r = <span class='fl'>0.03</span>, K = <span class='fl'>1</span>),
-          maxiter = <span class='fl'>1024</span>)
-</div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; Results of fitting population models 
-#&gt; 
-#&gt; Stats:
-#&gt;                  CCC r_squared    RSE
-#&gt; Gompertz      0.9950    0.9909 0.0438
-#&gt; Logistic      0.9923    0.9860 0.0539
-#&gt; Monomolecular 0.8960    0.8361 0.1797
-#&gt; 
-#&gt;  Infection rate:
-#&gt;                Estimate  Std.error      Lower      Upper
-#&gt; Gompertz      0.2630455 0.02071581 0.22038054 0.22038054
-#&gt; Logistic      0.3661332 0.03408759 0.29592845 0.29592845
-#&gt; Monomolecular 0.0682291 0.02690929 0.01280837 0.01280837
-#&gt; 
-#&gt;  Initial inoculum:
-#&gt;                    Estimate    Std.error         Lower        Upper
-#&gt; Gompertz       1.017021e-12 7.351869e-12 -1.412444e-11 1.615848e-11
-#&gt; Logistic       5.304329e-03 2.520782e-03  1.126822e-04 1.049598e-02
-#&gt; Monomolecular -1.487701e-01 8.495704e-02 -3.237424e-01 2.620220e-02
-#&gt; 
-#&gt;  Maximum disease intensity:
-#&gt;               Estimate  Std.error     Lower    Upper
-#&gt; Gompertz             1 0.01936234 0.9601225 1.039877
-#&gt; Logistic             1 0.02080931 0.9571424 1.042858
-#&gt; Monomolecular        1 0.19490764 0.5985802 1.401420</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>epi</span> <span class='op'>=</span>  <span class='fu'><a href='sim_logistic.html'>sim_logistic</a></span>(N = <span class='fl'>30</span>, y0 = <span class='fl'>0.01</span>,dt = <span class='fl'>5</span>, r = <span class='fl'>0.3</span>, alpha = <span class='fl'>0.5</span>, n = <span class='fl'>1</span>)
+<span class='fu'>AUDPS</span>(time = <span class='kw'>epi</span><span class='op'>$</span><span class='kw'>time</span>, y = <span class='kw'>epi</span><span class='op'>$</span><span class='kw'>y</span>, y_proportion = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; [1] 17.1863</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

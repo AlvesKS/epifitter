@@ -150,10 +150,10 @@
     <p>Create a <code>ggplot2</code>-style plot with the fitted models curves and the epidemic data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_fit</span>(<span class='no'>object</span>,
-  <span class='kw'>point_size</span> <span class='kw'>=</span><span class='fl'>1.2</span>,
-  <span class='kw'>line_size</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>models</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Exponential"</span>,<span class='st'>"Monomolecular"</span>, <span class='st'>"Logistic"</span>, <span class='st'>"Gompertz"</span>))</pre>
+    <pre class="usage"><span class='fu'>plot_fit</span>(<span class='kw'>object</span>,
+  point_size =<span class='fl'>1.2</span>,
+  line_size = <span class='fl'>1</span>,
+  models = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Exponential"</span>,<span class='st'>"Monomolecular"</span>, <span class='st'>"Logistic"</span>, <span class='st'>"Gompertz"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,24 +178,26 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>It is possivel to add more <code>ggplot</code> componets by using the <code>+</code> sintax. See examples below.</p>
+    <p>It is possivel to add more <code>ggplot</code> componets by using the <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> sintax. See examples below.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>epi1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sim_logistic.html'>sim_logistic</a></span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>30</span>,
-                     <span class='kw'>y0</span> <span class='kw'>=</span> <span class='fl'>0.01</span>,
-                     <span class='kw'>dt</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-                     <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.3</span>,
-                     <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-                     <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>4</span>)
-<span class='no'>data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>time</span> <span class='kw'>=</span>  <span class='no'>epi1</span>[,<span class='fl'>2</span>], <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>epi1</span>[,<span class='fl'>4</span>])
-<span class='no'>fitted</span> <span class='kw'>=</span> <span class='fu'><a href='fit_lin.html'>fit_lin</a></span>( <span class='kw'>time</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>time</span>, <span class='kw'>y</span> <span class='kw'>=</span>  <span class='no'>data</span>$<span class='no'>y</span>)
-<span class='fu'>plot_fit</span>(<span class='no'>fitted</span>)</div><div class='img'><img src='plot_fit-1.png' alt='' width='700' height='433' /></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>epi1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sim_logistic.html'>sim_logistic</a></span>(N = <span class='fl'>30</span>,
+                     y0 = <span class='fl'>0.01</span>,
+                     dt = <span class='fl'>5</span>,
+                     r = <span class='fl'>0.3</span>,
+                     alpha = <span class='fl'>0.5</span>,
+                     n = <span class='fl'>4</span>)
+<span class='kw'>data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(time =  <span class='kw'>epi1</span>[,<span class='fl'>2</span>], y = <span class='kw'>epi1</span>[,<span class='fl'>4</span>])
+<span class='kw'>fitted</span> <span class='op'>=</span> <span class='fu'><a href='fit_lin.html'>fit_lin</a></span>( time = <span class='kw'>data</span><span class='op'>$</span><span class='kw'>time</span>, y =  <span class='kw'>data</span><span class='op'>$</span><span class='kw'>y</span>)
+<span class='fu'>plot_fit</span>(<span class='kw'>fitted</span>)
+</div><div class='img'><img src='plot_fit-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># adding ggplot components</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
-<span class='fu'>plot_fit</span>(<span class='no'>fitted</span>)+
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_minimal</a></span>()+
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)+
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"Disease internsity"</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"Time"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 18 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 19 row(s) containing missing values (geom_path).</span></div><div class='img'><img src='plot_fit-2.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://ggplot2.tidyverse.org'>ggplot2</a></span>)
+<span class='fu'>plot_fit</span>(<span class='kw'>fitted</span>)<span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_minimal</a></span>()<span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)<span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span>(y = <span class='st'>"Disease internsity"</span>, x = <span class='st'>"Time"</span>)
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 18 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 19 row(s) containing missing values (geom_path).</span></div><div class='img'><img src='plot_fit-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -211,7 +213,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

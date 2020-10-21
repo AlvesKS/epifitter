@@ -190,6 +190,6 @@ plot_grid(exp_plot,
 # References
 
 Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
-  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. DOI: [10.18637/jss.v033.i09](10.18637/jss.v033.i09)
+  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. DOI: [10.18637/jss.v033.i09](http://dx.doi.org/10.18637/jss.v033.i09)
 
 

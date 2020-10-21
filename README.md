@@ -51,4 +51,4 @@ Viçosa MG Brazil
 
 ## Contributing
 
-This project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.html). By participating in this project you agree to abide by its terms. If you wish to contribute code to **epifitter**, please fork the repository and create a pull request with your added feature.
+This project is released with a [Contributor Code of Conduct](https://alvesks.github.io/epifitter/CODE_OF_CONDUCT.html). By participating in this project you agree to abide by its terms. If you wish to contribute code to **epifitter**, please fork the repository and create a pull request with your added feature.

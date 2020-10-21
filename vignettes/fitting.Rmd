@@ -78,7 +78,8 @@ ggplot(
   labs(
     title = "Simulated 'complete' epidemics of sigmoid shape",
     subtitle = "Produced using sim_logistic()"
-  )
+  )+
+  theme_minimal_hgrid()
 ```
 
 
@@ -161,7 +162,7 @@ plot_fit(f_lin,
   point_size = 2,
   line_size = 1,
   models = "Logistic")+
-  theme_minimal_grid(font_size =18) +
+  theme_minimal_hgrid(font_size =18) +
   scale_x_continuous(limits = c(0,100))+
   scale_color_grey()+
    theme(legend.position = "none")+
@@ -201,7 +202,7 @@ We can check the results using `plot_fit`.
 
 ```{r}
 plot_fit(f_nlin) +
-  theme_bw() #changing plot theme
+  theme_minimal_hgrid()#changing plot theme
 ```
 
 
@@ -275,7 +276,7 @@ p_multi
 
 Or use `facet_wrap()` for ploting them separately.
 
-```{r}
+```{r fig.height=10, fig.width=6}
 p_multi +
   facet_wrap(~ DPC, ncol = 1)
 ```
@@ -363,7 +364,7 @@ multi_fit$Data %>%
   geom_point(aes(time, y), color = "gray") +
   geom_line(size = 1) +
   facet_grid(DPC ~ model, scales = "free_y") +
-  theme_light() +
+  theme_minimal_hgrid()+
   coord_cartesian(ylim = c(0, 1))
 ```
 
@@ -378,7 +379,7 @@ multi_fit$Data %>%
     size = 2
   ) +
   geom_line(size = 1.2) +
-  theme_light() +
+  theme_minimal_hgrid() +
   labs(
     x = "Time",
     y = "Disease Intensity"
@@ -402,7 +403,7 @@ multi_fit$Parameters %>%
     x = "Time",
     y = "Apparent infection rate"
   ) +
-  theme_light()
+  theme_minimal_hgrid()
 ```
 
 

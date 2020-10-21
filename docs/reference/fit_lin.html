@@ -45,6 +45,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Fits epidemic models using data linearization — fit_lin" />
 <meta property="og:description" content="Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) to data using data linearization" />
@@ -113,7 +115,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/fitting.html">Fitting disease progress curves to classic epidemiological models</a>
+      <a href="../articles/fitting.html">Fitting and selecting models</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Simulating disease progress curves</a>
@@ -165,6 +167,9 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Kaique dos S. Alves</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
@@ -186,18 +191,18 @@
 #&gt; Monomolecular 0.9318    0.8723 0.5743
 #&gt; 
 #&gt;  Infection rate:
-#&gt;                Estimate  Std.error     Lower     Upper
-#&gt; Logistic      0.2963172 0.06294769 0.2891399 0.2891399
-#&gt; Gompertz      0.1984260 0.14663934 0.1817061 0.1817061
-#&gt; Exponential   0.1516750 0.20384281 0.1284328 0.1284328
-#&gt; Monomolecular 0.1446423 0.19564748 0.1223345 0.1223345
+#&gt;                Estimate   Std.error     Lower     Upper
+#&gt; Logistic      0.2963172 0.003491710 0.2891399 0.2891399
+#&gt; Gompertz      0.1984260 0.008134087 0.1817061 0.1817061
+#&gt; Exponential   0.1516750 0.011307165 0.1284328 0.1284328
+#&gt; Monomolecular 0.1446423 0.010852569 0.1223345 0.1223345
 #&gt; 
 #&gt;  Initial inoculum:
-#&gt;                    Estimate         Lower        Upper
-#&gt; Logistic       0.0108173681  0.0095169644  0.012293254
-#&gt; Gompertz       0.0002387652  0.0000127004  0.002091927
-#&gt; Exponential    0.0231954412  0.0152556644  0.035267457
-#&gt; Monomolecular -1.1210822598 -2.1711224375 -0.418737384</div><div class='input'>
+#&gt;                    Estimate Linearized     lin.SE         Lower        Upper
+#&gt; Logistic       0.0108173681 -4.5157260 0.06294769  0.0095169644  0.012293254
+#&gt; Gompertz       0.0002387652 -2.1210668 0.14663934  0.0000127004  0.002091927
+#&gt; Exponential    0.0231954412 -3.7637995 0.20384281  0.0152556644  0.035267457
+#&gt; Monomolecular -1.1210822598 -0.7519265 0.19564748 -2.1711224375 -0.418737384</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

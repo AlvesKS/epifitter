@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate model parameters for multiple disease progress curves — multi_fitter • epifitter</title>
+<title>Estimate model parameters for multiple disease progress curves — fit_multi • epifitter</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,7 +48,7 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Estimate model parameters for multiple disease progress curves — multi_fitter" />
+<meta property="og:title" content="Estimate model parameters for multiple disease progress curves — fit_multi" />
 <meta property="og:description" content="Estimate model parameters for multiple disease progress curves" />
 <meta property="og:image" content="/logo.png" />
 
@@ -145,14 +145,14 @@
     <div class="page-header">
     <h1>Estimate model parameters for multiple disease progress curves</h1>
     
-    <div class="hidden name"><code>multi_fitter.Rd</code></div>
+    <div class="hidden name"><code>fit_multi.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Estimate model parameters for multiple disease progress curves</p>
     </div>
 
-    <pre class="usage"><span class='fu'>multi_fitter</span>(<span class='kw'>time_col</span>,
+    <pre class="usage"><span class='fu'>fit_multi</span>(<span class='kw'>time_col</span>,
              <span class='kw'>intensity_col</span>,
              <span class='kw'>data</span>,
              <span class='kw'>strata_cols</span> ,
@@ -230,7 +230,7 @@
 
 <span class='kw'>data</span> <span class='op'>=</span> <span class='kw'>dplyr</span>::<span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_rows</a></span>(<span class='kw'>data_A1</span>, <span class='kw'>data_B1</span>,<span class='kw'>data_A2</span>, <span class='kw'>data_B2</span>)
 
-<span class='fu'>multi_fitter</span>(time_col = <span class='st'>"time"</span>,
+<span class='fu'>fit_multi</span>(time_col = <span class='st'>"time"</span>,
              intensity_col = <span class='st'>"random_y"</span>,
              data = <span class='kw'>data</span>,
              strata_col = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fun"</span>,<span class='st'>"cultivar"</span>),

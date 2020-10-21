@@ -4,7 +4,7 @@
 Area under disease progress curve
 }
 \usage{
-AUDPC(time, y, y_proportion, type = "absolute")
+AUDPC(time, y, y_proportion = TRUE, type = "absolute")
 }
 \description{
 Calculates the area under disease progress curves.

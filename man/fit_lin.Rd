@@ -11,6 +11,9 @@ Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) to data
 \item{time}{Numeric vector which refers to the time steps in the epidemics}
 \item{y}{Numeric vector which refers to the disease intensity}
 }
+\author{
+Kaique dos S. Alves
+}
 \examples{
 set.seed(1)
 epi1 <- sim_logistic(N = 30,

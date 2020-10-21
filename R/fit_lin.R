@@ -29,6 +29,7 @@ fit_lin <- function(time, y) {
   model  =
     value  =
     v0  =
+    v0_se=
     v0_ci_lwr  =
     v0_ci_upr  =
     CCC  =
@@ -63,17 +64,19 @@ fit_lin <- function(time, y) {
   epi$gompit <- -log(-log(epi$y))
 
   colnames(epi) <- c("time", "y", "exponit", "monit", "logit", "gompit")
-
+  # Suppress summarise info
+  options(dplyr.summarise.inform = FALSE)
   z <- epi %>%
     tidyr::gather(3:6, key = "model", value = "value") %>%
     dplyr::group_by(model) %>%
     dplyr::summarise(
-      r = as.numeric(as.matrix((stats::lm(value ~ time))$coefficients)[2, 1]),
-      r_se = summary(stats::lm(value ~ time))$coefficients[1, 2],
+      r = summary(stats::lm(value ~ time))$coefficients[2, 1],
+      r_se = summary(stats::lm(value ~ time))$coefficients[2, 2],
       r_ci_lwr = as.numeric(as.matrix(stats::confint(stats::lm(value ~ time)))[2, 1]),
       r_ci_upr = as.numeric(as.matrix(stats::confint(stats::lm(value ~ time)))[2, 2]),
 
       v0 = as.numeric(as.matrix((stats::lm(value ~ time))$coefficients)[1, 1]),
+      v0_se = summary(stats::lm(value ~ time))$coefficients[1, 2],
       v0_ci_lwr = as.numeric(as.matrix(stats::confint(stats::lm(value ~ time)))[1, 1]),
       v0_ci_upr = as.numeric(as.matrix(stats::confint(stats::lm(value ~ time)))[1, 2]),
       r_squared = summary(stats::lm(value ~ time))$r.squared,
@@ -109,10 +112,10 @@ fit_lin <- function(time, y) {
         model == "monit" ~ "Monomolecular"
       )
     ) %>%
-    dplyr::select(-v0, -v0_ci_lwr, -v0_ci_upr) %>%
+    dplyr::select(-v0_ci_lwr, -v0_ci_upr) %>%
     dplyr::arrange(-CCC) %>%
     dplyr::mutate(best_model = 1:4) %>%
-    dplyr::select(best_model, 1:11)
+    dplyr::select(best_model, 1:13)
   # z
   predicted <- epi %>%
     dplyr::mutate(Exponential = dplyr::filter(z, model == "Exponential")$y0 * exp(dplyr::filter(z, model == "Exponential")$r * time)) %>%
@@ -129,13 +132,13 @@ fit_lin <- function(time, y) {
   za <- z %>%
     dplyr::mutate(Estimate = r, Std.error = r_se, Lower = r_ci_lwr, Upper = r_ci_lwr)
   zb <- z %>%
-    dplyr::mutate(Estimate = y0, Lower = y0_ci_lwr, Upper = y0_ci_upr)
+    dplyr::mutate(Estimate = y0, Linearized  = v0, lin.SE = v0_se, Lower = y0_ci_lwr, Upper = y0_ci_upr)
 
   z1 <- as.matrix(z[, c("CCC", "r_squared", "RSE")])
   rownames(z1) <- as.matrix(za[, "model"])
   z2 <- as.matrix(za[, c("Estimate", "Std.error", "Lower", "Upper")])
   rownames(z2) <- as.matrix(za[, "model"])
-  z3 <- as.matrix(zb[, c("Estimate", "Lower", "Upper")])
+  z3 <- as.matrix(zb[, c("Estimate","Linearized","lin.SE", "Lower", "Upper")])
   rownames(z3) <- as.matrix(zb[, "model"])
 
 

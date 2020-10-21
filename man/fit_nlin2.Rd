@@ -8,7 +8,7 @@ fit_nlin2(time,
   maxiter = 50)
 }
 \description{
-Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) using nonlinaer aproach for estimate parameters. This function also estimates the maximum disease intensity parameter K.
+Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) using nonlinear approach for estimate parameters. This function also estimates the maximum disease intensity parameter K.
 }
 \arguments{
 \item{time}{Numeric vector which refers to the time steps in the epidemics.}

@@ -17,7 +17,7 @@ Create a \code{ggplot2}-style plot with the fitted models curves and the epidemi
 \item{models}{Select the models to be displayed in the panel}
 }
 \details{
-It is possivel to add more \code{ggplot} componets by using the \code{+} sintax. See examples below.
+It is possible to add more \code{ggplot} components by using the \code{+} syntax. See examples below.
 
 }
 

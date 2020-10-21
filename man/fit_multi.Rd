@@ -1,12 +1,12 @@
-\name{multi_fitter}
-\alias{multi_fitter}
+\name{fit_multi}
+\alias{fit_multi}
 \title{Estimate model parameters for multiple disease progress curves
 }
 \description{
 Estimate model parameters for multiple disease progress curves
 }
 \usage{
-multi_fitter(time_col,
+fit_multi(time_col,
              intensity_col,
              data,
              strata_cols ,
@@ -18,30 +18,30 @@ multi_fitter(time_col,
 
 \arguments{
   \item{time_col}{
-Character name specifying the culumn for the time. eg: time_col = "days".
+Character name specifying the column for the time. eg: time_col = "days".
 }
   \item{intensity_col}{
-Character name specifying the culumn for the disease intensity.
+Character name specifying the column for the disease intensity.
 }
   \item{data}{
 \code{data.frame} object containing the variables for model fitting.
 }
   \item{strata_cols}{
-Character name or vector specifying the culumns for stratification.
+Character name or vector specifying the columns for stratification.
 }
 \item{starting_par}{Starting value for initial inoculun (y0) and apparent infection rate (r). Please informe in that especific order}
 \item{maxiter}{
- Maximun number of iterations. Only used if is \code{nlin = TRUE}
+ Maximum number of iterations. Only used if is \code{nlin = TRUE}
 }
 \item{nlin}{
- Logical. If \code{FALSE} estimates parameters using data linearization. If \code{nlin=TRUE}, estimates nonlinear aproach. \code{\link{fit_nlin}}.
+ Logical. If \code{FALSE} estimates parameters using data linearization. If \code{nlin=TRUE}, estimates nonlinear approach. \code{\link{fit_nlin}}.
 }
 \item{estimate_K}{
  Logical. If \code{nlin=TRUE}, estimates maximum disease intensity. (default: \code{nlin=FALSE}) \code{\link{fit_nlin2}}.
 }
 }
 \value{
-Returns a \code{data.frame} containg estimated parameters for individual strata levels.
+Returns a \code{data.frame} containing estimated parameters for individual strata levels.
 }
 
 \seealso{
@@ -72,7 +72,7 @@ data_B2 = dplyr::mutate(data_B2,
 
 data = dplyr::bind_rows(data_A1, data_B1,data_A2, data_B2)
 
-multi_fitter(time_col = "time",
+fit_multi(time_col = "time",
              intensity_col = "random_y",
              data = data,
              strata_col = c("fun","cultivar"),

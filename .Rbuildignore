@@ -3,3 +3,6 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^manuscript$
+^CODE_OF_CONDUCT\.md$
+^cran-comments\.md$

@@ -2,10 +2,13 @@ Package: epifitter
 Type: Package
 Title: Analysis and Simulation of Plant Disease Progress Curves
 Version: 0.1.0 
-Description: A tool for those interested in simulating plant disease (polycyclic and monocyclic)
-    epidemics and fitting classic epidemiological models to plant disease progress curves data.
-    Statistical methods implementation is done as described in Laurence V. Madden, Gareth Hughes,
-    and Frank van den Bosch (2007) <doi:10.1094/9780890545058>.
+Description: Analysis and visualization of plant disease progress curve data. Functions for
+    fitting two-parameter population dynamics models (exponential, monomolecular, logistic
+    and Gompertz) to proportion data for single or multiple epidemics using either linear
+    or no-linear regression.  Statistical and visual outputs are provided to aid in model
+    selection. Synthetic curves can be simulated for any of the models given the parameters.
+    See Laurence V. Madden, Gareth Hughes, and Frank van den Bosch (2007) <doi:10.1094/9780890545058>
+    for further information on the methods.
 Authors@R: c(
     person(given = "Kaique dos S.",
            family = "Alves", 

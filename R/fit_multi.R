@@ -1,4 +1,4 @@
-multi_fitter = function(time_col,
+fit_multi = function(time_col,
                         intensity_col,
                         data,
                         strata_cols ,

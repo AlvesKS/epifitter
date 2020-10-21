@@ -45,9 +45,11 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Simulate an epidemic using the Exponential model — sim_exponential" />
-<meta property="og:description" content="Simulate a stochastic apidemic curve using the Exponential model." />
+<meta property="og:description" content="Simulate a stochastic epidemic curve using the Exponential model." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -113,7 +115,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/fitting.html">Fitting disease progress curves to classic epidemiological models</a>
+      <a href="../articles/fitting.html">Fitting and selecting models</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Simulating disease progress curves</a>
@@ -147,7 +149,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Simulate a stochastic apidemic curve using the Exponential model.</p>
+    <p>Simulate a stochastic epidemic curve using the Exponential model.</p>
     </div>
 
     <pre class="usage"><span class='fu'>sim_exponential</span>(N = <span class='fl'>10</span>,dt = <span class='fl'>1</span>, y0 = <span class='fl'>0.01</span>, <span class='kw'>r</span>, <span class='kw'>n</span>,  alpha = <span class='fl'>0.2</span>)</pre>
@@ -188,7 +190,7 @@
 <dt>rep</dt><dd><p>Replicates</p></dd>
 <dt>time</dt><dd><p>Time after epidemic start</p></dd>
 <dt>y</dt><dd><p>Disease intensity</p></dd>
-<dt>random_y</dt><dd><p>Disease intensity after aplying the random <code>alpha</code> error</p></dd>
+<dt>random_y</dt><dd><p>Disease intensity after applying the random <code>alpha</code> error</p></dd>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

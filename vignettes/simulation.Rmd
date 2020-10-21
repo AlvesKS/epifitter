@@ -10,13 +10,17 @@ vignette: >
 ---
 
 # Introduction
-Use `epiffiter` to simulate disease progress curves (DPCs). You can simulate using the classic epidemiological models: Exponential, Monomolecular, Logistic, and Gompertz. 
+
+In `epiffiter`, opposite to the `fit_` functions (estimate parameters from fitting models to the data), the `sim_` family of functions allows to produce the DPC data given a set of parameters for a specific model. Currently, the same four population dynamic models that are fitted to the data can be simulated. 
+
+The functions use the `ode()` function of the `devolve` package (Soetaert,Petzoldt & Setzer 2010) to solve the differential equation form of the e epidemiological models.
+
 
 # Hands On
 
 ## Packages
 
-Here are some packages we'll need. 
+First, we need to load the packages we'll need for this tutorial. 
 
 ```{r message=FALSE, warning=FALSE}
 library(epifitter)
@@ -25,24 +29,45 @@ library(ggplot2)
 library(cowplot)
 ```
 
-## Simulating DPCs for different models
-### The exponential model
+## The basics of the simulation
 
-Use the function `sim_exponential()` to simulate DPCs using the exponential model. The `N` defines the total time course of the epidemic.  Define `dt`, which is the time interval between disease intensity values. Define initial inoculum `y0` and the apparent infection rate `r`. The function allow you to simulate more than one value of disease intesity per time point, that is, replicates! So you need to define the number of replicates at `n`. The argument `alpha` is the variation parameter for the replicates. (see details at `?sim_exponential`).
+The `sim_` functions, regardless of the model, require the same set of six arguments. By default, at least two arguments are required (the others have default values)
+
+- `r`: apparent infection rate
+- `n`: number of replicates
+
+When `n` is greater than one, replicated epidemics (e.g. replicated treatments) are produced and a level of noise (experimental error) should be set in the `alpha` argument. These two arguments combined set will generate `random_y` values, which will vary randomly across the defined number of replicates.
+
+The other arguments are:
+
+- `N`: epidemic duration in time units
+- `dt`: time (fixed) in units between two assessments
+- `y0`: initial inoculum
+- `alpha`: noise parameters for the replicates
+
+
+### Exponential
+
+Let's simulate a curve resembling the exponential growth.
 
 ```{r}
 exp_model <- sim_exponential(
-  N = 100,
-  y0 = 0.01,
-  dt = 5,
-  r = 0.045,
-  alpha = 0.2,
-  n = 7
+  N = 100,    # total time units 
+  y0 = 0.01,  # initial inoculum
+  dt = 10,    #  interval between assessments in time units
+  r = 0.045,  #  apparent infection rate
+  alpha = 0.2,# level of noise
+  n = 7       # number of replicates
 )
 head(exp_model)
 ```
 
-The function returns a `data.frame` object with four columns. `replicates` indicate each respective replicate, in `time` we have the time steps, `y` contains the simulated values of disease intensity, and `random_y` contains values of disease intensity after inserting a variation. 
+A `data.frame` object is produced with four columns:
+
+- `replicates`: the curve with the respective ID number
+- `time`: the assessment time 
+- `y`: the simulated proportion of disease intensity
+- `random_y`: randomly simulated proportion disease intensity based on the noise 
 
 Use the [`ggplot2`](https://ggplot2.tidyverse.org/) package to build impressive graphics!
 
@@ -62,9 +87,9 @@ exp_plot = exp_model %>%
 exp_plot
 ```
 
-### The Monomolecular model
+### Monomolecular 
 
-For the other models is exactly the same pipeline.
+The logic is exactly the same here.
 
 ```{r}
 mono_model <- sim_monomolecular(
@@ -121,7 +146,7 @@ logist_plot = logist_model %>%
 logist_plot
 ```
 
-### The Gompertz model
+### Gompertz 
 
 
 ```{r}
@@ -162,6 +187,9 @@ plot_grid(exp_plot,
 ```
 
 
+# References
 
+Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
+  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. DOI: [10.18637/jss.v033.i09](10.18637/jss.v033.i09)
 
 

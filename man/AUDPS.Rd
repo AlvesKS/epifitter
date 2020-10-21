@@ -4,7 +4,7 @@
 Area under disease progress stairs
 }
 \usage{
-AUDPS(time, y, y_proportion, type = "absolute")
+AUDPS(time, y, y_proportion = TRUE, type = "absolute")
 }
 \description{
 Calculates the area under disease progress stairs.
@@ -25,7 +25,7 @@ Set if is absolute or relative AUDPC. type = "absolute" is default.
 }
 
 \references{
-Simko, I., and Piepho, H.-P. 2012. The area under the disease progress stairs: Calculation, advantage, and application. Phytopathology 102:381- 389. 
+Simko, I., and Piepho, H.-P. 2012. The area under the disease progress stairs: Calculation, advantage, and application. Phytopathology 102:381- 389.
 }
 \author{
 Kaique dos S. Alves

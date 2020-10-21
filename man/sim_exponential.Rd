@@ -5,7 +5,7 @@
 sim_exponential(N = 10,dt = 1, y0 = 0.01, r, n,  alpha = 0.2)
 }
 \description{
-Simulate a stochastic apidemic curve using the Exponential model.
+Simulate a stochastic epidemic curve using the Exponential model.
 }
 
 \arguments{
@@ -20,7 +20,7 @@ Simulate a stochastic apidemic curve using the Exponential model.
 \item{rep}{Replicates}
 \item{time}{Time after epidemic start}
 \item{y}{Disease intensity}
-\item{random_y}{Disease intensity after aplying the random \code{alpha} error}
+\item{random_y}{Disease intensity after applying the random \code{alpha} error}
 }
 \examples{
 sim_exponential(N = 30, y0 = 0.01,dt = 5, r = 0.1, alpha = 0.5, n = 4)

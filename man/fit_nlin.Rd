@@ -8,7 +8,7 @@ fit_nlin(time,
   maxiter = 50)
 }
 \description{
-Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) using nonlinaer aproach for estimate parameters.
+Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) using nonlinear approach for estimate parameters.
 }
 \arguments{
 \item{time}{Numeric vector which refers to the time steps in the epidemics}
@@ -16,6 +16,9 @@ Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) using n
 \item{starting_par}{Starting value for initial inoculun (y0) and apparent infection rate (r). Please informe in that especific order}
 \item{maxiter}{Maximun number of iterations}
 
+}
+\author{
+Kaique dos S. Alves
 }
 \examples{
 set.seed(1)

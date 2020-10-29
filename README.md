@@ -23,7 +23,13 @@ Current implementation includes functions for:
 
 ## How to install
 
-Currently, only the development version of **epifitter** is available from GitHub. The  **devtools** package, available from CRAN, is required for installation.   
+Install the stable release from CRAN.
+
+``` r
+install.packages("epifitter")
+```
+
+The development version of **epifitter** is available from GitHub. The  **devtools** package, available from CRAN, is required for installation.   
 
 
 ``` r
@@ -41,12 +47,12 @@ devtools::install_github("AlvesKS/epifitter")
 Kaique S Alves, D.Sc Student  
 Universidade Federal de Viçosa    
 Viçosa MG Brazil
-<https://alvesks.netlify.com/>
+<https://alvesks.netlify.app/>
 
 Emerson M Del Ponte, Assoc Professor  
 Universidade Federal de Viçosa  
 Viçosa MG Brazil  
-<https://emersondelponte.netlify.com/>
+<https://emersondelponte.netlify.app/>
 
 
 ## Contributing

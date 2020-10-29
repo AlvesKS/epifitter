@@ -1,3 +1,7 @@
+[![CRAN](https://www.r-pkg.org/badges/version/epifitter)](https://CRAN.R-project.org/package=epifitter)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/epifitter)](https://CRAN.R-project.org/package=epifitter)
+
+
 # *epifitter* <img width = 200px style = "margin-left: 40px; margin-top: 50px" align = right src="man/figures/logo.png" />
 
 ## Introduction

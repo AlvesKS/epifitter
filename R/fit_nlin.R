@@ -7,6 +7,10 @@ fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter 
     stop(gettextf("Missing 'time' vector"))
   }
 
+  for (i in 1:length(y)) {
+    if (y[i] > 1) {
+      stop(gettextf("values must between 0 and 1)"))
+    }}
 
   epi <- data.frame(time, y)
   model  =

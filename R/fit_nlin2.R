@@ -7,15 +7,11 @@ fit_nlin2 <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03, K =  0.8
   if (missing(time)) {
     stop(gettextf("Missing 'time' vector"))
   }
-  # if (missing(guess_y0)) {
-  #   # stop(gettextf("Missing 'guess_y0' value"))
-  # }
-  # if (missing(guess_r)) {
-  #   # stop(gettextf("Missing 'guess_r' value"))
-  # }
-  # if (missing(guess_K)) {
-  #   # stop(gettextf("Missing 'guess_K' value"))
-  # }
+
+  for (i in 1:length(y)) {
+    if (y[i] > 1) {
+      stop(gettextf("values must between 0 and 1)"))
+    }}
 
   epi <- data.frame(time, y)
 

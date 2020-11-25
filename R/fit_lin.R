@@ -36,6 +36,7 @@ fit_lin <- function(time, y) {
     best_model  =
     linear  =
     linearized  =
+    name =
     r  =
     r_se =
     r_ci_lwr  =
@@ -63,7 +64,9 @@ fit_lin <- function(time, y) {
   epi$logit <- log(epi$y / (1 - epi$y))
   epi$gompit <- -log(-log(epi$y))
 
-  colnames(epi) <- c("time", "y", "exponit", "monit", "logit", "gompit")
+
+
+  # colnames(epi) <- c("time", "y", "exponit", "monit", "logit", "gompit")
   # Suppress summarise info
   options(dplyr.summarise.inform = FALSE)
   z <- epi %>%
@@ -117,15 +120,32 @@ fit_lin <- function(time, y) {
     dplyr::mutate(best_model = 1:4) %>%
     dplyr::select(best_model, 1:13)
   # z
-  predicted <- epi %>%
+
+
+  epi2 = epi %>%
+    dplyr::group_by(time) %>%
+    dplyr::mutate(rep  = 1:dplyr::n())
+
+
+  predicted <- epi2 %>%
     dplyr::mutate(Exponential = dplyr::filter(z, model == "Exponential")$y0 * exp(dplyr::filter(z, model == "Exponential")$r * time)) %>%
     dplyr::mutate(Monomolecular = 1 - (1 - dplyr::filter(z, model == "Monomolecular")$y0) * exp(-dplyr::filter(z, model == "Monomolecular")$r * time)) %>%
     dplyr::mutate(Logistic = 1 / (1 + ((1 - dplyr::filter(z, model == "Logistic")$y0) / dplyr::filter(z, model == "Logistic")$y0) * exp(-dplyr::filter(z, model == "Logistic")$r * time))) %>%
     dplyr::mutate(Gompertz = exp(log(dplyr::filter(z, model == "Gompertz")$y0) * exp(-dplyr::filter(z, model == "Gompertz")$r * time))) %>%
-    tidyr::gather(3:6, key = "linear", value = "linearized") %>%
-    tidyr::gather(3:6, key = "model", value = "predicted") %>%
-    dplyr::select(-linear) %>%
-    dplyr::select(time, y, model, linearized, predicted) %>%
+
+    tidyr::pivot_longer(c(3:6,8:11)) %>%
+    dplyr::mutate(type = dplyr::case_when(name %in% c("exponit","monit","logit","gompit")~"linearized",
+                                   name %in% c("Exponential","Monomolecular","Logistic","Gompertz")~"predicted")) %>%
+    dplyr::mutate(model = dplyr::case_when(name == "exponit"~ "Exponential",
+                                    name == "monit" ~ "Monomolecular",
+                                    name == "logit" ~ "Logistic",
+                                    name == "gompit" ~ "Gompertz",
+                                    name %in% c("Exponential","Monomolecular","Logistic","Gompertz")~name )) %>%
+    dplyr::select(-name) %>%
+    tidyr::pivot_wider(values_from = "value",
+                       names_from  = c("type"),
+                       id_cols = c("time","y","model","rep")) %>%
+    dplyr::select(-rep) %>%
     dplyr::mutate(residual = y - predicted)
 
 

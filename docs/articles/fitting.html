@@ -53,7 +53,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -82,7 +82,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/AlvesKS/epifitter/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -96,13 +96,14 @@
 
       
 
-      </header><script src="fitting_files/header-attrs-2.6.6/header-attrs.js"></script><div class="row">
+      </header><script src="fitting_files/header-attrs-2.5/header-attrs.js"></script><link href="fitting_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="fitting_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Fitting and selecting models</h1>
                         <h4 class="author">Kaique S Alves</h4>
             
-            <h4 class="date">2021-02-11</h4>
+            <h4 class="date">2021-06-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/master/vignettes/fitting.Rmd"><code>vignettes/fitting.Rmd</code></a></small>
       <div class="hidden name"><code>fitting.Rmd</code></div>
@@ -125,12 +126,12 @@
 </ul>
 <p>Both approaches are available in <em>epifitter</em>. The simplest way to fit these models to single epidemic data is using the <code><a href="../reference/fit_lin.html">fit_lin()</a></code> and <code><a href="../reference/fit_nlin.html">fit_nlin()</a></code> functions. For the latter, the alternative <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code> allows estimating a third parameter, the upper asymptote, when maximum disease intensity is not close to 100%. The <code><a href="../reference/fit_multi.html">fit_multi()</a></code> function is the most flexible and allows to fit all models to multiple epidemic datasets.</p>
 <p>First, we need to load the packages we’ll need for this tutorial.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlvesKS/epifitter">epifitter</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlvesKS/epifitter">epifitter</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org">magrittr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span></pre></div>
 </div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
@@ -140,28 +141,28 @@
 <a href="#dataset" class="anchor"></a>Dataset</h3>
 <p>To use <em>epifitter</em> data at least two variables are needed, one representing the time of each assessment of disease intensity during the course of the epidemics and the other representing a disease intensity variable as proportion (e.g. incidence, severity, prevalence). For the case of designed experiments with replicates, a third variable is needed.</p>
 <p>Let’s simulate a DPC dataset for one epidemics measured at replicated plots. The simulated data resemble a polyciclic epidemics of sigmoid shape. We can do that using the <em>epifitter</em> <code><a href="../reference/sim_logistic.html">sim_logistic()</a></code> function of epifitter (more about <code><a href="../reference/sim_logistic.html">?sim_logistic</a></code> here).</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dpcL</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_logistic.html">sim_logistic</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="va">dpcL</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_logistic.html">sim_logistic</a></span><span class="op">(</span>
   N <span class="op">=</span> <span class="fl">100</span>, <span class="co"># duration of the epidemics in days</span>
   y0 <span class="op">=</span> <span class="fl">0.01</span>, <span class="co"># disease intensity at time zero</span>
   dt <span class="op">=</span> <span class="fl">10</span>, <span class="co"># interval between assessments</span>
   r <span class="op">=</span> <span class="fl">0.1</span>, <span class="co"># apparent infection rate</span>
   alpha <span class="op">=</span> <span class="fl">0.2</span>, <span class="co"># level of noise</span>
   n <span class="op">=</span> <span class="fl">7</span> <span class="co"># number of replicates</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span></pre></div>
 <p>Let’s give a look at the simulated dataset.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dpcL</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dpcL</span><span class="op">)</span></pre></div>
 <pre><code>##   replicates time          y   random_y
 ## 1          1    0 0.01000000 0.01000000
-## 2          1   10 0.02672668 0.02536668
-## 3          1   20 0.06946279 0.06658662
-## 4          1   30 0.16868385 0.14127154
-## 5          1   40 0.35549349 0.36398942
-## 6          1   50 0.59989486 0.67070668</code></pre>
+## 2          1   10 0.02672668 0.02102892
+## 3          1   20 0.06946279 0.05393009
+## 4          1   30 0.16868385 0.19686258
+## 5          1   40 0.35549349 0.46515934
+## 6          1   50 0.59989486 0.50393586</code></pre>
 <p>The <code>dpc_L</code> object generated using <code><a href="../reference/sim_logistic.html">sim_logistic()</a></code> is a dataframe with four columns. The <code>y</code> variable is a vector for the disease intensity as proportion (0 &lt; y &lt; 1). To facilitate visualization, let’s make a plot using the <code>ggplot</code> function of the <em>ggplot2</em> package.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
   <span class="va">dpcL</span>,
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span>,
     group <span class="op">=</span> <span class="va">replicates</span>
@@ -174,7 +175,7 @@
     title <span class="op">=</span> <span class="st">"Simulated 'complete' epidemics of sigmoid shape"</span>,
     subtitle <span class="op">=</span> <span class="st">"Produced using sim_logistic()"</span>
   <span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_minimal_grid.html">theme_minimal_hgrid</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_minimal_grid.html">theme_minimal_hgrid</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div id="linear-regression-using-fit_lin" class="section level3">
@@ -182,36 +183,36 @@
 <a href="#linear-regression-using-fit_lin" class="anchor"></a>Linear regression using <code>fit_lin()</code>
 </h3>
 <p>The <code><a href="../reference/fit_lin.html">fit_lin()</a></code> requires at least the <code>time</code> and <code>y</code> arguments. In the example, we will call the <code>random_y</code> which represents the replicates. A quick way to call these variables attached to the dataframe is shown below.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">f_lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_lin.html">fit_lin</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="va">f_lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_lin.html">fit_lin</a></span><span class="op">(</span>
   time <span class="op">=</span> <span class="va">dpcL</span><span class="op">$</span><span class="va">time</span>,  
   y <span class="op">=</span> <span class="va">dpcL</span><span class="op">$</span><span class="va">random_y</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span></pre></div>
 <p><code><a href="../reference/fit_lin.html">fit_lin()</a></code> outputs a list object which contains several elements. Three elements of the list are shown by default: stats of model fit, Infection rate and Initial Inoculum</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">f_lin</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="va">f_lin</span></pre></div>
 <pre><code>## Results of fitting population models 
 ## 
 ## Stats:
 ##                  CCC r_squared    RSE
-## Logistic      0.9979    0.9957 0.2106
-## Gompertz      0.9781    0.9571 0.4855
-## Monomolecular 0.9374    0.8821 0.6490
-## Exponential   0.9108    0.8362 0.6342
+## Logistic      0.9983    0.9965 0.1901
+## Gompertz      0.9807    0.9621 0.4511
+## Monomolecular 0.9401    0.8870 0.6239
+## Exponential   0.9080    0.8315 0.6602
 ## 
 ##  Infection rate:
-##                 Estimate   Std.error      Lower      Upper
-## Logistic      0.10013554 0.000758826 0.09862388 0.09862388
-## Gompertz      0.07154068 0.001749750 0.06805500 0.06805500
-## Monomolecular 0.05541544 0.002338911 0.05075609 0.05075609
-## Exponential   0.04472010 0.002285562 0.04016703 0.04016703
+##                 Estimate    Std.error      Lower      Upper
+## Logistic      0.10034462 0.0006851144 0.09897981 0.09897981
+## Gompertz      0.07095528 0.0016255474 0.06771702 0.06771702
+## Monomolecular 0.05456609 0.0022484101 0.05008702 0.05008702
+## Exponential   0.04577854 0.0023792139 0.04103890 0.04103890
 ## 
 ##  Initial inoculum:
-##                    Estimate Linearized     lin.SE         Lower         Upper
-## Logistic       1.021146e-02  -4.573981 0.04489275  9.346048e-03  0.0111561030
-## Gompertz       3.463809e-05  -2.329281 0.10351663  3.296326e-06  0.0002348142
-## Monomolecular -1.770646e+00  -1.019080 0.13837183 -2.650015e+00 -1.1031361873
-## Exponential    2.858423e-02  -3.554900 0.13521567  2.183451e-02  0.0374204921</code></pre>
+##                    Estimate Linearized     lin.SE         Lower        Upper
+## Logistic       9.634132e-03 -4.6327622 0.04053192  8.893459e-03  0.010435841
+## Gompertz       3.485299e-05 -2.3286788 0.09616868  3.989729e-06  0.000208654
+## Monomolecular -1.716610e+00 -0.9993849 0.13301774 -2.540861e+00 -1.084231085
+## Exponential    2.642678e-02 -3.6333773 0.14075619  1.996493e-02  0.034980078</code></pre>
 <div id="model-fit-stats" class="section level4">
 <h4 class="hasAnchor">
 <a href="#model-fit-stats" class="anchor"></a>Model fit stats</h4>
@@ -232,52 +233,52 @@
 <h4 class="hasAnchor">
 <a href="#global-stats" class="anchor"></a>Global stats</h4>
 <p>The element <code>f_lin$stats_all</code> provides a wide format dataframe with all the stats for each model.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">f_lin</span><span class="op">$</span><span class="va">stats_all</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="va">f_lin</span><span class="op">$</span><span class="va">stats_all</span></pre></div>
 <pre><code>## # A tibble: 4 x 14
-##   best_model model      r    r_se r_ci_lwr r_ci_upr    v0  v0_se r_squared   RSE
-##        &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
-## 1          1 Logi… 0.100  7.59e-4   0.0986   0.102  -4.57 0.0449     0.996 0.211
-## 2          2 Gomp… 0.0715 1.75e-3   0.0681   0.0750 -2.33 0.104      0.957 0.486
-## 3          3 Mono… 0.0554 2.34e-3   0.0508   0.0601 -1.02 0.138      0.882 0.649
-## 4          4 Expo… 0.0447 2.29e-3   0.0402   0.0493 -3.55 0.135      0.836 0.634
-## # … with 4 more variables: CCC &lt;dbl&gt;, y0 &lt;dbl&gt;, y0_ci_lwr &lt;dbl&gt;,
+##   best_model model      r    r_se r_ci_lwr r_ci_upr     v0  v0_se r_squared
+##        &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+## 1          1 Logi~ 0.100  6.85e-4   0.0990   0.102  -4.63  0.0405     0.997
+## 2          2 Gomp~ 0.0710 1.63e-3   0.0677   0.0742 -2.33  0.0962     0.962
+## 3          3 Mono~ 0.0546 2.25e-3   0.0501   0.0590 -0.999 0.133      0.887
+## 4          4 Expo~ 0.0458 2.38e-3   0.0410   0.0505 -3.63  0.141      0.832
+## # ... with 5 more variables: RSE &lt;dbl&gt;, CCC &lt;dbl&gt;, y0 &lt;dbl&gt;, y0_ci_lwr &lt;dbl&gt;,
 ## #   y0_ci_upr &lt;dbl&gt;</code></pre>
 </div>
 <div id="model-predictions" class="section level4">
 <h4 class="hasAnchor">
 <a href="#model-predictions" class="anchor"></a>Model predictions</h4>
 <p>The predicted values are stored as a dataframe in the <code>data</code> element called using the same <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> operator as above. Both the observed and (<code>y</code>) and the back-transformed predictions (<code>predicted</code>) are shown for each model. The linearized value and the residual are also shown.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">f_lin</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">f_lin</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></pre></div>
 <pre><code>##   time          y         model  linearized     predicted      residual
-## 1    0 0.01000000   Exponential -4.60517019  2.858423e-02 -0.0185842263
-## 2    0 0.01000000 Monomolecular  0.01005034 -1.770646e+00  1.7806459324
-## 3    0 0.01000000      Logistic -4.59511985  1.021146e-02 -0.0002114598
-## 4    0 0.01000000      Gompertz -1.52717963  3.463809e-05  0.0099653619
-## 5   10 0.02536668   Exponential -3.67431886  4.470369e-02 -0.0193370117
-## 6   10 0.02536668 Monomolecular  0.02569396 -5.918965e-01  0.6172632250</code></pre>
+## 1    0 0.01000000   Exponential -4.60517019  2.642678e-02 -0.0164267824
+## 2    0 0.01000000 Monomolecular  0.01005034 -1.716610e+00  1.7266103879
+## 3    0 0.01000000      Logistic -4.59511985  9.634132e-03  0.0003658679
+## 4    0 0.01000000      Gompertz -1.52717963  3.485299e-05  0.0099651470
+## 5   10 0.02102892   Exponential -3.86185686  4.176937e-02 -0.0207404573
+## 6   10 0.02102892 Monomolecular  0.02125317 -5.741636e-01  0.5951924728</code></pre>
 </div>
 <div id="plot-of-predictions" class="section level4">
 <h4 class="hasAnchor">
 <a href="#plot-of-predictions" class="anchor"></a>Plot of predictions</h4>
 <p>The <code><a href="../reference/plot_fit.html">plot_fit()</a></code> produces, by default, a panel of plots depicting the observed and predicted values by all fitted models. The arguments <code>pont_size</code> and <code>line_size</code> that control for the size of the dots for the observation and the size of the fitted line, respectively.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">plot_lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">f_lin</span>,
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="va">plot_lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">f_lin</span>,
   point_size <span class="op">=</span> <span class="fl">2</span>,
   line_size <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span> 
 
 <span class="co"># Default plots</span>
-<span class="va">plot_lin</span> </code></pre></div>
+<span class="va">plot_lin</span> </pre></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div id="publication-ready-plots" class="section level4">
 <h4 class="hasAnchor">
 <a href="#publication-ready-plots" class="anchor"></a>Publication-ready plots</h4>
 <p>The plots are <em>ggplot2</em> objects which can be easily customized by adding new layers that override plot paramaters as shown below. The argument <code>models</code> allows to select the models(s) to be shown on the plot. The next plot was customized for the logistic model.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Customized plots</span>
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="co"># Customized plots</span>
 
 <span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">f_lin</span>,
   point_size <span class="op">=</span> <span class="fl">2</span>,
@@ -291,7 +292,7 @@
     x <span class="op">=</span> <span class="st">"Time"</span>,
     y <span class="op">=</span> <span class="st">"Proportion disease "</span>
     
-  <span class="op">)</span></code></pre></div>
+  <span class="op">)</span></pre></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 </div>
 </div>
@@ -305,40 +306,40 @@
 <blockquote>
 <p>NOTE: If you encounter error messages saying “matrix at initial parameter estimates”, try to modify the starting values for the parameters to solve the problem.</p>
 </blockquote>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">f_nlin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="va">f_nlin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span>
   time <span class="op">=</span> <span class="va">dpcL</span><span class="op">$</span><span class="va">time</span>,
   y <span class="op">=</span> <span class="va">dpcL</span><span class="op">$</span><span class="va">random_y</span>,
   starting_par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>y0 <span class="op">=</span> <span class="fl">0.01</span>, r <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span>
 <span class="op">)</span>
 
-<span class="va">f_nlin</span></code></pre></div>
+<span class="va">f_nlin</span></pre></div>
 <pre><code>## Results of fitting population models 
 ## 
 ## Stats:
 ##                  CCC r_squared    RSE
-## Logistic      0.9985    0.9971 0.0219
-## Gompertz      0.9961    0.9936 0.0358
-## Monomolecular 0.9135    0.8652 0.1553
-## Exponential   0.8873    0.8251 0.1751
+## Logistic      0.9974    0.9948 0.0292
+## Gompertz      0.9958    0.9925 0.0371
+## Monomolecular 0.9153    0.8677 0.1540
+## Exponential   0.8852    0.8221 0.1767
 ## 
 ##  Infection rate:
 ##                 Estimate   Std.error      Lower      Upper
-## Logistic      0.10060968 0.001806520 0.09701091 0.09701091
-## Gompertz      0.07079108 0.002013031 0.06678092 0.06678092
-## Monomolecular 0.02276142 0.001509930 0.01975349 0.01975349
-## Exponential   0.01900514 0.001390036 0.01623605 0.01623605
+## Logistic      0.09920867 0.002354801 0.09451767 0.09451767
+## Gompertz      0.06938200 0.002026695 0.06534462 0.06534462
+## Monomolecular 0.02289724 0.001503471 0.01990217 0.01990217
+## Exponential   0.01892925 0.001398705 0.01614288 0.01614288
 ## 
 ##  Initial inoculum:
 ##                    Estimate    Std.error         Lower         Upper
-## Logistic       9.608968e-03 8.155206e-04  7.984368e-03  1.123357e-02
-## Gompertz       7.411354e-08 1.096995e-07 -1.444191e-07  2.926462e-07
-## Monomolecular -1.912689e-01 4.648940e-02 -2.838805e-01 -9.865726e-02
-## Exponential    1.816086e-01 2.097913e-02  1.398161e-01  2.234012e-01</code></pre>
+## Logistic       1.057881e-02 1.162268e-03  8.263456e-03  1.289417e-02
+## Gompertz       3.172127e-07 4.271635e-07 -5.337406e-07  1.168166e-06
+## Monomolecular -1.937427e-01 4.615086e-02 -2.856799e-01 -1.018054e-01
+## Exponential    1.828318e-01 2.123713e-02  1.405253e-01  2.251383e-01</code></pre>
 <p>We can check the results using <code>plot_fit</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">f_nlin</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_minimal_grid.html">theme_minimal_hgrid</a></span><span class="op">(</span><span class="op">)</span><span class="co">#changing plot theme</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit">
+<span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">f_nlin</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_minimal_grid.html">theme_minimal_hgrid</a></span><span class="op">(</span><span class="op">)</span><span class="co">#changing plot theme</span></pre></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 </div>
 </div>
@@ -347,44 +348,44 @@
 <a href="#estimating-k-maximum-disease" class="anchor"></a>Estimating <code>K</code> (maximum disease)</h3>
 <p>In many epidemics the last measure (final time) of a DPC does not reach the maximum intensity and, for this reason, estimation of maximum asymptote (carrying capacity <code>K</code>) may be necessary. The <code>fin_lin2()</code> provides an estimation of <code>K</code> in addition to the estimates provided by <code><a href="../reference/fit_lin.html">fit_lin()</a></code>.</p>
 <p>Before demonstrating the function, we can transform our simulated data by creating another variable with <code>y_random2</code> with maximum about 0.8 (80%). Simplest way is to multiply the <code>y_random</code> by 0.8.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dpcL2</span> <span class="op">=</span> <span class="va">dpcL</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>random_y <span class="op">=</span> <span class="va">random_y</span> <span class="op">*</span> <span class="fl">0.8</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit">
+<span class="va">dpcL2</span> <span class="op">=</span> <span class="va">dpcL</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>random_y <span class="op">=</span> <span class="va">random_y</span> <span class="op">*</span> <span class="fl">0.8</span><span class="op">)</span></pre></div>
 <p>Then we run the <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code> for the new dataset.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">f_nlin2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin2.html">fit_nlin2</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb19"><pre class="downlit">
+<span class="va">f_nlin2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin2.html">fit_nlin2</a></span><span class="op">(</span>
   time <span class="op">=</span> <span class="va">dpcL2</span><span class="op">$</span><span class="va">time</span>,
   y <span class="op">=</span> <span class="va">dpcL2</span><span class="op">$</span><span class="va">random_y</span>,
   starting_par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>y0 <span class="op">=</span> <span class="fl">0.01</span>, r <span class="op">=</span> <span class="fl">0.2</span>, K <span class="op">=</span>  <span class="fl">0.6</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="va">f_nlin2</span></code></pre></div>
+<span class="va">f_nlin2</span></pre></div>
 <pre><code>## Results of fitting population models 
 ## 
 ## Stats:
 ##                  CCC r_squared    RSE
-## Logistic      0.9985    0.9971 0.0176
-## Gompertz      0.9652    0.9646 0.0820
-## Monomolecular 0.9462    0.9047 0.1020
+## Logistic      0.9974    0.9948 0.0235
+## Gompertz      0.9598    0.9586 0.0875
+## Monomolecular 0.9475    0.9067 0.1009
 ## 
 ##  Infection rate:
 ##                 Estimate   Std.error      Lower      Upper
-## Logistic      0.09988497 0.002166245 0.09556863 0.09556863
-## Gompertz      0.10382207 0.014539266 0.07485195 0.07485195
-## Monomolecular 0.01625068 0.003104400 0.01006503 0.01006503
+## Logistic      0.09901519 0.002861320 0.09331389 0.09331389
+## Gompertz      0.10737763 0.016414453 0.07467112 0.07467112
+## Monomolecular 0.01632799 0.003065379 0.01022009 0.01022009
 ## 
 ##  Initial inoculum:
 ##                    Estimate    Std.error         Lower         Upper
-## Logistic       7.896110e-03 7.547794e-04  6.392179e-03  9.400041e-03
-## Gompertz       3.559609e-19 8.117031e-18 -1.581758e-17  1.652950e-17
-## Monomolecular -1.450428e-01 3.249706e-02 -2.097946e-01 -8.029096e-02
+## Logistic       8.522361e-03 1.065578e-03  6.399151e-03  1.064557e-02
+## Gompertz       9.683685e-20 2.509283e-18 -4.903019e-18  5.096693e-18
+## Monomolecular -1.465282e-01 3.218007e-02 -2.106484e-01 -8.240804e-02
 ## 
 ##  Maximum disease intensity:
 ##                Estimate   Std.error     Lower     Upper
-## Logistic      0.8026173 0.004371914 0.7939061 0.8113285
-## Gompertz      0.6662489 0.017146519 0.6320838 0.7004141
-## Monomolecular 1.0000000 0.107926855 0.7849510 1.2150490</code></pre>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">f_nlin2</span><span class="op">)</span></code></pre></div>
+## Logistic      0.8007236 0.005820541 0.7891260 0.8123213
+## Gompertz      0.6552268 0.017770214 0.6198188 0.6906347
+## Monomolecular 1.0000000 0.105904063 0.7889815 1.2110185</code></pre>
+<div class="sourceCode" id="cb21"><pre class="downlit">
+<span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">f_nlin2</span><span class="op">)</span></pre></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <blockquote>
 <p>NOTE: The exponential model is not included because it doesn’t have a maximum asymptote. The estimated value of <code>K</code> is the expected 0.8.</p>
@@ -398,8 +399,8 @@
 <h4 class="hasAnchor">
 <a href="#data" class="anchor"></a>Data</h4>
 <p>Let’s use the <code>sim_</code> family of functions to create three epidemics and store the data in a single <code>data.frame</code>. The Gompertz model was used to simulate these data. Note that we allowed to the <code>y0</code> and <code>r</code> parameter to differ the DPCs. We should combine the three DPCs using the <code><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows()</a></code> function and name the identifier (<code>.id</code>), automatically created as a character vector, for each epidemics as ‘DPC’.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">epi1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">60</span>, y0 <span class="op">=</span> <span class="fl">0.001</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.1</span>, alpha <span class="op">=</span> <span class="fl">0.4</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<div class="sourceCode" id="cb22"><pre class="downlit">
+<span class="va">epi1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">60</span>, y0 <span class="op">=</span> <span class="fl">0.001</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.1</span>, alpha <span class="op">=</span> <span class="fl">0.4</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="va">epi2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">60</span>, y0 <span class="op">=</span> <span class="fl">0.001</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.12</span>, alpha <span class="op">=</span> <span class="fl">0.4</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="va">epi3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">60</span>, y0 <span class="op">=</span> <span class="fl">0.003</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.14</span>, alpha <span class="op">=</span> <span class="fl">0.4</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 
@@ -408,17 +409,17 @@
   <span class="va">epi3</span>,
   .id <span class="op">=</span> <span class="st">"DPC"</span>
 <span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">multi_epidemic</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">multi_epidemic</span><span class="op">)</span></pre></div>
 <pre><code>##   DPC replicates time          y    random_y
-## 1   1          1    0 0.00100000 0.001157136
-## 2   1          1    5 0.01515505 0.017585344
-## 3   1          1   10 0.07878459 0.089877640
-## 4   1          1   15 0.21411521 0.279737420
-## 5   1          1   20 0.39266393 0.215442762
-## 6   1          1   25 0.56723412 0.502478308</code></pre>
+## 1   1          1    0 0.00100000 0.001303713
+## 2   1          1    5 0.01515505 0.025246621
+## 3   1          1   10 0.07878459 0.078601102
+## 4   1          1   15 0.21411521 0.252538245
+## 5   1          1   20 0.39266393 0.415207734
+## 6   1          1   25 0.56723412 0.503614375</code></pre>
 <p>We can visualize the three DPCs in a same plot</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">multi_epidemic</span>,
+<div class="sourceCode" id="cb24"><pre class="downlit">
+<span class="va">p_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">multi_epidemic</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span>, shape <span class="op">=</span> <span class="va">DPC</span>, group <span class="op">=</span> <span class="va">DPC</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
@@ -428,12 +429,12 @@
     y <span class="op">=</span> <span class="st">"Proportion disease "</span>
     
   <span class="op">)</span>
-<span class="va">p_multi</span></code></pre></div>
+<span class="va">p_multi</span></pre></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <p>Or use <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap()</a></code> for ploting them separately.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p_multi</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">DPC</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit">
+<span class="va">p_multi</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">DPC</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></pre></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-17-1.png" width="576"></p>
 </div>
 <div id="using-fit_multi" class="section level4">
@@ -442,91 +443,91 @@
 </h4>
 <p><code><a href="../reference/fit_multi.html">fit_multi()</a></code> requires at least four arguments: time, disease intensity (as proportion), data and the curve identifier (<code>strata_cols</code>). The latter argument accepts one or more strata include as <code>c("strata1",strata2")</code>. In the example below, the stratum name is <code>DPC</code>, the name of the variable.</p>
 <p>By default, the linear regression is fitted to data but adding another argument <code>nlin = T</code>, the non linear regressions is fitted instead.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">multi_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_multi.html">fit_multi</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb26"><pre class="downlit">
+<span class="va">multi_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_multi.html">fit_multi</a></span><span class="op">(</span>
   time_col <span class="op">=</span> <span class="st">"time"</span>,
   intensity_col <span class="op">=</span> <span class="st">"random_y"</span>,
   data <span class="op">=</span> <span class="va">multi_epidemic</span>,
   strata_cols <span class="op">=</span> <span class="st">"DPC"</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span></pre></div>
 <p>All parameters of the list can be returned using the $ operator as below.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">multi_fit</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">multi_fit</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></pre></div>
 <pre><code>##   DPC best_model         model          r        r_se   r_ci_lwr   r_ci_upr
-## 1   1          1      Gompertz 0.10190113 0.002685148 0.09650785 0.10729440
-## 2   1          2      Logistic 0.15931921 0.007258577 0.14473993 0.17389849
-## 3   1          3 Monomolecular 0.07430324 0.003517895 0.06723734 0.08136914
-## 4   1          4   Exponential 0.08501597 0.008985833 0.06696739 0.10306454
-## 5   2          1      Gompertz 0.12614273 0.002814631 0.12048938 0.13179609
-## 6   2          2 Monomolecular 0.09939115 0.003632290 0.09209548 0.10668682
-##           v0      v0_se r_squared       RSE       CCC            y0
-## 1 -1.9583797 0.09493432 0.9664474 0.3622463 0.9829374  0.0008352051
-## 2 -4.5457016 0.25662945 0.9059731 0.9792356 0.9506673  0.0105012773
-## 3 -0.6572799 0.12437637 0.8992175 0.4745900 0.9469347 -0.9295366779
-## 4 -3.8884217 0.31769716 0.6416095 1.2122551 0.7816835  0.0204776410
-## 5 -1.9765170 0.09951223 0.9757110 0.3797145 0.9877062  0.0007335898
-## 6 -0.7607203 0.12842085 0.9374019 0.4900227 0.9676896 -1.1398169544
-##       y0_ci_lwr    y0_ci_upr
-## 1  0.0001884270  0.002858789
-## 2  0.0062983019  0.017459697
-## 3 -1.4771214842 -0.502999274
-## 4  0.0108180939  0.038762261
-## 5  0.0001485696  0.002712267
-## 6 -1.7694843741 -0.653310140</code></pre>
+## 1   1          1      Gompertz 0.10459326 0.003513756 0.09753567 0.11165085
+## 2   1          2      Logistic 0.16484048 0.008202856 0.14836456 0.18131640
+## 3   1          3 Monomolecular 0.07597095 0.004038753 0.06785888 0.08408303
+## 4   1          4   Exponential 0.08886953 0.009436214 0.06991634 0.10782273
+## 5   2          1      Gompertz 0.12591533 0.004665647 0.11654410 0.13528655
+## 6   2          2      Logistic 0.17965552 0.008510461 0.16256176 0.19674929
+##          v0     v0_se r_squared       RSE       CCC            y0     y0_ci_lwr
+## 1 -2.025907 0.1242300 0.9465847 0.4740316 0.9725595  0.0005090378  5.934693e-05
+## 2 -4.754145 0.2900148 0.8898264 1.1066258 0.9417017  0.0085423126  4.788890e-03
+## 3 -0.675697 0.1427915 0.8761870 0.5448576 0.9340082 -0.9654023923 -1.618239e+00
+## 4 -4.078448 0.3336206 0.6395026 1.2730149 0.7801178  0.0169337348  8.664300e-03
+## 5 -1.962853 0.1649555 0.9357606 0.6294302 0.9668144  0.0008090842  4.936559e-05
+## 6 -4.335085 0.3008902 0.8991184 1.1481239 0.9468798  0.0129313489  7.107718e-03
+##      y0_ci_upr
+## 1  0.002716387
+## 2  0.015192674
+## 3 -0.475345011
+## 4  0.033095734
+## 5  0.006025902
+## 6  0.023413986</code></pre>
 <p>Similarly, all data can be returned.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">multi_fit</span><span class="op">$</span><span class="va">Data</span><span class="op">)</span></code></pre></div>
-<pre><code>##   DPC time           y         model   linearized     predicted     residual
-## 1   1    0 0.001157136   Exponential -6.761807188  0.0204776410 -0.019320505
-## 2   1    0 0.001157136 Monomolecular  0.001157806 -0.9295366779  0.930693814
-## 3   1    0 0.001157136      Logistic -6.760649382  0.0105012773 -0.009344141
-## 4   1    0 0.001157136      Gompertz -1.911290190  0.0008352051  0.000321931
-## 5   1    5 0.017585344   Exponential -4.040689447  0.0313249043 -0.013739560
-## 6   1    5 0.017585344 Monomolecular  0.017741803 -0.3307779537  0.348363298</code></pre>
+<div class="sourceCode" id="cb29"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">multi_fit</span><span class="op">$</span><span class="va">Data</span><span class="op">)</span></pre></div>
+<pre><code>##   DPC time           y         model   linearized     predicted      residual
+## 1   1    0 0.001303713   Exponential -6.642538550  0.0169337348 -0.0156300213
+## 2   1    0 0.001303713 Monomolecular  0.001304564 -0.9654023923  0.9667061058
+## 3   1    0 0.001303713      Logistic -6.641233986  0.0085423126 -0.0072385991
+## 4   1    0 0.001303713      Gompertz -1.893494202  0.0005090378  0.0007946757
+## 5   1    5 0.025246621   Exponential -3.679062960  0.0264076946 -0.0011610737
+## 6   1    5 0.025246621 Monomolecular  0.025570784 -0.3442580748  0.3695046957</code></pre>
 <p>If nonlinear regression is preferred, the <code>nlim</code> argument should be set to <code>TRUE</code></p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">multi_fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_multi.html">fit_multi</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb31"><pre class="downlit">
+<span class="va">multi_fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_multi.html">fit_multi</a></span><span class="op">(</span>
   time_col <span class="op">=</span> <span class="st">"time"</span>,
   intensity_col <span class="op">=</span> <span class="st">"random_y"</span>,
   data <span class="op">=</span> <span class="va">multi_epidemic</span>,
   strata_cols <span class="op">=</span> <span class="st">"DPC"</span>,
-  nlin <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning in log(y0/1): NaNs produced
+  nlin <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
+<pre><code>## Warning in log(y0/1): NaNs produzidos
 
-## Warning in log(y0/1): NaNs produced
+## Warning in log(y0/1): NaNs produzidos
 
-## Warning in log(y0/1): NaNs produced
+## Warning in log(y0/1): NaNs produzidos
 
-## Warning in log(y0/1): NaNs produced
+## Warning in log(y0/1): NaNs produzidos
 
-## Warning in log(y0/1): NaNs produced
+## Warning in log(y0/1): NaNs produzidos
 
-## Warning in log(y0/1): NaNs produced
+## Warning in log(y0/1): NaNs produzidos
 
-## Warning in log(y0/1): NaNs produced</code></pre>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">multi_fit2</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></code></pre></div>
+## Warning in log(y0/1): NaNs produzidos</code></pre>
+<div class="sourceCode" id="cb33"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">multi_fit2</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></pre></div>
 <pre><code>##   DPC         model            y0        y0_se          r        r_se df
-## 1   1      Gompertz  0.0025652022 0.0014612026 0.09329180 0.004043616 50
-## 2   1      Logistic  0.0374684354 0.0062605574 0.13470593 0.006795155 50
-## 3   1 Monomolecular -0.1692715517 0.0427003493 0.04220106 0.002542694 50
-## 4   1   Exponential  0.2287398807 0.0278151003 0.02747884 0.002521528 50
-## 5   2      Gompertz  0.0003967858 0.0003577174 0.13074763 0.006110454 50
-## 6   2      Logistic  0.0251666346 0.0053904500 0.19050535 0.010928458 50
+## 1   1      Gompertz  0.0007326682 0.0006454646 0.10080581 0.005161695 50
+## 2   1      Logistic  0.0284526222 0.0060421209 0.14620114 0.008612900 50
+## 3   1 Monomolecular -0.1827532016 0.0475637053 0.04239665 0.002811713 50
+## 4   1   Exponential  0.2251537025 0.0293683837 0.02782544 0.002698613 50
+## 5   2      Gompertz  0.0011395210 0.0009075791 0.12254915 0.006190070 50
+## 6   2      Logistic  0.0330614359 0.0071791152 0.17468947 0.011008358 50
 ##         CCC r_squared        RSE     y0_ci_lwr    y0_ci_upr   r_ci_lwr
-## 1 0.9908909 0.9820643 0.05053241 -0.0003697096  0.005500114 0.08516995
-## 2 0.9887068 0.9789283 0.05614429  0.0248937357  0.050043135 0.12105745
-## 3 0.9516586 0.9203200 0.11108714 -0.2550377273 -0.083505376 0.03709390
-## 4 0.8735737 0.8021341 0.17205561  0.1728716075  0.284608154 0.02241420
-## 5 0.9929016 0.9859052 0.04640357 -0.0003217106  0.001115282 0.11847442
-## 6 0.9902466 0.9824243 0.05419103  0.0143395972  0.035993672 0.16855489
+## 1 0.9887684 0.9777417 0.05760231 -0.0005637857  0.002029122 0.09043824
+## 2 0.9863767 0.9745501 0.06331111  0.0163166651  0.040588579 0.12890162
+## 3 0.9423791 0.9052368 0.12359725 -0.2782877152 -0.087218688 0.03674916
+## 4 0.8620091 0.7861902 0.18310418  0.1661655678  0.284141837 0.02240511
+## 5 0.9909265 0.9820546 0.05178873 -0.0006834054  0.002962447 0.11011603
+## 6 0.9868687 0.9761672 0.06192816  0.0186417587  0.047481113 0.15257854
 ##     r_ci_upr best_model
-## 1 0.10141364          1
-## 2 0.14835440          2
-## 3 0.04730821          3
-## 4 0.03254348          4
-## 5 0.14302084          1
-## 6 0.21245580          2</code></pre>
+## 1 0.11117338          1
+## 2 0.16350066          2
+## 3 0.04804415          3
+## 4 0.03324576          4
+## 5 0.13498227          1
+## 6 0.19680041          2</code></pre>
 </div>
 <div id="want-to-estimate-k" class="section level4">
 <h4 class="hasAnchor">
@@ -535,47 +536,53 @@
 <blockquote>
 <p>NOTE: If you do not set both arguments <code>TRUE</code>, <code>K</code> will not be estimated, because <code>nlin</code> defaut is <code>FALSE</code>. Also remember that when estimating K, we don’t fit the <em>Exponential</em> model.</p>
 </blockquote>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">multi_fit_K</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_multi.html">fit_multi</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb35"><pre class="downlit">
+<span class="va">multi_fit_K</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_multi.html">fit_multi</a></span><span class="op">(</span>
   time_col <span class="op">=</span> <span class="st">"time"</span>,
   intensity_col <span class="op">=</span> <span class="st">"random_y"</span>,
   data <span class="op">=</span> <span class="va">multi_epidemic</span>,
   strata_cols <span class="op">=</span> <span class="st">"DPC"</span>,
   nlin <span class="op">=</span> <span class="cn">T</span>,
   estimate_K <span class="op">=</span> <span class="cn">T</span>
-<span class="op">)</span></code></pre></div>
-<pre><code>## Warning in log(y0/K): NaNs produced
+<span class="op">)</span></pre></div>
+<pre><code>## Warning in log(y0/K): NaNs produzidos
 
-## Warning in log(y0/K): NaNs produced
+## Warning in log(y0/K): NaNs produzidos
 
-## Warning in log(y0/K): NaNs produced
+## Warning in log(y0/K): NaNs produzidos
 
-## Warning in log(y0/K): NaNs produced
+## Warning in log(y0/K): NaNs produzidos
 
-## Warning in log(y0/K): NaNs produced</code></pre>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">multi_fit_K</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></code></pre></div>
-<pre><code>##   DPC         model            y0        y0_se          r        r_se K
-## 1   1      Gompertz  0.0025652046 0.0018515241 0.09329177 0.006390331 1
-## 2   1      Logistic  0.0374683954 0.0071902700 0.13470592 0.008709278 1
-## 3   1 Monomolecular -0.1692700972 0.0473191479 0.04220092 0.006722605 1
-## 4   2      Gompertz  0.0003967929 0.0004110122 0.13074749 0.007831300 1
-## 5   2      Logistic  0.0251665802 0.0058051274 0.19050547 0.012356364 1
-## 6   2 Monomolecular -0.1759491218 0.0505407003 0.05350216 0.007305091 1
+## Warning in log(y0/K): NaNs produzidos
+
+## Warning in log(y0/K): NaNs produzidos
+
+## Warning in log(y0/K): NaNs produzidos
+
+## Warning in log(y0/K): NaNs produzidos</code></pre>
+<div class="sourceCode" id="cb37"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">multi_fit_K</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span></pre></div>
+<pre><code>##   DPC         model            y0       y0_se          r        r_se K
+## 1   1      Gompertz  0.0007326628 0.000812759 0.10080585 0.007833870 1
+## 2   1      Logistic  0.0284527406 0.006870343 0.14620094 0.010714599 1
+## 3   1 Monomolecular -0.1827591159 0.052678054 0.04239720 0.007398310 1
+## 4   2      Gompertz  0.0011395240 0.001050649 0.12254913 0.008132521 1
+## 5   2      Logistic  0.0330609946 0.007781047 0.17469037 0.012665582 1
+## 6   2 Monomolecular -0.1696213541 0.048985649 0.05276792 0.007098912 1
 ##         K_se df       CCC r_squared        RSE     y0_ci_lwr    y0_ci_upr
-## 1 0.01991421 49 0.9908909 0.9820643 0.05104544 -0.0011555725  0.006285982
-## 2 0.01791845 49 0.9887068 0.9789282 0.05671430  0.0230190068  0.051917784
-## 3 0.06819499 49 0.9516585 0.9203204 0.11221496 -0.2643614850 -0.074178709
-## 4 0.01224355 49 0.9929016 0.9859052 0.04687468 -0.0004291671  0.001222753
-## 5 0.01246751 49 0.9902466 0.9824243 0.05474121  0.0135007399  0.036832420
-## 6 0.04937555 49 0.9516578 0.9203162 0.11626339 -0.2775144616 -0.074383782
+## 1 0.02126255 49 0.9887684 0.9777417 0.05818712 -0.0009006376  0.002365963
+## 2 0.01901692 49 0.9863767 0.9745501 0.06395388  0.0146462694  0.042259212
+## 3 0.07531010 49 0.9423794 0.9052352 0.12485208 -0.2886196289 -0.076898603
+## 4 0.01424633 49 0.9909265 0.9820546 0.05231452 -0.0009718332  0.003250881
+## 5 0.01482238 49 0.9868687 0.9761672 0.06255689  0.0174243949  0.048697594
+## 6 0.04888357 49 0.9536356 0.9232298 0.11289254 -0.2680617023 -0.071181006
 ##     r_ci_lwr   r_ci_upr  K_ci_lwr K_ci_upr best_model
-## 1 0.08044992 0.10613362 0.9599809 1.040019          1
-## 2 0.11720397 0.15220787 0.9639915 1.036008          2
-## 3 0.02869134 0.05571050 0.8629570 1.137043          3
-## 4 0.11500991 0.14648508 0.9753957 1.024604          1
-## 5 0.16567442 0.21533651 0.9749456 1.025054          2
-## 6 0.03882203 0.06818229 0.9007761 1.099224          3</code></pre>
+## 1 0.08506310 0.11654860 0.9572713 1.042729          1
+## 2 0.12466914 0.16773273 0.9617841 1.038216          2
+## 3 0.02752974 0.05726466 0.8486587 1.151341          3
+## 4 0.10620622 0.13889204 0.9713709 1.028629          1
+## 5 0.14923793 0.20014281 0.9702133 1.029787          2
+## 6 0.03850212 0.06703371 0.9017648 1.098235          3</code></pre>
 </div>
 </div>
 <div id="graphical-outputs" class="section level3">
@@ -586,18 +593,18 @@
 <h4 class="hasAnchor">
 <a href="#dpcs-and-fitted-curves" class="anchor"></a>DPCs and fitted curves</h4>
 <p>The original data and the predicted values by each model are stored in <code>multi_fit$Data</code>. A nice plot can be produced as follows:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">multi_fit</span><span class="op">$</span><span class="va">Data</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb39"><pre class="downlit">
+<span class="va">multi_fit</span><span class="op">$</span><span class="va">Data</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">predicted</span>, color <span class="op">=</span> <span class="va">DPC</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"gray"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">DPC</span> <span class="op">~</span> <span class="va">model</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_minimal_grid.html">theme_minimal_hgrid</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 <p>Using the <em>dplyr</em> function <code>filter</code> only the model of interest can be chosen for plotting.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">multi_fit</span><span class="op">$</span><span class="va">Data</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb40"><pre class="downlit">
+<span class="va">multi_fit</span><span class="op">$</span><span class="va">Data</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">model</span> <span class="op">==</span> <span class="st">"Gompertz"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">predicted</span>, color <span class="op">=</span> <span class="va">DPC</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span><span class="op">)</span>,
@@ -609,15 +616,15 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
     x <span class="op">=</span> <span class="st">"Time"</span>,
     y <span class="op">=</span> <span class="st">"Disease Intensity"</span>
-  <span class="op">)</span></code></pre></div>
+  <span class="op">)</span></pre></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
 </div>
 <div id="apparent-infection-rate" class="section level4">
 <h4 class="hasAnchor">
 <a href="#apparent-infection-rate" class="anchor"></a>Apparent infection rate</h4>
 <p>The <code>multi_fit$Parameters</code> element is where all stats and parameters as stored. Let’s plot the estimates of the apparent infection rate.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">multi_fit</span><span class="op">$</span><span class="va">Parameters</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb41"><pre class="downlit">
+<span class="va">multi_fit</span><span class="op">$</span><span class="va">Parameters</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">model</span> <span class="op">==</span> <span class="st">"Gompertz"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">DPC</span>, <span class="va">r</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
@@ -629,7 +636,7 @@
     x <span class="op">=</span> <span class="st">"Time"</span>,
     y <span class="op">=</span> <span class="st">"Apparent infection rate"</span>
   <span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_minimal_grid.html">theme_minimal_hgrid</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_minimal_grid.html">theme_minimal_hgrid</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <p><img src="fitting_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
 </div>
 </div>

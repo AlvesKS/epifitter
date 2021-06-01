@@ -53,7 +53,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -82,7 +82,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/AlvesKS/epifitter/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -96,13 +96,14 @@
 
       
 
-      </header><script src="simulation_files/header-attrs-2.6.6/header-attrs.js"></script><div class="row">
+      </header><script src="simulation_files/header-attrs-2.5/header-attrs.js"></script><link href="simulation_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="simulation_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simulating disease progress curves</h1>
                         <h4 class="author">Kaique S Alves</h4>
             
-            <h4 class="date">2021-02-11</h4>
+            <h4 class="date">2021-06-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/master/vignettes/simulation.Rmd"><code>vignettes/simulation.Rmd</code></a></small>
       <div class="hidden name"><code>simulation.Rmd</code></div>
@@ -124,11 +125,11 @@
 <h3 class="hasAnchor">
 <a href="#packages" class="anchor"></a>Packages</h3>
 <p>First, we need to load the packages we’ll need for this tutorial.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlvesKS/epifitter">epifitter</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlvesKS/epifitter">epifitter</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org">magrittr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span></pre></div>
 </div>
 <div id="the-basics-of-the-simulation" class="section level3">
 <h3 class="hasAnchor">
@@ -156,8 +157,8 @@
 <h4 class="hasAnchor">
 <a href="#exponential" class="anchor"></a>Exponential</h4>
 <p>Let’s simulate a curve resembling the exponential growth.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">exp_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_exponential.html">sim_exponential</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="va">exp_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_exponential.html">sim_exponential</a></span><span class="op">(</span>
   N <span class="op">=</span> <span class="fl">100</span>,    <span class="co"># total time units </span>
   y0 <span class="op">=</span> <span class="fl">0.01</span>,  <span class="co"># initial inoculum</span>
   dt <span class="op">=</span> <span class="fl">10</span>,    <span class="co">#  interval between assessments in time units</span>
@@ -165,14 +166,14 @@
   alpha <span class="op">=</span> <span class="fl">0.2</span>,<span class="co"># level of noise</span>
   n <span class="op">=</span> <span class="fl">7</span>       <span class="co"># number of replicates</span>
 <span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">exp_model</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">exp_model</span><span class="op">)</span></pre></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01000000
-## 2          1   10 0.01568425 0.01495661
-## 3          1   20 0.02459905 0.02007450
-## 4          1   30 0.03858028 0.03677355
-## 5          1   40 0.06050749 0.06116244
-## 6          1   50 0.09489670 0.09726574</code></pre>
+## 1          1    0 0.01000000 0.01138023
+## 2          1   10 0.01568425 0.01582709
+## 3          1   20 0.02459905 0.01992487
+## 4          1   30 0.03858028 0.03008413
+## 5          1   40 0.06050749 0.06149182
+## 6          1   50 0.09489670 0.10315367</code></pre>
 <p>A <code>data.frame</code> object is produced with four columns:</p>
 <ul>
 <li>
@@ -185,8 +186,8 @@
 <code>random_y</code>: randomly simulated proportion disease intensity based on the noise</li>
 </ul>
 <p>Use the <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a> package to build impressive graphics!</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">exp_plot</span> <span class="op">=</span> <span class="va">exp_model</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="va">exp_plot</span> <span class="op">=</span> <span class="va">exp_model</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">random_y</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">3</span>,color <span class="op">=</span> <span class="st">"gray"</span>, width <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
@@ -197,16 +198,16 @@
     y <span class="op">=</span> <span class="st">"Disease intensity"</span>,
     x <span class="op">=</span> <span class="st">"Time"</span>
   <span class="op">)</span>
-<span class="va">exp_plot</span></code></pre></div>
-<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<span class="va">exp_plot</span></pre></div>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
 <p><img src="simulation_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
 <div id="monomolecular" class="section level4">
 <h4 class="hasAnchor">
 <a href="#monomolecular" class="anchor"></a>Monomolecular</h4>
 <p>The logic is exactly the same here.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mono_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_monomolecular.html">sim_monomolecular</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="va">mono_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_monomolecular.html">sim_monomolecular</a></span><span class="op">(</span>
   N <span class="op">=</span> <span class="fl">100</span>,
   y0 <span class="op">=</span> <span class="fl">0.01</span>,
   dt <span class="op">=</span> <span class="fl">5</span>,
@@ -214,16 +215,16 @@
   alpha <span class="op">=</span> <span class="fl">0.2</span>,
   n <span class="op">=</span> <span class="fl">7</span>
 <span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mono_model</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mono_model</span><span class="op">)</span></pre></div>
 <pre><code>##   replicates time         y  random_y
 ## 1          1    0 0.0100000 0.0100000
-## 2          1    5 0.2289861 0.2209042
-## 3          1   10 0.3995322 0.3672669
-## 4          1   15 0.5323535 0.6128977
-## 5          1   20 0.6357949 0.6756221
-## 6          1   25 0.7163551 0.7176287</code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mono_plot</span> <span class="op">=</span> <span class="va">mono_model</span> <span class="op">%&gt;%</span>
+## 2          1    5 0.2289861 0.1921026
+## 3          1   10 0.3995322 0.3593234
+## 4          1   15 0.5323535 0.4625067
+## 5          1   20 0.6357949 0.4946245
+## 6          1   25 0.7163551 0.6599480</code></pre>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="va">mono_plot</span> <span class="op">=</span> <span class="va">mono_model</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">random_y</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">3</span>, color <span class="op">=</span> <span class="st">"gray"</span>, width <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
@@ -233,14 +234,14 @@
     y <span class="op">=</span> <span class="st">"Disease intensity"</span>,
     x <span class="op">=</span> <span class="st">"Time"</span>
   <span class="op">)</span>
-<span class="va">mono_plot</span></code></pre></div>
+<span class="va">mono_plot</span></pre></div>
 <p><img src="simulation_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 <div id="the-logistic-model" class="section level4">
 <h4 class="hasAnchor">
 <a href="#the-logistic-model" class="anchor"></a>The Logistic model</h4>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">logist_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_logistic.html">sim_logistic</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="va">logist_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_logistic.html">sim_logistic</a></span><span class="op">(</span>
   N <span class="op">=</span> <span class="fl">100</span>,
   y0 <span class="op">=</span> <span class="fl">0.01</span>,
   dt <span class="op">=</span> <span class="fl">5</span>,
@@ -248,16 +249,16 @@
   alpha <span class="op">=</span> <span class="fl">0.2</span>,
   n <span class="op">=</span> <span class="fl">7</span>
 <span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">logist_model</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">logist_model</span><span class="op">)</span></pre></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01000000
-## 2          1    5 0.01638216 0.01533777
-## 3          1   10 0.02672677 0.02516298
-## 4          1   15 0.04331509 0.05739230
-## 5          1   20 0.06946352 0.06417950
-## 6          1   25 0.10958806 0.08902146</code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">logist_plot</span> <span class="op">=</span> <span class="va">logist_model</span> <span class="op">%&gt;%</span>
+## 1          1    0 0.01000000 0.01029425
+## 2          1    5 0.01638216 0.01980827
+## 3          1   10 0.02672677 0.02237773
+## 4          1   15 0.04331509 0.03874821
+## 5          1   20 0.06946352 0.08444894
+## 6          1   25 0.10958806 0.10522422</code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="va">logist_plot</span> <span class="op">=</span> <span class="va">logist_model</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">random_y</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">3</span>,color <span class="op">=</span> <span class="st">"gray"</span>, width <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
@@ -267,14 +268,14 @@
     y <span class="op">=</span> <span class="st">"Disease intensity"</span>,
     x <span class="op">=</span> <span class="st">"Time"</span>
   <span class="op">)</span>
-<span class="va">logist_plot</span></code></pre></div>
+<span class="va">logist_plot</span></pre></div>
 <p><img src="simulation_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
 <div id="gompertz" class="section level4">
 <h4 class="hasAnchor">
 <a href="#gompertz" class="anchor"></a>Gompertz</h4>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gomp_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="va">gomp_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>
   N <span class="op">=</span> <span class="fl">100</span>,
   y0 <span class="op">=</span> <span class="fl">0.01</span>,
   dt <span class="op">=</span> <span class="fl">5</span>,
@@ -282,16 +283,16 @@
   alpha <span class="op">=</span> <span class="fl">0.2</span>,
   n <span class="op">=</span> <span class="fl">7</span>
 <span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">gomp_model</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">gomp_model</span><span class="op">)</span></pre></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01258411
-## 2          1    5 0.03896283 0.04389016
-## 3          1   10 0.10158896 0.06837397
-## 4          1   15 0.19958740 0.22357266
-## 5          1   20 0.32122825 0.27572259
-## 6          1   25 0.44922018 0.49727812</code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gomp_plot</span> <span class="op">=</span> <span class="va">gomp_model</span> <span class="op">%&gt;%</span>
+## 1          1    0 0.01000000 0.01274797
+## 2          1    5 0.03896283 0.03605923
+## 3          1   10 0.10158896 0.08890527
+## 4          1   15 0.19958740 0.21981366
+## 5          1   20 0.32122825 0.34547882
+## 6          1   25 0.44922018 0.45079722</code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="va">gomp_plot</span> <span class="op">=</span> <span class="va">gomp_model</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">random_y</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">3</span>,color <span class="op">=</span> <span class="st">"gray"</span>, width <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
@@ -301,7 +302,7 @@
     y <span class="op">=</span> <span class="st">"Disease intensity"</span>,
     x <span class="op">=</span> <span class="st">"Time"</span>
   <span class="op">)</span>
-<span class="va">gomp_plot</span></code></pre></div>
+<span class="va">gomp_plot</span></pre></div>
 <p><img src="simulation_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 </div>
@@ -309,12 +310,12 @@
 <h3 class="hasAnchor">
 <a href="#combo" class="anchor"></a>Combo</h3>
 <p>Use the function <code><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid()</a></code> from the <a href="https://wilkelab.org/cowplot/index.html"><code>cowplot</code></a> package to gather all plots into a grid</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span><span class="va">exp_plot</span>,
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span><span class="va">exp_plot</span>,
           <span class="va">mono_plot</span>,
           <span class="va">logist_plot</span>,
-          <span class="va">gomp_plot</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+          <span class="va">gomp_plot</span><span class="op">)</span></pre></div>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
 <p><img src="simulation_files/figure-html/unnamed-chunk-10-1.png" width="768"></p>
 </div>
 </div>

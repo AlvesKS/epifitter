@@ -1,4 +1,4 @@
-# *epifitter* <img src="man/figures/logo.png" align="right"/>
+# *epifitter* <img src="man/figures/logo.png" width = 150px align="right"/>
 
 [![CRAN](https://www.r-pkg.org/badges/version/epifitter)](https://CRAN.R-project.org/package=epifitter) [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/epifitter)](https://CRAN.R-project.org/package=epifitter)
 

@@ -53,7 +53,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -82,7 +82,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/AlvesKS/epifitter/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -98,65 +98,44 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
-
 <div id="epifitter-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#epifitter-" class="anchor"></a><em>epifitter</em> <img width="200px" style="margin-left: 40px; margin-top: 50px" align="right" src="reference/figures/logo.png">
+<a href="#epifitter-" class="anchor"></a><em>epifitter</em> <img src="reference/figures/logo.png" align="right">
 </h1></div>
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>The <strong>epifitter</strong> package provides a set of tools for aiding in the <strong>visualization, description, and comparison of plant disease progress curve</strong> (DPC) data. DPCs depict the change in a disease-intensity variable measured at different times during the epidemics.</p>
-</div>
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
-<p>Their analysis, that may include fitting “classic” population dynamics models (e.g. logistic, monomolecular, gompertz), allows gaining understanding of the epidemiological processes, but is also used widely for comparing epidemics.</p>
+
+<p>Provides a set of tools for aiding in the <strong>visualization, description, and comparison of plant disease progress curve</strong> (DPC) data. A DPC depict the change in a disease-intensity variable measured sequentially at different times during the epidemics. Their analysis, that may include fitting “classic” population dynamics models (e.g. logistic, monomolecular, Gompertz), allows gaining understanding of the epidemiological processes, but is most used for comparing epidemics.</p>
 <p>The mathematics behind model fitting is straightforward and general-purpose spreadsheet or statistical softwares can be used to perform the calculations and select the “best” model. What <code>epifitter</code> does is to provide the analyst with R functions for performing several tasks commonly used for the temporal analysis of epidemics, including graphical output.</p>
-<p>Current implementation includes functions for:</p>
+<p>Current implementation includes functions for the analyst to:</p>
 <ul>
-<li>Fitting classic population dynamics models using linear and nonlinear approaches</li>
-<li>Selecting best fitted models based on statistical and visual analysis</li>
-<li>Calculating the area under the disease progress cures (AUDPC)</li>
-<li>Comparing epidemics statistically</li>
-<li>Simulating synthetic epidemics of various shapes and uncertainty</li>
-<li>Producing publication-ready multiple panel plots</li>
+<li>Fit classic population dynamics models using linear and nonlinear approaches</li>
+<li>Select models based on statistical and visual analysis</li>
+<li>Calculate the area under the disease progress curve</li>
+<li>Compare epidemics via visual inference</li>
+<li>Simulate synthetic epidemics of various shapes and uncertainty</li>
 </ul>
-</div>
-<div id="how-to-install" class="section level2">
+<div id="quick-start" class="section level2">
 <h2 class="hasAnchor">
-<a href="#how-to-install" class="anchor"></a>How to install</h2>
+<a href="#quick-start" class="anchor"></a>Quick start</h2>
 <p>Install the stable release from CRAN.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"epifitter"</span>)
-</pre></div>
+<pre class="{.r}"><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("epifitter")</a></code></pre>
 <p>The development version of <strong>epifitter</strong> is available from GitHub. The <strong>devtools</strong> package, available from CRAN, is required for installation.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co">if</span> (<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="kw"><a href="https://devtools.r-lib.org">devtools</a></span>)) {
-  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)
+<pre class="{.r}"><code>if (!require(devtools)) {
+  install.packages("devtools")
 }
 
-<span class="kw">devtools</span>::<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"AlvesKS/epifitter"</span>)
-</pre></div>
+devtools::install_github("AlvesKS/epifitter")</code></pre>
 </div>
 <div id="meta" class="section level2">
 <h2 class="hasAnchor">
 <a href="#meta" class="anchor"></a>Meta</h2>
-<p>Kaique S Alves, D.Sc Student<br>
-Universidade Federal de Viçosa<br>
-Viçosa MG Brazil <a href="https://alvesks.netlify.app/" class="uri">https://alvesks.netlify.app/</a></p>
-<p>Emerson M Del Ponte, Assoc Professor<br>
-Universidade Federal de Viçosa<br>
-Viçosa MG Brazil<br><a href="https://emersondelponte.netlify.app/" class="uri">https://emersondelponte.netlify.app/</a></p>
-</div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>This project is released with a <a href="https://alvesks.github.io/epifitter/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms. If you wish to contribute code to <strong>epifitter</strong>, please fork the repository and create a pull request with your added feature.</p>
+<ul>
+<li>Please <a href="https://github.com/AlvesKS/epifitter/issues">report any issues or bugs</a>.</li>
+<li>All code is licensed MIT</li>
+<li>To cite epifitter, please use the output from citation(“epifitter”)</li>
+<li>Please note that epifitter is released with <a href="https://alvesks.github.io/epifitter/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</li>
+</ul>
 </div>
 </div>
-
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

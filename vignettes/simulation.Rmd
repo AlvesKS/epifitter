@@ -9,18 +9,17 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Introduction
+## Introduction
 
-In `epiffiter`, opposite to the `fit_` functions (estimate parameters from fitting models to the data), the `sim_` family of functions allows to produce the DPC data given a set of parameters for a specific model. Currently, the same four population dynamic models that are fitted to the data can be simulated. 
+In `epiffiter`, opposite to the `fit_` functions (estimate parameters from fitting models to the data), the `sim_` family of functions allows to produce the DPC data given a set of parameters for a specific model. Currently, the same four population dynamic models that are fitted to the data can be simulated.
 
 The functions use the `ode()` function of the `devolve` package (Soetaert,Petzoldt & Setzer 2010) to solve the differential equation form of the e epidemiological models.
 
+## Hands On
 
-# Hands On
+### Packages
 
-## Packages
-
-First, we need to load the packages we'll need for this tutorial. 
+First, we need to load the packages we'll need for this tutorial.
 
 ```{r message=FALSE, warning=FALSE}
 library(epifitter)
@@ -29,24 +28,23 @@ library(ggplot2)
 library(cowplot)
 ```
 
-## The basics of the simulation
+### The basics of the simulation
 
 The `sim_` functions, regardless of the model, require the same set of six arguments. By default, at least two arguments are required (the others have default values)
 
-- `r`: apparent infection rate
-- `n`: number of replicates
+-   `r`: apparent infection rate
+-   `n`: number of replicates
 
 When `n` is greater than one, replicated epidemics (e.g. replicated treatments) are produced and a level of noise (experimental error) should be set in the `alpha` argument. These two arguments combined set will generate `random_y` values, which will vary randomly across the defined number of replicates.
 
 The other arguments are:
 
-- `N`: epidemic duration in time units
-- `dt`: time (fixed) in units between two assessments
-- `y0`: initial inoculum
-- `alpha`: noise parameters for the replicates
+-   `N`: epidemic duration in time units
+-   `dt`: time (fixed) in units between two assessments
+-   `y0`: initial inoculum
+-   `alpha`: noise parameters for the replicates
 
-
-### Exponential
+#### Exponential
 
 Let's simulate a curve resembling the exponential growth.
 
@@ -64,13 +62,12 @@ head(exp_model)
 
 A `data.frame` object is produced with four columns:
 
-- `replicates`: the curve with the respective ID number
-- `time`: the assessment time 
-- `y`: the simulated proportion of disease intensity
-- `random_y`: randomly simulated proportion disease intensity based on the noise 
+-   `replicates`: the curve with the respective ID number
+-   `time`: the assessment time
+-   `y`: the simulated proportion of disease intensity
+-   `random_y`: randomly simulated proportion disease intensity based on the noise
 
 Use the [`ggplot2`](https://ggplot2.tidyverse.org/) package to build impressive graphics!
-
 
 ```{r}
 exp_plot = exp_model %>%
@@ -87,7 +84,7 @@ exp_plot = exp_model %>%
 exp_plot
 ```
 
-### Monomolecular 
+#### Monomolecular
 
 The logic is exactly the same here.
 
@@ -117,8 +114,7 @@ mono_plot = mono_model %>%
 mono_plot
 ```
 
-### The Logistic model
-
+#### The Logistic model
 
 ```{r}
 logist_model <- sim_logistic(
@@ -146,8 +142,7 @@ logist_plot = logist_model %>%
 logist_plot
 ```
 
-### Gompertz 
-
+#### Gompertz
 
 ```{r}
 gomp_model <- sim_gompertz(
@@ -175,7 +170,7 @@ gomp_plot = gomp_model %>%
 gomp_plot
 ```
 
-## Combo
+### Combo
 
 Use the function `plot_grid()` from the [`cowplot`](https://wilkelab.org/cowplot/index.html) package to gather all plots into a grid
 
@@ -186,10 +181,6 @@ plot_grid(exp_plot,
           gomp_plot)
 ```
 
+## References
 
-# References
-
-Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
-  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. DOI: [10.18637/jss.v033.i09](http://dx.doi.org/10.18637/jss.v033.i09)
-
-
+Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. DOI: [10.18637/jss.v033.i09](http://dx.doi.org/10.18637/jss.v033.i09)

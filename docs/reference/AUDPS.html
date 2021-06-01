@@ -100,7 +100,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -129,7 +129,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AlvesKS/epifitter/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -155,7 +155,7 @@
     <p>Calculates the area under disease progress stairs.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>AUDPS</span>(<span class='kw'>time</span>, <span class='kw'>y</span>, y_proportion = <span class='fl'>TRUE</span>, type = <span class='st'>"absolute"</span>)</pre>
+    <pre class="usage"><span class='fu'>AUDPS</span><span class='op'>(</span><span class='va'>time</span>, <span class='va'>y</span>, y_proportion <span class='op'>=</span> <span class='cn'>TRUE</span>, type <span class='op'>=</span> <span class='st'>"absolute"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -186,8 +186,8 @@
     <p>Kaique dos S. Alves</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>epi</span> <span class='op'>=</span>  <span class='fu'><a href='sim_logistic.html'>sim_logistic</a></span>(N = <span class='fl'>30</span>, y0 = <span class='fl'>0.01</span>,dt = <span class='fl'>5</span>, r = <span class='fl'>0.3</span>, alpha = <span class='fl'>0.5</span>, n = <span class='fl'>1</span>)
-<span class='fu'>AUDPS</span>(time = <span class='kw'>epi</span><span class='op'>$</span><span class='kw'>time</span>, y = <span class='kw'>epi</span><span class='op'>$</span><span class='kw'>y</span>, y_proportion = <span class='fl'>TRUE</span>)
+    <pre class="examples"><div class='input'><span class='va'>epi</span> <span class='op'>=</span>  <span class='fu'><a href='sim_logistic.html'>sim_logistic</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>30</span>, y0 <span class='op'>=</span> <span class='fl'>0.01</span>,dt <span class='op'>=</span> <span class='fl'>5</span>, r <span class='op'>=</span> <span class='fl'>0.3</span>, alpha <span class='op'>=</span> <span class='fl'>0.5</span>, n <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='fu'>AUDPS</span><span class='op'>(</span>time <span class='op'>=</span> <span class='va'>epi</span><span class='op'>$</span><span class='va'>time</span>, y <span class='op'>=</span> <span class='va'>epi</span><span class='op'>$</span><span class='va'>y</span>, y_proportion <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 17.1863</div><div class='input'>
 </div></pre>
   </div>

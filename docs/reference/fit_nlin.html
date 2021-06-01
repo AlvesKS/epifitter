@@ -100,7 +100,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -129,7 +129,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AlvesKS/epifitter/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -155,10 +155,10 @@
     <p>Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) using nonlinear approach for estimate parameters.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fit_nlin</span>(<span class='kw'>time</span>,
-  <span class='kw'>y</span>,
-  starting_par = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(y0 = <span class='fl'>0.01</span>, r = <span class='fl'>0.03</span>),
-  maxiter = <span class='fl'>50</span>)</pre>
+    <pre class="usage"><span class='fu'>fit_nlin</span><span class='op'>(</span><span class='va'>time</span>,
+  <span class='va'>y</span>,
+  starting_par <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>y0 <span class='op'>=</span> <span class='fl'>0.01</span>, r <span class='op'>=</span> <span class='fl'>0.03</span><span class='op'>)</span>,
+  maxiter <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -186,16 +186,16 @@
     <p>Kaique dos S. Alves</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
-<span class='kw'>epi1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sim_logistic.html'>sim_logistic</a></span>(N = <span class='fl'>30</span>,
-                     y0 = <span class='fl'>0.01</span>,
-                     dt = <span class='fl'>5</span>,
-                     r = <span class='fl'>0.3</span>,
-                     alpha = <span class='fl'>0.5</span>,
-                     n = <span class='fl'>4</span>)
-<span class='kw'>data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(time =  <span class='kw'>epi1</span>[,<span class='fl'>2</span>], y = <span class='kw'>epi1</span>[,<span class='fl'>4</span>])
-<span class='fu'>fit_nlin</span>(time = <span class='kw'>data</span><span class='op'>$</span><span class='kw'>time</span>, y =  <span class='kw'>data</span><span class='op'>$</span><span class='kw'>y</span>, starting_par = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(y0 = <span class='fl'>0.001</span>, r = <span class='fl'>0.03</span>), maxiter = <span class='fl'>1024</span>)
-</div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produzidos</span></div><div class='output co'>#&gt; Results of fitting population models 
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>epi1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sim_logistic.html'>sim_logistic</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>30</span>,
+                     y0 <span class='op'>=</span> <span class='fl'>0.01</span>,
+                     dt <span class='op'>=</span> <span class='fl'>5</span>,
+                     r <span class='op'>=</span> <span class='fl'>0.3</span>,
+                     alpha <span class='op'>=</span> <span class='fl'>0.5</span>,
+                     n <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+<span class='va'>data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>time <span class='op'>=</span>  <span class='va'>epi1</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>]</span>, y <span class='op'>=</span> <span class='va'>epi1</span><span class='op'>[</span>,<span class='fl'>4</span><span class='op'>]</span><span class='op'>)</span>
+<span class='fu'>fit_nlin</span><span class='op'>(</span>time <span class='op'>=</span> <span class='va'>data</span><span class='op'>$</span><span class='va'>time</span>, y <span class='op'>=</span>  <span class='va'>data</span><span class='op'>$</span><span class='va'>y</span>, starting_par <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>y0 <span class='op'>=</span> <span class='fl'>0.001</span>, r <span class='op'>=</span> <span class='fl'>0.03</span><span class='op'>)</span>, maxiter <span class='op'>=</span> <span class='fl'>1024</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; Results of fitting population models 
 #&gt; 
 #&gt; Stats:
 #&gt;                  CCC r_squared    RSE
@@ -206,16 +206,16 @@
 #&gt; 
 #&gt;  Infection rate:
 #&gt;                 Estimate   Std.error      Lower      Upper
-#&gt; Gompertz      0.26304504 0.015218902 0.23176214 0.23176214
+#&gt; Gompertz      0.26304478 0.015218900 0.23176189 0.23176189
 #&gt; Logistic      0.36613264 0.028677439 0.30718532 0.30718532
-#&gt; Monomolecular 0.06822917 0.008441786 0.05087684 0.05087684
+#&gt; Monomolecular 0.06822917 0.008441786 0.05087683 0.05087683
 #&gt; Exponential   0.06438233 0.008534818 0.04683876 0.04683876
 #&gt; 
 #&gt;  Initial inoculum:
 #&gt;                    Estimate    Std.error         Lower        Upper
-#&gt; Gompertz       1.017193e-12 5.947383e-12 -1.120783e-11 1.324221e-11
+#&gt; Gompertz       1.017299e-12 5.947981e-12 -1.120895e-11 1.324355e-11
 #&gt; Logistic       5.304364e-03 2.219734e-03  7.416344e-04 9.867093e-03
-#&gt; Monomolecular -1.487705e-01 7.778021e-02 -3.086500e-01 1.110901e-02
+#&gt; Monomolecular -1.487705e-01 7.778021e-02 -3.086500e-01 1.110902e-02
 #&gt; Exponential    1.658502e-01 3.643013e-02  9.096701e-02 2.407334e-01</div><div class='input'>
 </div></pre>
   </div>

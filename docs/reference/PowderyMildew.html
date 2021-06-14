@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fits epidemic models using data linearization — fit_lin • epifitter</title>
+<title>Dataset powdery mildew disease progress curves — PowderyMildew • epifitter</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,8 +48,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Fits epidemic models using data linearization — fit_lin" />
-<meta property="og:description" content="Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) to data using data linearization" />
+<meta property="og:title" content="Dataset powdery mildew disease progress curves — PowderyMildew" />
+<meta property="og:description" content="Dataset containing experimental data of disease progress curves of powdery mildew under different irrigation systems and soil moisture levels in organic tomato." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -146,66 +146,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fits epidemic models using data linearization</h1>
+    <h1>Dataset powdery mildew disease progress curves</h1>
     
-    <div class="hidden name"><code>fit_lin.Rd</code></div>
+    <div class="hidden name"><code>PowderyMildew.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Fits epidemic models (Exponential, Monomolecular, Logistic and Gompertz) to data using data linearization</p>
+    <p>Dataset containing experimental data of disease progress curves of powdery mildew under different irrigation systems and soil moisture levels in organic tomato.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fit_lin</span><span class='op'>(</span><span class='va'>time</span>,<span class='va'>y</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"PowderyMildew"</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>time</th>
-      <td><p>Numeric vector which refers to the time steps in the epidemics</p></td>
-    </tr>
-    <tr>
-      <th>y</th>
-      <td><p>Numeric vector which refers to the disease intensity</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>Kaique dos S. Alves</p>
+    <p>A data frame with 240 observations on the following 2 variables.</p><dl>
+    <dt><code>irrigation_type</code></dt><dd><p>Irrigations Systems: MS = Micro Sprinkler</p></dd>
+    <dt><code>moisture</code></dt><dd><p>Levels of soils moisture</p></dd>
+    <dt><code>block</code></dt><dd><p>Experimental blocks</p></dd>
+    <dt><code>time</code></dt><dd><p>a numeric vector containing the time points</p></dd>
+    <dt><code>sev</code></dt><dd><p>a numeric vector containg disease severity data in proportinal scales</p></dd>
+  
+</dl>
+
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Lage, D. A. C., Marouelli, W. A., and Café-Filho, A. C. 2019. Management of powdery mildew and behaviour of late blight under different irrigation configurations in organic tomato. Crop Protection. 125:104886.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>epi1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sim_logistic.html'>sim_logistic</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>30</span>,
-                     y0 <span class='op'>=</span> <span class='fl'>0.01</span>,
-                     dt <span class='op'>=</span> <span class='fl'>5</span>,
-                     r <span class='op'>=</span> <span class='fl'>0.3</span>,
-                     alpha <span class='op'>=</span> <span class='fl'>0.2</span>,
-                     n <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
-<span class='va'>data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>time <span class='op'>=</span>  <span class='va'>epi1</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>]</span>, y <span class='op'>=</span> <span class='va'>epi1</span><span class='op'>[</span>,<span class='fl'>4</span><span class='op'>]</span><span class='op'>)</span>
-<span class='fu'>fit_lin</span><span class='op'>(</span> time <span class='op'>=</span> <span class='va'>data</span><span class='op'>$</span><span class='va'>time</span>, y <span class='op'>=</span>  <span class='va'>data</span><span class='op'>$</span><span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Results of fitting population models 
-#&gt; 
-#&gt; Stats:
-#&gt;                  CCC r_squared    RSE
-#&gt; Logistic      0.9982    0.9964 0.1848
-#&gt; Gompertz      0.9786    0.9581 0.4304
-#&gt; Exponential   0.9326    0.8737 0.5983
-#&gt; Monomolecular 0.9318    0.8723 0.5743
-#&gt; 
-#&gt;  Infection rate:
-#&gt;                Estimate   Std.error     Lower     Upper
-#&gt; Logistic      0.2963172 0.003491710 0.2891399 0.2891399
-#&gt; Gompertz      0.1984260 0.008134087 0.1817061 0.1817061
-#&gt; Exponential   0.1516750 0.011307165 0.1284328 0.1284328
-#&gt; Monomolecular 0.1446423 0.010852569 0.1223345 0.1223345
-#&gt; 
-#&gt;  Initial inoculum:
-#&gt;                    Estimate Linearized     lin.SE         Lower        Upper
-#&gt; Logistic       0.0108173681 -4.5157260 0.06294769  0.0095169644  0.012293254
-#&gt; Gompertz       0.0002387652 -2.1210668 0.14663934  0.0000127004  0.002091927
-#&gt; Exponential    0.0231954412 -3.7637995 0.20384281  0.0152556644  0.035267457
-#&gt; Monomolecular -1.1210822598 -0.7519265 0.19564748 -2.1711224375 -0.418737384</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>PowderyMildew</span><span class='op'>)</span>
+<span class='co'>## maybe str(PowderyMildew) ; plot(PowderyMildew) ...</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

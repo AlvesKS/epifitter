@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epifitter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -103,7 +103,7 @@
       <h1 data-toc-skip>Simulating disease progress curves</h1>
                         <h4 class="author">Kaique S Alves</h4>
             
-            <h4 class="date">2021-06-01</h4>
+            <h4 class="date">2021-06-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/master/vignettes/simulation.Rmd"><code>vignettes/simulation.Rmd</code></a></small>
       <div class="hidden name"><code>simulation.Rmd</code></div>
@@ -168,12 +168,12 @@
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">exp_model</span><span class="op">)</span></pre></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01138023
-## 2          1   10 0.01568425 0.01582709
-## 3          1   20 0.02459905 0.01992487
-## 4          1   30 0.03858028 0.03008413
-## 5          1   40 0.06050749 0.06149182
-## 6          1   50 0.09489670 0.10315367</code></pre>
+## 1          1    0 0.01000000 0.01000000
+## 2          1   10 0.01568425 0.01594221
+## 3          1   20 0.02459905 0.02477225
+## 4          1   30 0.03858028 0.03559417
+## 5          1   40 0.06050749 0.07083290
+## 6          1   50 0.09489670 0.10802466</code></pre>
 <p>A <code>data.frame</code> object is produced with four columns:</p>
 <ul>
 <li>
@@ -199,7 +199,7 @@
     x <span class="op">=</span> <span class="st">"Time"</span>
   <span class="op">)</span>
 <span class="va">exp_plot</span></pre></div>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
 <p><img src="simulation_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
 <div id="monomolecular" class="section level4">
@@ -216,13 +216,13 @@
   n <span class="op">=</span> <span class="fl">7</span>
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mono_model</span><span class="op">)</span></pre></div>
-<pre><code>##   replicates time         y  random_y
-## 1          1    0 0.0100000 0.0100000
-## 2          1    5 0.2289861 0.1921026
-## 3          1   10 0.3995322 0.3593234
-## 4          1   15 0.5323535 0.4625067
-## 5          1   20 0.6357949 0.4946245
-## 6          1   25 0.7163551 0.6599480</code></pre>
+<pre><code>##   replicates time         y   random_y
+## 1          1    0 0.0100000 0.01181973
+## 2          1    5 0.2289861 0.18321739
+## 3          1   10 0.3995322 0.48066834
+## 4          1   15 0.5323535 0.57142173
+## 5          1   20 0.6357949 0.55775762
+## 6          1   25 0.7163551 0.71959049</code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit">
 <span class="va">mono_plot</span> <span class="op">=</span> <span class="va">mono_model</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -251,12 +251,12 @@
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">logist_model</span><span class="op">)</span></pre></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01029425
-## 2          1    5 0.01638216 0.01980827
-## 3          1   10 0.02672677 0.02237773
-## 4          1   15 0.04331509 0.03874821
-## 5          1   20 0.06946352 0.08444894
-## 6          1   25 0.10958806 0.10522422</code></pre>
+## 1          1    0 0.01000000 0.01000000
+## 2          1    5 0.01638216 0.01983962
+## 3          1   10 0.02672677 0.02984366
+## 4          1   15 0.04331509 0.02364864
+## 5          1   20 0.06946352 0.06631386
+## 6          1   25 0.10958806 0.11027489</code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit">
 <span class="va">logist_plot</span> <span class="op">=</span> <span class="va">logist_model</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -285,12 +285,12 @@
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">gomp_model</span><span class="op">)</span></pre></div>
 <pre><code>##   replicates time          y   random_y
-## 1          1    0 0.01000000 0.01274797
-## 2          1    5 0.03896283 0.03605923
-## 3          1   10 0.10158896 0.08890527
-## 4          1   15 0.19958740 0.21981366
-## 5          1   20 0.32122825 0.34547882
-## 6          1   25 0.44922018 0.45079722</code></pre>
+## 1          1    0 0.01000000 0.01254931
+## 2          1    5 0.03896283 0.03637617
+## 3          1   10 0.10158896 0.10442916
+## 4          1   15 0.19958740 0.22298368
+## 5          1   20 0.32122825 0.31664090
+## 6          1   25 0.44922018 0.37424327</code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit">
 <span class="va">gomp_plot</span> <span class="op">=</span> <span class="va">gomp_model</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -315,7 +315,7 @@
           <span class="va">mono_plot</span>,
           <span class="va">logist_plot</span>,
           <span class="va">gomp_plot</span><span class="op">)</span></pre></div>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
 <p><img src="simulation_files/figure-html/unnamed-chunk-10-1.png" width="768"></p>
 </div>
 </div>

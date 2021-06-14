@@ -1,4 +1,14 @@
-sim_logistic <- function(N = 10, dt = 1, y0 = 0.01, r, n, alpha = 0.2) {
+sim_logistic <- function(N = 10, dt = 1, y0 = 0.01, r, K = 1, n, alpha = 0.2) {
+  if (K>1) {
+    stop(gettextf("K must be lower or equal than 1 (k <= 1)"))
+  }
+  if (K<=0) {
+    stop(gettextf("K must be higher than 0 and lower or equal to 1 ( 0 < K <= 1)"))
+  }
+
+  if (K<y0) {
+    stop(gettextf("K must be higher y0"))
+  }
   time <- seq(0, N, by = dt)
   w <- numeric(length(time))
   y <- numeric(length(time))
@@ -10,7 +20,7 @@ sim_logistic <- function(N = 10, dt = 1, y0 = 0.01, r, n, alpha = 0.2) {
 
     InitCond <- c(y[k])
     steps <- seq(time[k], time[k + 1], by = dt)
-    parms <- list(r = r[k])
+    parms <- list(r = r[k], K =K)
     ode_logi <- deSolve::ode(InitCond, steps, logi_fun, parms)
     y[k + 1] <- ode_logi[length(ode_logi[, 2]), 2]
   }

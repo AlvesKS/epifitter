@@ -1,0 +1,241 @@
+"irrigation_type" "moisture" "block" "time" "sev"
+"1" "Drip" "High moisture" "1" 0 0.011
+"2" "Drip" "High moisture" "2" 0 0.011
+"3" "Drip" "High moisture" "3" 0 0.011
+"4" "Drip" "High moisture" "1" 7 0.034
+"5" "Drip" "High moisture" "2" 7 0.04
+"6" "Drip" "High moisture" "3" 7 0.036
+"7" "Drip" "High moisture" "1" 14 0.114
+"8" "Drip" "High moisture" "2" 14 0.109
+"9" "Drip" "High moisture" "3" 14 0.097
+"10" "Drip" "High moisture" "1" 21 0.126
+"11" "Drip" "High moisture" "2" 21 0.12
+"12" "Drip" "High moisture" "3" 21 0.103
+"13" "Drip" "High moisture" "1" 28 0.16
+"14" "Drip" "High moisture" "2" 28 0.149
+"15" "Drip" "High moisture" "3" 28 0.149
+"16" "Drip" "High moisture" "1" 35 0.183
+"17" "Drip" "High moisture" "2" 35 0.189
+"18" "Drip" "High moisture" "3" 35 0.171
+"19" "Drip" "High moisture" "1" 42 0.297
+"20" "Drip" "High moisture" "2" 42 0.331
+"21" "Drip" "High moisture" "3" 42 0.343
+"22" "Drip" "High moisture" "1" 49 0.331
+"23" "Drip" "High moisture" "2" 49 0.366
+"24" "Drip" "High moisture" "3" 49 0.366
+"25" "Drip" "High moisture" "1" 56 0.389
+"26" "Drip" "High moisture" "2" 56 0.457
+"27" "Drip" "High moisture" "3" 56 0.411
+"28" "Drip" "High moisture" "1" 63 0.434
+"29" "Drip" "High moisture" "2" 63 0.434
+"30" "Drip" "High moisture" "3" 63 0.434
+"31" "MS" "High moisture" "1" 0 0.005
+"32" "MS" "High moisture" "2" 0 0.007
+"33" "MS" "High moisture" "3" 0 0.008
+"34" "MS" "High moisture" "1" 7 0.017
+"35" "MS" "High moisture" "2" 7 0.024
+"36" "MS" "High moisture" "3" 7 0.014
+"37" "MS" "High moisture" "1" 14 0.051
+"38" "MS" "High moisture" "2" 14 0.074
+"39" "MS" "High moisture" "3" 14 0.046
+"40" "MS" "High moisture" "1" 21 0.061
+"41" "MS" "High moisture" "2" 21 0.089
+"42" "MS" "High moisture" "3" 21 0.056
+"43" "MS" "High moisture" "1" 28 0.069
+"44" "MS" "High moisture" "2" 28 0.07
+"45" "MS" "High moisture" "3" 28 0.066
+"46" "MS" "High moisture" "1" 35 0.089
+"47" "MS" "High moisture" "2" 35 0.1
+"48" "MS" "High moisture" "3" 35 0.091
+"49" "MS" "High moisture" "1" 42 0.171
+"50" "MS" "High moisture" "2" 42 0.229
+"51" "MS" "High moisture" "3" 42 0.211
+"52" "MS" "High moisture" "1" 49 0.211
+"53" "MS" "High moisture" "2" 49 0.234
+"54" "MS" "High moisture" "3" 49 0.229
+"55" "MS" "High moisture" "1" 56 0.297
+"56" "MS" "High moisture" "2" 56 0.32
+"57" "MS" "High moisture" "3" 56 0.297
+"58" "MS" "High moisture" "1" 63 0.366
+"59" "MS" "High moisture" "2" 63 0.354
+"60" "MS" "High moisture" "3" 63 0.331
+"61" "MS" "Moderate moisture" "1" 0 0.009
+"62" "MS" "Moderate moisture" "2" 0 0.009
+"63" "MS" "Moderate moisture" "3" 0 0.009
+"64" "MS" "Moderate moisture" "1" 7 0.028
+"65" "MS" "Moderate moisture" "2" 7 0.025
+"66" "MS" "Moderate moisture" "3" 7 0.021
+"67" "MS" "Moderate moisture" "1" 14 0.077
+"68" "MS" "Moderate moisture" "2" 14 0.08
+"69" "MS" "Moderate moisture" "3" 14 0.071
+"70" "MS" "Moderate moisture" "1" 21 0.056
+"71" "MS" "Moderate moisture" "2" 21 0.086
+"72" "MS" "Moderate moisture" "3" 21 0.071
+"73" "MS" "Moderate moisture" "1" 28 0.103
+"74" "MS" "Moderate moisture" "2" 28 0.109
+"75" "MS" "Moderate moisture" "3" 28 0.097
+"76" "MS" "Moderate moisture" "1" 35 0.137
+"77" "MS" "Moderate moisture" "2" 35 0.143
+"78" "MS" "Moderate moisture" "3" 35 0.149
+"79" "MS" "Moderate moisture" "1" 42 0.229
+"80" "MS" "Moderate moisture" "2" 42 0.269
+"81" "MS" "Moderate moisture" "3" 42 0.309
+"82" "MS" "Moderate moisture" "1" 49 0.309
+"83" "MS" "Moderate moisture" "2" 49 0.297
+"84" "MS" "Moderate moisture" "3" 49 0.354
+"85" "MS" "Moderate moisture" "1" 56 0.354
+"86" "MS" "Moderate moisture" "2" 56 0.411
+"87" "MS" "Moderate moisture" "3" 56 0.389
+"88" "MS" "Moderate moisture" "1" 63 0.411
+"89" "MS" "Moderate moisture" "2" 63 0.4
+"90" "MS" "Moderate moisture" "3" 63 0.4
+"91" "Furrow" "Moderate moisture" "1" 0 0.01
+"92" "Furrow" "Moderate moisture" "2" 0 0.01
+"93" "Furrow" "Moderate moisture" "3" 0 0.01
+"94" "Furrow" "Moderate moisture" "1" 7 0.036
+"95" "Furrow" "Moderate moisture" "2" 7 0.036
+"96" "Furrow" "Moderate moisture" "3" 7 0.04
+"97" "Furrow" "Moderate moisture" "1" 14 0.097
+"98" "Furrow" "Moderate moisture" "2" 14 0.097
+"99" "Furrow" "Moderate moisture" "3" 14 0.114
+"100" "Furrow" "Moderate moisture" "1" 21 0.114
+"101" "Furrow" "Moderate moisture" "2" 21 0.097
+"102" "Furrow" "Moderate moisture" "3" 21 0.103
+"103" "Furrow" "Moderate moisture" "1" 28 0.149
+"104" "Furrow" "Moderate moisture" "2" 28 0.166
+"105" "Furrow" "Moderate moisture" "3" 28 0.154
+"106" "Furrow" "Moderate moisture" "1" 35 0.183
+"107" "Furrow" "Moderate moisture" "2" 35 0.194
+"108" "Furrow" "Moderate moisture" "3" 35 0.194
+"109" "Furrow" "Moderate moisture" "1" 42 0.343
+"110" "Furrow" "Moderate moisture" "2" 42 0.377
+"111" "Furrow" "Moderate moisture" "3" 42 0.343
+"112" "Furrow" "Moderate moisture" "1" 49 0.377
+"113" "Furrow" "Moderate moisture" "2" 49 0.389
+"114" "Furrow" "Moderate moisture" "3" 49 0.377
+"115" "Furrow" "Moderate moisture" "1" 56 0.4
+"116" "Furrow" "Moderate moisture" "2" 56 0.411
+"117" "Furrow" "Moderate moisture" "3" 56 0.434
+"118" "Furrow" "Moderate moisture" "1" 63 0.457
+"119" "Furrow" "Moderate moisture" "2" 63 0.457
+"120" "Furrow" "Moderate moisture" "3" 63 0.434
+"121" "MS above canopy" "High moisture" "1" 0 0.007
+"122" "MS above canopy" "High moisture" "2" 0 0.009
+"123" "MS above canopy" "High moisture" "3" 0 0.006
+"124" "MS above canopy" "High moisture" "1" 7 0.013
+"125" "MS above canopy" "High moisture" "2" 7 0.014
+"126" "MS above canopy" "High moisture" "3" 7 0.011
+"127" "MS above canopy" "High moisture" "1" 14 0.019
+"128" "MS above canopy" "High moisture" "2" 14 0.018
+"129" "MS above canopy" "High moisture" "3" 14 0.016
+"130" "MS above canopy" "High moisture" "1" 21 0.04
+"131" "MS above canopy" "High moisture" "2" 21 0.043
+"132" "MS above canopy" "High moisture" "3" 21 0.046
+"133" "MS above canopy" "High moisture" "1" 28 0.041
+"134" "MS above canopy" "High moisture" "2" 28 0.05
+"135" "MS above canopy" "High moisture" "3" 28 0.049
+"136" "MS above canopy" "High moisture" "1" 35 0.044
+"137" "MS above canopy" "High moisture" "2" 35 0.053
+"138" "MS above canopy" "High moisture" "3" 35 0.054
+"139" "MS above canopy" "High moisture" "1" 42 0.083
+"140" "MS above canopy" "High moisture" "2" 42 0.089
+"141" "MS above canopy" "High moisture" "3" 42 0.097
+"142" "MS above canopy" "High moisture" "1" 49 0.114
+"143" "MS above canopy" "High moisture" "2" 49 0.123
+"144" "MS above canopy" "High moisture" "3" 49 0.103
+"145" "MS above canopy" "High moisture" "1" 56 0.12
+"146" "MS above canopy" "High moisture" "2" 56 0.12
+"147" "MS above canopy" "High moisture" "3" 56 0.12
+"148" "MS above canopy" "High moisture" "1" 63 0.131
+"149" "MS above canopy" "High moisture" "2" 63 0.149
+"150" "MS above canopy" "High moisture" "3" 63 0.16
+"151" "MS above canopy" "Moderate moisture" "1" 0 0.011
+"152" "MS above canopy" "Moderate moisture" "2" 0 0.009
+"153" "MS above canopy" "Moderate moisture" "3" 0 0.008
+"154" "MS above canopy" "Moderate moisture" "1" 7 0.018
+"155" "MS above canopy" "Moderate moisture" "2" 7 0.019
+"156" "MS above canopy" "Moderate moisture" "3" 7 0.018
+"157" "MS above canopy" "Moderate moisture" "1" 14 0.025
+"158" "MS above canopy" "Moderate moisture" "2" 14 0.026
+"159" "MS above canopy" "Moderate moisture" "3" 14 0.022
+"160" "MS above canopy" "Moderate moisture" "1" 21 0.064
+"161" "MS above canopy" "Moderate moisture" "2" 21 0.056
+"162" "MS above canopy" "Moderate moisture" "3" 21 0.05
+"163" "MS above canopy" "Moderate moisture" "1" 28 0.063
+"164" "MS above canopy" "Moderate moisture" "2" 28 0.063
+"165" "MS above canopy" "Moderate moisture" "3" 28 0.071
+"166" "MS above canopy" "Moderate moisture" "1" 35 0.066
+"167" "MS above canopy" "Moderate moisture" "2" 35 0.074
+"168" "MS above canopy" "Moderate moisture" "3" 35 0.083
+"169" "MS above canopy" "Moderate moisture" "1" 42 0.097
+"170" "MS above canopy" "Moderate moisture" "2" 42 0.103
+"171" "MS above canopy" "Moderate moisture" "3" 42 0.109
+"172" "MS above canopy" "Moderate moisture" "1" 49 0.12
+"173" "MS above canopy" "Moderate moisture" "2" 49 0.137
+"174" "MS above canopy" "Moderate moisture" "3" 49 0.131
+"175" "MS above canopy" "Moderate moisture" "1" 56 0.126
+"176" "MS above canopy" "Moderate moisture" "2" 56 0.143
+"177" "MS above canopy" "Moderate moisture" "3" 56 0.131
+"178" "MS above canopy" "Moderate moisture" "1" 63 0.149
+"179" "MS above canopy" "Moderate moisture" "2" 63 0.189
+"180" "MS above canopy" "Moderate moisture" "3" 63 0.166
+"181" "Overhead" "High moisture" "1" 0 0.003
+"182" "Overhead" "High moisture" "2" 0 0.004
+"183" "Overhead" "High moisture" "3" 0 0.006
+"184" "Overhead" "High moisture" "1" 7 0.008
+"185" "Overhead" "High moisture" "2" 7 0.006
+"186" "Overhead" "High moisture" "3" 7 0.008
+"187" "Overhead" "High moisture" "1" 14 0.016
+"188" "Overhead" "High moisture" "2" 14 0.017
+"189" "Overhead" "High moisture" "3" 14 0.016
+"190" "Overhead" "High moisture" "1" 21 0.026
+"191" "Overhead" "High moisture" "2" 21 0.029
+"192" "Overhead" "High moisture" "3" 21 0.029
+"193" "Overhead" "High moisture" "1" 28 0.037
+"194" "Overhead" "High moisture" "2" 28 0.047
+"195" "Overhead" "High moisture" "3" 28 0.041
+"196" "Overhead" "High moisture" "1" 35 0.053
+"197" "Overhead" "High moisture" "2" 35 0.053
+"198" "Overhead" "High moisture" "3" 35 0.051
+"199" "Overhead" "High moisture" "1" 42 0.089
+"200" "Overhead" "High moisture" "2" 42 0.089
+"201" "Overhead" "High moisture" "3" 42 0.091
+"202" "Overhead" "High moisture" "1" 49 0.111
+"203" "Overhead" "High moisture" "2" 49 0.097
+"204" "Overhead" "High moisture" "3" 49 0.12
+"205" "Overhead" "High moisture" "1" 56 0.111
+"206" "Overhead" "High moisture" "2" 56 0.111
+"207" "Overhead" "High moisture" "3" 56 0.131
+"208" "Overhead" "High moisture" "1" 63 0.114
+"209" "Overhead" "High moisture" "2" 63 0.114
+"210" "Overhead" "High moisture" "3" 63 0.143
+"211" "Overhead" "Moderate moisture" "1" 0 0.005
+"212" "Overhead" "Moderate moisture" "2" 0 0.005
+"213" "Overhead" "Moderate moisture" "3" 0 0.004
+"214" "Overhead" "Moderate moisture" "1" 7 0.009
+"215" "Overhead" "Moderate moisture" "2" 7 0.005
+"216" "Overhead" "Moderate moisture" "3" 7 0.006
+"217" "Overhead" "Moderate moisture" "1" 14 0.024
+"218" "Overhead" "Moderate moisture" "2" 14 0.019
+"219" "Overhead" "Moderate moisture" "3" 14 0.022
+"220" "Overhead" "Moderate moisture" "1" 21 0.029
+"221" "Overhead" "Moderate moisture" "2" 21 0.022
+"222" "Overhead" "Moderate moisture" "3" 21 0.025
+"223" "Overhead" "Moderate moisture" "1" 28 0.049
+"224" "Overhead" "Moderate moisture" "2" 28 0.039
+"225" "Overhead" "Moderate moisture" "3" 28 0.043
+"226" "Overhead" "Moderate moisture" "1" 35 0.06
+"227" "Overhead" "Moderate moisture" "2" 35 0.051
+"228" "Overhead" "Moderate moisture" "3" 35 0.058
+"229" "Overhead" "Moderate moisture" "1" 42 0.097
+"230" "Overhead" "Moderate moisture" "2" 42 0.097
+"231" "Overhead" "Moderate moisture" "3" 42 0.1
+"232" "Overhead" "Moderate moisture" "1" 49 0.109
+"233" "Overhead" "Moderate moisture" "2" 49 0.1
+"234" "Overhead" "Moderate moisture" "3" 49 0.109
+"235" "Overhead" "Moderate moisture" "1" 56 0.12
+"236" "Overhead" "Moderate moisture" "2" 56 0.126
+"237" "Overhead" "Moderate moisture" "3" 56 0.114
+"238" "Overhead" "Moderate moisture" "1" 63 0.131
+"239" "Overhead" "Moderate moisture" "2" 63 0.131
+"240" "Overhead" "Moderate moisture" "3" 63 0.126

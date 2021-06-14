@@ -1,7 +1,7 @@
 Package: epifitter
 Type: Package
 Title: Analysis and Simulation of Plant Disease Progress Curves
-Version: 0.2.0 
+Version: 0.3.0 
 Description: Analysis and visualization of plant disease progress curve data. Functions for
     fitting two-parameter population dynamics models (exponential, monomolecular, logistic
     and Gompertz) to proportion data for single or multiple epidemics using either linear

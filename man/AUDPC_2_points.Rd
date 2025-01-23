@@ -9,10 +9,10 @@ AUDPC_2_points(time, y0, yT)
 assessment.}
 
 \item{y0}{A numeric value representing the disease intensity at the first
-intensity measurement.}
+intensity measurement. Must be greater than zero and less than one.}
 
 \item{yT}{A numeric value representing the disease intensity at the last
-intensity measurement.}
+intensity measurement. Must be greater than \code{y0} and less than one.}
 }
 \description{
 Estimates area under the disease progress curve \acronym{AUDPC} from two

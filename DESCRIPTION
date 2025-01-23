@@ -19,9 +19,13 @@ Authors@R: c(
           family = "Del Ponte", 
           role = "aut",
           email = "delponte@ufv.br",
-          comment = c(ORCID = "0000-0003-4398-409X"))
+          comment = c(ORCID = "0000-0003-4398-409X")),
+  person(given = "Adam H.",
+         family = "Sparks",
+         role = "aut",
+         email = "adamhsparks@gmail.com",
+         comment = c("ORCID" = "0000-0002-0061-8359"))
           )
-Maintainer: Kaique dos S. Alves <kaiquedsalves@gmail.com>
 Depends: R (>= 3.2)
 Imports: deSolve, dplyr, stats, ggplot2, knitr, tidyr, DescTools, minpack.lm, magrittr, tibble
 Suggests: 

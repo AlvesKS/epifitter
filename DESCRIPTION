@@ -24,7 +24,11 @@ Authors@R: c(
 Maintainer: Kaique dos S. Alves <kaiquedsalves@gmail.com>
 Depends: R (>= 3.2)
 Imports: deSolve, dplyr, stats, ggplot2, knitr, tidyr, DescTools, minpack.lm, magrittr, tibble
-Suggests: rmarkdown, ggridges, cowplot
+Suggests: 
+    rmarkdown,
+    ggridges,
+    cowplot,
+    testthat (>= 3.0.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -33,3 +37,4 @@ Date: 2021-06-13 22:30:00 UTC
 URL: https://github.com/AlvesKS/epifitter
 BugReports: https://github.com/AlvesKS/epifitter/issues
 X-schema.org-applicationCategory: Tools
+Config/testthat/edition: 3

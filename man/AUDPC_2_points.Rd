@@ -12,7 +12,7 @@ assessment.}
 intensity measurement. Must be greater than zero and less than one.}
 
 \item{yT}{A numeric value representing the disease intensity at the last
-intensity measurement. Must be greater than \code{y0} and less than one.}
+intensity measurement. Must be greater than zero and less than one.}
 }
 \description{
 Estimates area under the disease progress curve \acronym{AUDPC} from two

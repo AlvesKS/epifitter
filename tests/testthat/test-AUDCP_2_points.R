@@ -13,14 +13,28 @@ test_that("AUDCP_2_points errors with missing `yT`", {
 test_that("AUDCP_2_points errors when y0 < 0", {
   expect_error(
     AUDPC_2_points(time = 10, y0 = -0.1, yT = 0.9),
-    "y0 and yT must be between 0 and <1 and yT must be > y0"
+    "y0 and yT must be between 0 and <=1 and must not be equal"
   )
 })
 
-test_that("AUDCP_2_points errors when y0 >= 1", {
+test_that("AUDCP_2_points errors when y0 > 1", {
   expect_error(
     AUDPC_2_points(time = 10, y0 = 1.1, yT = 0.9),
-    "y0 and yT must be between 0 and <1 and yT must be > y0"
+    "y0 and yT must be between 0 and <=1 and must not be equal"
+  )
+})
+
+test_that("AUDCP_2_points errors when yT > 1", {
+  expect_error(
+    AUDPC_2_points(time = 10, y0 = 0.1, yT = 1.1),
+    "y0 and yT must be between 0 and <=1 and must not be equal"
+  )
+})
+
+test_that("AUDCP_2_points errors when y0 == yT", {
+  expect_error(
+    AUDPC_2_points(time = 10, y0 = 0.1, yT = 0.1),
+    "y0 and yT must be between 0 and <=1 and must not be equal."
   )
 })
 

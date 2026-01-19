@@ -1,40 +1,88 @@
-test_that("AUDCP_2_points errors with missing `time`", {
-  expect_error(AUDPC_2_points(y0 = 0.1, yT = 0.9), "Missing 'time' value")
+test_that("AUDPC_2_points errors with missing `time`", {
+  expect_error(AUDPC_2_points(y0 = 0.1, yT = 0.9), "All parameters")
 })
 
-test_that("AUDCP_2_points errors with missing `y0`", {
-  expect_error(AUDPC_2_points(time = 10, yT = 0.9), "Missing 'y0' value")
+test_that("AUDPC_2_points errors with missing `y0`", {
+  expect_error(AUDPC_2_points(time = 10, yT = 0.9), "All parameters")
 })
 
-test_that("AUDCP_2_points errors with missing `yT`", {
-  expect_error(AUDPC_2_points(time = 10, y0 = 0.1), "Missing 'yT' value")
+test_that("AUDPC_2_points errors with missing `yT`", {
+  expect_error(AUDPC_2_points(time = 10, y0 = 0.1), "All parameters")
 })
 
-test_that("AUDCP_2_points errors when y0 < 0", {
+test_that("AUDPC_2_points errors when y0 < 0", {
   expect_error(
     AUDPC_2_points(time = 10, y0 = -0.1, yT = 0.9),
-    "y0 and yT must be between 0 and <=1 and must not be equal"
+    "strictly between 0 and 1"
   )
 })
 
-test_that("AUDCP_2_points errors when y0 > 1", {
+test_that("AUDPC_2_points errors when y0 > 1", {
   expect_error(
     AUDPC_2_points(time = 10, y0 = 1.1, yT = 0.9),
-    "y0 and yT must be between 0 and <=1 and must not be equal"
+    "strictly between 0 and 1"
   )
 })
 
-test_that("AUDCP_2_points errors when yT > 1", {
+test_that("AUDPC_2_points errors when yT > 1", {
   expect_error(
     AUDPC_2_points(time = 10, y0 = 0.1, yT = 1.1),
-    "y0 and yT must be between 0 and <=1 and must not be equal"
+    "strictly between 0 and 1"
   )
 })
 
-test_that("AUDCP_2_points errors when y0 == yT", {
+test_that("AUDPC_2_points errors when y0 == 0", {
+  expect_error(
+    AUDPC_2_points(time = 10, y0 = 0, yT = 0.9),
+    "strictly between 0 and 1"
+  )
+})
+
+test_that("AUDPC_2_points errors when yT == 1", {
+  expect_error(
+    AUDPC_2_points(time = 10, y0 = 0.1, yT = 1),
+    "strictly between 0 and 1"
+  )
+})
+
+test_that("AUDPC_2_points errors when y0 == yT", {
   expect_error(
     AUDPC_2_points(time = 10, y0 = 0.1, yT = 0.1),
-    "y0 and yT must be between 0 and <=1 and must not be equal."
+    "strictly between 0 and 1"
+  )
+})
+
+test_that("AUDPC_2_points errors when time <= 0", {
+  expect_error(
+    AUDPC_2_points(time = -5, y0 = 0.1, yT = 0.9),
+    "time must be positive"
+  )
+})
+
+test_that("AUDPC_2_points errors with non-numeric inputs", {
+  expect_error(
+    AUDPC_2_points(time = "10", y0 = 0.1, yT = 0.9),
+    "numeric scalar values"
+  )
+})
+
+test_that("AUDPC_2_points errors with vector inputs", {
+  expect_error(
+    AUDPC_2_points(time = c(10, 20), y0 = 0.1, yT = 0.9),
+    "numeric scalar values"
+  )
+})
+
+test_that("AUDPC_2_points errors with NA values", {
+  expect_error(
+    AUDPC_2_points(time = 10, y0 = NA_real_, yT = 0.9)
+  )
+})
+
+test_that("AUDPC_2_points errors with Inf values", {
+  expect_error(
+    AUDPC_2_points(time = Inf, y0 = 0.1, yT = 0.9),
+    "finite"
   )
 })
 

@@ -1,3 +1,4 @@
+#' @export
 fit_multi = function(time_col,
                         intensity_col,
                         data,
@@ -28,6 +29,7 @@ fit_multi = function(time_col,
 
 
 
+  strata = model = best_CCC = best_RSE = NULL
   box = data.frame()
   pred_box = data.frame()
 
@@ -100,8 +102,17 @@ fit_multi = function(time_col,
   }
 
 
+  best_box = box2 %>%
+    dplyr::group_by(dplyr::across(dplyr::all_of(strata_col))) %>%
+    dplyr::summarise(
+      best_CCC_model = model[best_CCC == 1][1],
+      best_RSE_model = model[best_RSE == 1][1],
+      .groups = "drop"
+    )
+
   a = list(Parameters = box2,
-           Data = pred_box2)
+           Data = pred_box2,
+           Best = best_box)
 
   return(a)
 

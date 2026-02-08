@@ -1,5 +1,9 @@
+
+url: https://alvesks.github.io/epifitter/
 destination: docs
 template:
+  bootstrap: 5
+  light-switch: true
   params:
     ganalytics: UA-177181576-1
 home:

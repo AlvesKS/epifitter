@@ -1,0 +1,138 @@
+# *epifitter*
+
+[![CRAN](https://www.r-pkg.org/badges/version/epifitter)](https://CRAN.R-project.org/package=epifitter)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/epifitter)](https://CRAN.R-project.org/package=epifitter)
+
+Provides a set of tools for aiding in the **visualization, description,
+and comparison of plant disease progress curve** (DPC) data. A DPC
+depict the change in a disease-intensity variable measured sequentially
+at different times during the epidemics. Their analysis, that may
+include fitting “classic” population dynamics models (e.g. logistic,
+monomolecular, Gompertz), allows gaining understanding of the
+epidemiological processes, but is most used for comparing epidemics.
+
+The mathematics behind model fitting is straightforward and
+general-purpose spreadsheet or statistical softwares can be used to
+perform the calculations and select the “best” model. What `epifitter`
+does is to provide the analyst with R functions for performing several
+tasks commonly used for the temporal analysis of epidemics, including
+graphical output.
+
+Current implementation includes functions for the analyst to:
+
+- Fit classic population dynamics models using linear and nonlinear
+  approaches
+- Select models based on statistical and visual analysis
+- Calculate the area under the disease progress curve
+- Compare epidemics via visual inference
+- Simulate synthetic epidemics of various shapes and uncertainty
+
+## Quick start
+
+Install the stable release from CRAN.
+
+``` r
+install.packages("epifitter")
+```
+
+The development version of **epifitter** is available from GitHub. The
+**devtools** package, available from CRAN, is required for installation.
+
+``` r
+if (!require(devtools)) {
+  install.packages("devtools")
+}
+
+devtools::install_github("AlvesKS/epifitter")
+```
+
+## Meta
+
+- Please [report any issues or
+  bugs](https://github.com/AlvesKS/epifitter/issues).
+- All code is licensed MIT
+- To cite epifitter, please use the output from citation(“epifitter”)
+- Please note that epifitter is released with [Contributor Code of
+  Conduct](https://alvesks.github.io/epifitter/CODE_OF_CONDUCT.html). By
+  participating in this project you agree to abide by its terms.
+
+# Package index
+
+## All functions
+
+- [`AUDPC()`](https://alvesks.github.io/epifitter/reference/AUDPC.md) :
+  Area under disease progress curve
+
+- [`AUDPC_2_points()`](https://alvesks.github.io/epifitter/reference/AUDPC_2_points.md)
+  : Estimate disease progress curve from only two points
+
+- [`AUDPS()`](https://alvesks.github.io/epifitter/reference/AUDPS.md) :
+  Area under disease progress stairs
+
+- [`expo_fun()`](https://alvesks.github.io/epifitter/reference/expo_fun.md)
+  : Function for Exponential model
+
+- [`fit_lin()`](https://alvesks.github.io/epifitter/reference/fit_lin.md)
+  : Fits epidemic models using data linearization
+
+- [`fit_multi()`](https://alvesks.github.io/epifitter/reference/fit_multi.md)
+  : Estimate model parameters for multiple disease progress curves
+
+- [`fit_nlin()`](https://alvesks.github.io/epifitter/reference/fit_nlin.md)
+  : Fits epidemic models using nonlinear aproach
+
+- [`fit_nlin2()`](https://alvesks.github.io/epifitter/reference/fit_nlin2.md)
+  : Fits epidemic models using nonlinear aproach. This function also
+  estimates the maximum disease intensity parameter K
+
+- [`gompi_fun()`](https://alvesks.github.io/epifitter/reference/gompi_fun.md)
+  : Function for Gompertz model
+
+- [`logi_fun()`](https://alvesks.github.io/epifitter/reference/logi_fun.md)
+  : Function for logistic model
+
+- [`mono_fun()`](https://alvesks.github.io/epifitter/reference/mono_fun.md)
+  : Function for Monomolecular model
+
+- [`plot_fit()`](https://alvesks.github.io/epifitter/reference/plot_fit.md)
+  : Creates a plot panel for the fitted models
+
+- [`PowderyMildew`](https://alvesks.github.io/epifitter/reference/PowderyMildew.md)
+  : Dataset powdery mildew disease progress curves
+
+- [`print(`*`<fit_lin>`*`)`](https://alvesks.github.io/epifitter/reference/print.fit_lin.md)
+  :
+
+  Print
+  [`fit_lin()`](https://alvesks.github.io/epifitter/reference/fit_lin.md)
+  or
+  [`fit_nlin()`](https://alvesks.github.io/epifitter/reference/fit_nlin.md)
+  outputs
+
+- [`print(`*`<fit_nlin2>`*`)`](https://alvesks.github.io/epifitter/reference/print.fit_nlin2.md)
+  :
+
+  Print
+  [`fit_nlin2()`](https://alvesks.github.io/epifitter/reference/fit_nlin2.md)
+  outputs
+
+- [`sim_exponential()`](https://alvesks.github.io/epifitter/reference/sim_exponential.md)
+  : Simulate an epidemic using the Exponential model
+
+- [`sim_gompertz()`](https://alvesks.github.io/epifitter/reference/sim_gompertz.md)
+  : Simulate an epidemic using the Gompertz model
+
+- [`sim_logistic()`](https://alvesks.github.io/epifitter/reference/sim_logistic.md)
+  : Simulate an epidemic using the logistic model
+
+- [`sim_monomolecular()`](https://alvesks.github.io/epifitter/reference/sim_monomolecular.md)
+  : Simulate an epidemic using the Monomolecular model
+
+# Articles
+
+### All vignettes
+
+- [Fitting and selecting
+  models](https://alvesks.github.io/epifitter/articles/fitting.md):
+- [Simulating disease progress
+  curves](https://alvesks.github.io/epifitter/articles/simulation.md):

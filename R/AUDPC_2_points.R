@@ -1,3 +1,4 @@
+#' @export
 AUDPC_2_points <- function(time, y0, yT) {
   if (missing(time)) {
     stop("Missing 'time' value")

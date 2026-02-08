@@ -1,3 +1,6 @@
+#' @importFrom minpack.lm nlsLM nls.lm.control
+#' @importFrom stats predict cor
+#' @export
 fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter = 50) {
 
   if (missing(y)) {
@@ -19,7 +22,8 @@ fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter 
     v0_ci_lwr  =
     v0_ci_upr  =
     CCC  =
-    best_model  =
+    best_CCC  =
+    best_RSE =
     linear  =
     linearized  =
     r  =
@@ -39,14 +43,15 @@ fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter 
     y0_ci_upr  =
     model  =
     time =
-    y = NULL
+    y =
+    rho = NULL
 
   result_exponential <- minpack.lm::nlsLM(y ~ y0 * exp(r * time),
     start = starting_par,#list(y0 = guess_y0, r = guess_r),
     data = epi,
     lower = c(-Inf, 0),
     upper = c(1, Inf),
-    control = nls.lm.control(maxiter = maxiter)
+    control = minpack.lm::nls.lm.control(maxiter = maxiter)
   )
 
   result_monomolecular <- minpack.lm::nlsLM(y ~ 1 - (1 - y0) * exp(-r * time),
@@ -54,7 +59,7 @@ fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter 
     data = epi,
     lower = c(-Inf, 0),
     upper = c(1, Inf),
-    control = nls.lm.control(maxiter = maxiter)
+    control = minpack.lm::nls.lm.control(maxiter = maxiter)
   )
 
   result_logistic <- minpack.lm::nlsLM(y ~ 1 / (1 + ((1 - y0) / y0) * exp(-r * time)),
@@ -62,7 +67,7 @@ fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter 
     data = epi,
     lower = c(-Inf, 0),
     upper = c(1, Inf),
-    control = nls.lm.control(maxiter = maxiter)
+    control = minpack.lm::nls.lm.control(maxiter = maxiter)
   )
 
 
@@ -71,7 +76,7 @@ fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter 
     data = epi,
     lower = c(-Inf, 0),
     upper = c(1, Inf),
-    control = nls.lm.control(maxiter = maxiter)
+    control = minpack.lm::nls.lm.control(maxiter = maxiter)
   )
 
 
@@ -139,10 +144,15 @@ fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter 
       y0_ci_lwr = y0 + stats::qt(p = 0.025, df = df) * y0_se,
       y0_ci_upr = y0 + stats::qt(p = 0.975, df = df) * y0_se,
       r_ci_lwr = r + stats::qt(p = 0.025, df = df) * r_se,
-      r_ci_upr = r + stats::qt(p = 0.975, df = df) * r_se
+      r_ci_upr = r + stats::qt(p = 0.975, df = df) * r_se,
+      rho = dplyr::case_when(
+        model == "Exponential" ~ r / 6,
+        model == "Gompertz" ~ r / 4,
+        model == "Logistic" ~ r / 6,
+        model == "Monomolecular" ~ r / 2
+      )
     ) %>%
-    dplyr::arrange(-CCC) %>%
-    dplyr::mutate(best_model = 1:4)
+    dplyr::mutate(best_CCC = rank(-CCC), best_RSE = rank(RSE))
 
 
   predicted <- epi %>%
@@ -157,13 +167,13 @@ fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter 
 
 
   za <- z %>%
-    dplyr::mutate(Estimate = r, Std.error = r_se, Lower = r_ci_lwr, Upper = r_ci_lwr)
+    dplyr::mutate(Estimate = r, Std.error = r_se, Lower = r_ci_lwr, Upper = r_ci_lwr, rho = rho)
   zb <- z %>%
     dplyr::mutate(Estimate = y0, Std.error = y0_se, Lower = y0_ci_lwr, Upper = y0_ci_upr)
 
   z1 <- as.matrix(z[, c("CCC", "r_squared", "RSE")])
   rownames(z1) <- as.matrix(z[, "model"])
-  z2 <- as.matrix(za[, c("Estimate", "Std.error", "Lower", "Upper")])
+  z2 <- as.matrix(za[, c("Estimate", "Std.error", "Lower", "Upper", "rho")])
   rownames(z2) <- as.matrix(za[, "model"])
   z3 <- as.matrix(zb[, c("Estimate", "Std.error", "Lower", "Upper")])
   rownames(z3) <- as.matrix(zb[, "model"])

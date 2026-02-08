@@ -1,3 +1,4 @@
+#' @export
 sim_logistic <- function(N = 10, dt = 1, y0 = 0.01, r, K = 1, n, alpha = 0.2) {
   if (K>1) {
     stop(gettextf("K must be lower or equal than 1 (k <= 1)"))

@@ -1,0 +1,4 @@
+# License
+
+    YEAR: 2020
+    COPYRIGHT HOLDER: Kaique dos Santos Alves

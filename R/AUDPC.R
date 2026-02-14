@@ -1,3 +1,4 @@
+#' @export
 AUDPC = function(time, y, y_proportion = TRUE, type = "absolute"){
   if (missing(y)) {
     stop(gettextf("Missing 'y' vector"))

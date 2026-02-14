@@ -1,4 +1,6 @@
+#' @importFrom magrittr %>%
 #' @importFrom rlang .data
+#' @export
 fit_lin <- function(time, y) {
 
   if (missing(y)) {
@@ -33,7 +35,8 @@ fit_lin <- function(time, y) {
     v0_ci_lwr  =
     v0_ci_upr  =
     CCC  =
-    best_model  =
+    best_CCC  =
+    best_RSE =
     linear  =
     linearized  =
     name =
@@ -54,7 +57,8 @@ fit_lin <- function(time, y) {
     y0_ci_upr  =
     model  =
     time =
-    y = NULL
+    y =
+    rho = NULL
 
 
 
@@ -113,12 +117,17 @@ fit_lin <- function(time, y) {
         model == "gompit" ~ "Gompertz",
         model == "logit" ~ "Logistic",
         model == "monit" ~ "Monomolecular"
+      ),
+      rho = dplyr::case_when(
+        model == "Exponential" ~ r / 6,
+        model == "Gompertz" ~ r / 4,
+        model == "Logistic" ~ r / 6,
+        model == "Monomolecular" ~ r / 2
       )
     ) %>%
     dplyr::select(-v0_ci_lwr, -v0_ci_upr) %>%
-    dplyr::arrange(-CCC) %>%
-    dplyr::mutate(best_model = 1:4) %>%
-    dplyr::select(best_model, 1:13)
+    dplyr::mutate(best_CCC = rank(-CCC), best_RSE = rank(RSE)) %>%
+    dplyr::select(best_CCC, best_RSE, 1:14)
   # z
 
 
@@ -150,13 +159,13 @@ fit_lin <- function(time, y) {
 
 
   za <- z %>%
-    dplyr::mutate(Estimate = r, Std.error = r_se, Lower = r_ci_lwr, Upper = r_ci_lwr)
+    dplyr::mutate(Estimate = r, Std.error = r_se, Lower = r_ci_lwr, Upper = r_ci_lwr, rho = rho)
   zb <- z %>%
     dplyr::mutate(Estimate = y0, Linearized  = v0, lin.SE = v0_se, Lower = y0_ci_lwr, Upper = y0_ci_upr)
 
   z1 <- as.matrix(z[, c("CCC", "r_squared", "RSE")])
   rownames(z1) <- as.matrix(za[, "model"])
-  z2 <- as.matrix(za[, c("Estimate", "Std.error", "Lower", "Upper")])
+  z2 <- as.matrix(za[, c("Estimate", "Std.error", "Lower", "Upper", "rho")])
   rownames(z2) <- as.matrix(za[, "model"])
   z3 <- as.matrix(zb[, c("Estimate","Linearized","lin.SE", "Lower", "Upper")])
   rownames(z3) <- as.matrix(zb[, "model"])

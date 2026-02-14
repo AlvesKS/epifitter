@@ -1,3 +1,4 @@
+#' @export
 plot_fit <- function(object,
                      point_size = 1.2,
                      line_size = 1,

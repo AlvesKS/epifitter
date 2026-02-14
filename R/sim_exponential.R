@@ -1,3 +1,4 @@
+#' @export
 sim_exponential <- function(N = 10, dt = 1, y0 = 0.01, r, n, alpha = 0.2) {
   time <- seq(0, N, by = dt)
   w <- numeric(length(time))

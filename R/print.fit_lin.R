@@ -1,3 +1,4 @@
+#' @export
 print.fit_lin <- function(x, ...) {
   cat("Results of fitting population models \n\n")
   # print(x$header, ...)

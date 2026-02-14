@@ -1,8 +1,10 @@
-pandoc: 2.11.2
-pkgdown: 1.6.1
+pandoc: 3.6.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   fitting: fitting.html
   simulation: simulation.html
-last_built: 2021-06-14T14:35Z
-
+last_built: 2026-02-08T23:30Z
+urls:
+  reference: https://alvesks.github.io/epifitter/reference
+  article: https://alvesks.github.io/epifitter/articles

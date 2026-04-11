@@ -2,6 +2,7 @@
 /* https://github.com/tidyverse/tidytemplate/blob/master/inst/pkgdown/assets/tidymodels.css */
 
 @import url('https://fonts.googleapis.com/css2?family=Muli:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap');
 
 
 body {
@@ -150,6 +151,24 @@ a:hover {
   color: #172a3a;
 }
 
+#pkgdown-sidebar,
+nav[data-toggle='toc'] {
+  color: #1f3440;
+}
+
+#pkgdown-sidebar .list-unstyled li a,
+nav[data-toggle='toc'] .nav > li > a,
+nav[data-toggle='toc'] .nav .nav > li > a {
+  color: #2b4653 !important;
+  font-weight: 600;
+}
+
+#pkgdown-sidebar .list-unstyled li a:hover,
+nav[data-toggle='toc'] .nav > li > a:hover,
+nav[data-toggle='toc'] .nav .nav > li > a:hover {
+  color: #114b5f !important;
+}
+
 
 /*----TOC sidebar on non-homepages----*/
 
@@ -164,6 +183,9 @@ nav[data-toggle='toc'] .nav > .active:hover > a,
 nav[data-toggle='toc'] .nav > .active:focus > a,
 nav[data-toggle='toc'] ul > li > a:hover {
   border-left: 3px solid #0A537D;
+  color: #114b5f !important;
+  background-color: rgba(17, 75, 95, 0.08);
+  border-radius: 12px;
   padding-left: 10px;
   text-indent: -2px;
   letter-spacing: 1pt;
@@ -175,6 +197,7 @@ nav[data-toggle='toc'] .nav > li > a:hover,
 nav[data-toggle='toc'] .nav > li > a:focus {
   padding-left: 10px;
   border-left: 3px solid #b6dfe2;
+  color: #114b5f !important;
 }
 
 
@@ -186,6 +209,7 @@ nav[data-toggle='toc'] ul > li > a {
   text-indent: -2px;
   letter-spacing: 1pt;
   font-size: 15px;
+  color: #2b4653 !important;
   text-decoration: none !important;
 }
 
@@ -241,4 +265,311 @@ nav[data-toggle='toc'] .nav .nav > .active:focus > a {
 .contents ul > li { /*to add back in space between bullet items that I took away by making p display inline */
   margin-top: 1em;
   margin-bottom: 1em;
+}
+
+body {
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  color: #20313b;
+  background:
+    radial-gradient(circle at top right, rgba(214, 233, 236, 0.9), transparent 24%),
+    linear-gradient(180deg, #f9fcfc 0%, #ffffff 100%);
+}
+
+h1, h2, h3 {
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.page-header h1 {
+  color: #114b5f;
+  letter-spacing: -0.03em;
+}
+
+a,
+a:hover {
+  color: #0f6c7b;
+}
+
+.navbar {
+  background: linear-gradient(90deg, #16495a 0%, #1d5e73 100%);
+  box-shadow: 0 10px 30px rgba(17, 75, 95, 0.20) !important;
+}
+
+.navbar-brand,
+.navbar-brand:hover,
+.navbar-brand:focus,
+.navbar[data-bs-theme="dark"] .navbar-brand,
+.navbar[data-bs-theme="dark"] .navbar-brand:hover,
+.navbar[data-bs-theme="dark"] .navbar-brand:focus {
+  color: #f5fbfc !important;
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.navbar .navbar-brand .version,
+.navbar .version,
+.navbar[data-bs-theme="dark"] .navbar-brand .version,
+.navbar[data-bs-theme="dark"] .version {
+  color: rgba(245, 251, 252, 0.72) !important;
+}
+
+.navbar-nav .nav-link,
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus,
+.navbar[data-bs-theme="dark"] .nav-link,
+.navbar[data-bs-theme="dark"] .nav-link:hover,
+.navbar[data-bs-theme="dark"] .nav-link:focus,
+.navbar[data-bs-theme="dark"] .dropdown-toggle {
+  color: #eef7f8 !important;
+  font-weight: 600;
+}
+
+.navbar[data-bs-theme="dark"] .navbar-toggler,
+.navbar[data-bs-theme="dark"] .navbar-toggler:hover,
+.navbar[data-bs-theme="dark"] .navbar-toggler:focus {
+  border-color: rgba(238, 247, 248, 0.24);
+}
+
+.navbar[data-bs-theme="dark"] .navbar-toggler-icon {
+  filter: invert(100%) brightness(1.2);
+}
+
+.navbar .dropdown-menu,
+.navbar[data-bs-theme="dark"] .dropdown-menu {
+  background-color: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(17, 75, 95, 0.08);
+  box-shadow: 0 12px 28px rgba(17, 75, 95, 0.10);
+}
+
+.navbar .dropdown-item,
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus,
+.navbar[data-bs-theme="dark"] .dropdown-item,
+.navbar[data-bs-theme="dark"] .dropdown-item:hover,
+.navbar[data-bs-theme="dark"] .dropdown-item:focus {
+  color: #234250;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #114b5f;
+  background-color: rgba(17, 75, 95, 0.06);
+  border-radius: 999px;
+}
+
+.navbar-nav .active > .nav-link,
+.navbar-nav .show > .nav-link,
+.navbar-nav .nav-link.active {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+}
+
+.template-home .page-header,
+.template-reference-index .page-header,
+.template-article .page-header {
+  padding: 1.5rem 1.75rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(214, 233, 236, 0.7), rgba(255, 255, 255, 0.95));
+  border: 1px solid rgba(17, 75, 95, 0.08);
+}
+
+.template-home .page-header {
+  position: relative;
+  min-height: 7.5rem;
+  overflow: hidden;
+}
+
+.template-home .page-header .logo {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(96px, 14vw, 136px);
+  max-width: 20%;
+  height: auto;
+  margin: 0;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.12));
+}
+
+.template-home .page-header h1 {
+  max-width: calc(100% - 180px);
+  margin: 0;
+}
+
+@media (max-width: 767.98px) {
+  .template-home .page-header {
+    min-height: auto;
+    padding-bottom: 1.25rem;
+  }
+
+  .template-home .page-header .logo {
+    position: static;
+    transform: none;
+    display: block;
+    margin: 0 0 1rem auto;
+    max-width: 96px;
+  }
+
+  .template-home .page-header h1 {
+    max-width: 100%;
+  }
+}
+
+#pkgdown-sidebar h2,
+.contents ul li::before,
+.navbar .info .version-danger {
+  color: #114b5f;
+}
+
+.btn-primary {
+  background-color: #77b6c3;
+  border-color: #77b6c3;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active:hover {
+  background-color: #114b5f;
+  border-color: #114b5f;
+}
+
+pre {
+  border-radius: 14px;
+  border: 1px solid rgba(17, 75, 95, 0.08);
+  box-shadow: 0 8px 24px rgba(17, 75, 95, 0.05);
+}
+
+[data-bs-theme="dark"] body {
+  color: #dbe7ec;
+  background:
+    radial-gradient(circle at top right, rgba(51, 92, 103, 0.35), transparent 24%),
+    linear-gradient(180deg, #0d1b22 0%, #111f27 100%);
+}
+
+[data-bs-theme="dark"] h2 {
+  color: #e3f0f4;
+}
+
+[data-bs-theme="dark"] h3 {
+  color: rgba(227, 240, 244, 0.82);
+}
+
+[data-bs-theme="dark"] .page-header h1,
+[data-bs-theme="dark"] #pkgdown-sidebar h2,
+[data-bs-theme="dark"] .contents ul li::before,
+[data-bs-theme="dark"] .navbar .info .version-danger {
+  color: #8ed1dc;
+}
+
+[data-bs-theme="dark"] a,
+[data-bs-theme="dark"] a:hover {
+  color: #8ed1dc;
+}
+
+[data-bs-theme="dark"] .navbar {
+  background: linear-gradient(90deg, #132730 0%, #17323d 100%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28) !important;
+}
+
+[data-bs-theme="dark"] .navbar-brand,
+[data-bs-theme="dark"] .navbar-brand:hover,
+[data-bs-theme="dark"] .navbar-brand:focus,
+[data-bs-theme="dark"] .navbar-nav .nav-link,
+[data-bs-theme="dark"] .navbar-nav .nav-link:hover,
+[data-bs-theme="dark"] .navbar-nav .nav-link:focus {
+  color: #eef7f8 !important;
+}
+
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .navbar-brand,
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .navbar-brand:hover,
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .navbar-brand:focus,
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .nav-link,
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .nav-link:hover,
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .nav-link:focus,
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .dropdown-toggle {
+  color: #eef7f8 !important;
+}
+
+[data-bs-theme="dark"] .navbar .navbar-brand .version,
+[data-bs-theme="dark"] .navbar .version {
+  color: rgba(238, 247, 248, 0.68) !important;
+}
+
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .dropdown-menu {
+  background-color: rgba(21, 37, 46, 0.98);
+  border-color: rgba(142, 209, 220, 0.12);
+}
+
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .dropdown-item,
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .dropdown-item:hover,
+[data-bs-theme="dark"] .navbar[data-bs-theme="dark"] .dropdown-item:focus {
+  color: #e6f2f5;
+}
+
+[data-bs-theme="dark"] .navbar-nav .active > .nav-link,
+[data-bs-theme="dark"] .navbar-nav .show > .nav-link,
+[data-bs-theme="dark"] .navbar-nav .nav-link.active,
+[data-bs-theme="dark"] .navbar-default .navbar-nav > .active > a,
+[data-bs-theme="dark"] .navbar-default .navbar-nav > .active > a:hover,
+[data-bs-theme="dark"] .navbar-default .navbar-nav > .active > a:focus {
+  color: #ffffff !important;
+  background-color: rgba(142, 209, 220, 0.16);
+  border-radius: 999px;
+}
+
+[data-bs-theme="dark"] .template-home .page-header,
+[data-bs-theme="dark"] .template-reference-index .page-header,
+[data-bs-theme="dark"] .template-article .page-header {
+  background: linear-gradient(135deg, rgba(28, 54, 64, 0.9), rgba(20, 33, 41, 0.96));
+  border: 1px solid rgba(142, 209, 220, 0.14);
+}
+
+[data-bs-theme="dark"] #pkgdown-sidebar a,
+[data-bs-theme="dark"] nav[data-toggle='toc'] ul > li > a {
+  color: #d8e7eb;
+}
+
+[data-bs-theme="dark"] #pkgdown-sidebar a:hover,
+[data-bs-theme="dark"] nav[data-toggle='toc'] ul > li > a:hover {
+  color: #ffffff;
+}
+
+[data-bs-theme="dark"] nav[data-toggle='toc'] ul > li > a {
+  border-left-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-bs-theme="dark"] nav[data-toggle='toc'] .nav > .active > a,
+[data-bs-theme="dark"] nav[data-toggle='toc'] .nav > .active:hover > a,
+[data-bs-theme="dark"] nav[data-toggle='toc'] .nav > .active:focus > a,
+[data-bs-theme="dark"] nav[data-toggle='toc'] ul > li > a:hover {
+  border-left-color: #8ed1dc;
+}
+
+[data-bs-theme="dark"] .btn-primary {
+  background-color: #3b8ea5;
+  border-color: #3b8ea5;
+}
+
+[data-bs-theme="dark"] .btn-primary:hover,
+[data-bs-theme="dark"] .btn-primary:focus,
+[data-bs-theme="dark"] .btn-primary:active:hover {
+  background-color: #8ed1dc;
+  border-color: #8ed1dc;
+  color: #0d1b22;
+}
+
+[data-bs-theme="dark"] pre,
+[data-bs-theme="dark"] .sourceCode,
+[data-bs-theme="dark"] .pagedtable-wrapper,
+[data-bs-theme="dark"] table {
+  border-color: rgba(142, 209, 220, 0.12);
+}
+
+[data-bs-theme="dark"] pre {
+  background-color: rgba(12, 23, 29, 0.86);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
 }

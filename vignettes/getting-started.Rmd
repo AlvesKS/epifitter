@@ -1,0 +1,100 @@
+---
+title: "Getting started with epifitter"
+author: "Kaique S. Alves"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with epifitter}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(epifitter)
+library(dplyr)
+library(ggplot2)
+library(cowplot)
+theme_set(cowplot::theme_half_open(font_size = 12))
+```
+
+## What epifitter does
+
+`epifitter` helps analyze plant disease progress curves by combining:
+
+- simulation helpers for synthetic epidemics;
+- fitting functions for canonical disease progress models;
+- summary measures such as `AUDPC()` and `AUDPS()`;
+- plotting functions that return `ggplot2` objects.
+
+## A first epidemic
+
+```{r}
+set.seed(1)
+
+epi <- sim_logistic(
+  N = 80,
+  y0 = 0.01,
+  dt = 10,
+  r = 0.12,
+  alpha = 0.2,
+  n = 5
+)
+
+knitr::kable(head(epi), digits = 4)
+```
+
+```{r fig.alt="Plot of a simulated epidemic showing replicate observations and the underlying disease progress curve over time."}
+ggplot(epi, aes(time, y, group = replicates)) +
+  geom_point(aes(y = random_y), shape = 1, color = "#8597a4") +
+  geom_line(color = "#15616d", linewidth = 0.8) +
+  labs(
+    title = "Simulated epidemic",
+    x = "Time",
+    y = "Disease intensity"
+  )
+```
+
+## Fit candidate models
+
+```{r}
+fit <- fit_lin(time = epi$time, y = epi$random_y)
+fit
+```
+
+`fit$stats_all` contains the full ranking of candidate models.
+
+```{r}
+knitr::kable(fit$stats_all, digits = 4)
+```
+
+## Visualize predictions
+
+```{r fig.alt="Faceted plot comparing observed disease intensity values with fitted curves from candidate models."}
+plot_fit(fit, point_size = 1.8, line_size = 0.9)
+```
+
+## Work with multiple epidemics
+
+```{r}
+epi_a <- sim_gompertz(N = 50, y0 = 0.002, dt = 5, r = 0.10, alpha = 0.2, n = 3)
+epi_b <- sim_gompertz(N = 50, y0 = 0.002, dt = 5, r = 0.14, alpha = 0.2, n = 3)
+
+multi_epi <- bind_rows(epi_a, epi_b, .id = "epidemic")
+
+multi_fit <- fit_multi(
+  time_col = "time",
+  intensity_col = "random_y",
+  data = multi_epi,
+  strata_cols = "epidemic"
+)
+
+knitr::kable(head(multi_fit$Parameters), digits = 4)
+```
+
+## Next steps
+
+- Use the model fitting article for a deeper walkthrough of `fit_lin()`, `fit_nlin()`, `fit_nlin2()`, and `fit_multi()`.
+- Use the simulation article for examples built around the `sim_` family.
+- Use the PowderyMildew article for a real-data workflow based on the bundled experimental dataset.

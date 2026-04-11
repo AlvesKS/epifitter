@@ -1,64 +1,28 @@
-#' @importFrom rlang .data
+#' Fit epidemic models using linearization
+#'
+#' Fit exponential, monomolecular, logistic, and Gompertz models to disease
+#' progress data using linearized forms of each model.
+#'
+#' @param time Numeric vector of assessment times.
+#' @param y Numeric vector of disease intensity values.
+#'
+#' @return A list with fit statistics, parameter estimates, and prediction
+#'   data.
+#'
+#' @examples
+#' set.seed(1)
+#' epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.2, n = 4)
+#' fit_lin(time = epi$time, y = epi$random_y)
+#'
+#' @export
 fit_lin <- function(time, y) {
-
-  if (missing(y)) {
-    stop(gettextf("Missing 'y' vector"))
-  }
-
-  {
-    if (missing(time)) {
-      stop(gettextf("Missing 'time' vector"))
-    }
-  }
-
-  for (i in 1:length(y)) {
-    if (y[i] > 1) {
-      stop(gettextf("values must between 0 and 1)"))
-    }
-
-    if (y[i] >= 1) {
-      y[i] <- 0.999
-      gettextf("values = '1' converted to '0.999'")
-    }
-    if (y[i] == 0) {
-      y[i] <- 0.0001
-      gettextf("values = '0' converted to '0.0001'")
-    }
-  }
-  epi <- data.frame(time, y)
-  model  =
-    value  =
-    v0  =
-    v0_se=
-    v0_ci_lwr  =
-    v0_ci_upr  =
-    CCC  =
-    best_model  =
-    linear  =
-    linearized  =
-    name =
-    r  =
-    r_se =
-    r_ci_lwr  =
-    y0  =
-    y0_ci_lwr  =
-    y0_ci_upr  =
-    y0  =
-    df  =
-    y0_se  =
-    r  =
-    r_se  =
-    CCC  =
-    r_ci_lwr  =
-    y0_ci_lwr  =
-    y0_ci_upr  =
-    model  =
-    time =
-    y = NULL
-
-
-
-
+.validate_epidemic_inputs(time, y, allow_boundary = TRUE)
+  y <- .sanitize_boundary_proportions(y)
+  epi <- data.frame(time = time, y = y)
+  model = value = v0 = v0_se = v0_ci_lwr = v0_ci_upr = CCC = best_model =
+    linear = linearized = name = r = r_se = r_ci_lwr = r_ci_upr = y0 =
+    y0_ci_lwr = y0_ci_upr = df = y0_se = time = y = residual = predicted =
+    rep = type = exponit = monit = logit = gompit = NULL
   epi$exponit <- log(epi$y)
   epi$monit <- log(1 / (1 - epi$y))
   epi$logit <- log(epi$y / (1 - epi$y))
@@ -66,11 +30,12 @@ fit_lin <- function(time, y) {
 
 
 
-  # colnames(epi) <- c("time", "y", "exponit", "monit", "logit", "gompit")
-  # Suppress summarise info
-  options(dplyr.summarise.inform = FALSE)
   z <- epi %>%
-    tidyr::gather(3:6, key = "model", value = "value") %>%
+    tidyr::pivot_longer(
+      cols = c(exponit, monit, logit, gompit),
+      names_to = "model",
+      values_to = "value"
+    ) %>%
     dplyr::group_by(model) %>%
     dplyr::summarise(
       r = summary(stats::lm(value ~ time))$coefficients[2, 1],
@@ -84,7 +49,8 @@ fit_lin <- function(time, y) {
       v0_ci_upr = as.numeric(as.matrix(stats::confint(stats::lm(value ~ time)))[1, 2]),
       r_squared = summary(stats::lm(value ~ time))$r.squared,
       RSE = summary(stats::lm(value ~ time))$sigma,
-      CCC = DescTools::CCC(stats::lm(value ~ time)$fitted.values, value)$rho.c$est
+      CCC = DescTools::CCC(stats::lm(value ~ time)$fitted.values, value)$rho.c$est,
+      .groups = "drop"
     ) %>%
     dplyr::mutate(
       y0 = dplyr::case_when(
@@ -124,7 +90,8 @@ fit_lin <- function(time, y) {
 
   epi2 = epi %>%
     dplyr::group_by(time) %>%
-    dplyr::mutate(rep  = 1:dplyr::n())
+    dplyr::mutate(rep = 1:dplyr::n()) %>%
+    dplyr::ungroup()
 
 
   predicted <- epi2 %>%
@@ -133,14 +100,14 @@ fit_lin <- function(time, y) {
     dplyr::mutate(Logistic = 1 / (1 + ((1 - dplyr::filter(z, model == "Logistic")$y0) / dplyr::filter(z, model == "Logistic")$y0) * exp(-dplyr::filter(z, model == "Logistic")$r * time))) %>%
     dplyr::mutate(Gompertz = exp(log(dplyr::filter(z, model == "Gompertz")$y0) * exp(-dplyr::filter(z, model == "Gompertz")$r * time))) %>%
 
-    tidyr::pivot_longer(c(3:6,8:11)) %>%
-    dplyr::mutate(type = dplyr::case_when(name %in% c("exponit","monit","logit","gompit")~"linearized",
-                                   name %in% c("Exponential","Monomolecular","Logistic","Gompertz")~"predicted")) %>%
-    dplyr::mutate(model = dplyr::case_when(name == "exponit"~ "Exponential",
+    tidyr::pivot_longer(cols = c(3:6, 8:11)) %>%
+    dplyr::mutate(type = dplyr::case_when(name %in% c("exponit", "monit", "logit", "gompit") ~ "linearized",
+                                   name %in% c("Exponential", "Monomolecular", "Logistic", "Gompertz") ~ "predicted")) %>%
+    dplyr::mutate(model = dplyr::case_when(name == "exponit" ~ "Exponential",
                                     name == "monit" ~ "Monomolecular",
                                     name == "logit" ~ "Logistic",
                                     name == "gompit" ~ "Gompertz",
-                                    name %in% c("Exponential","Monomolecular","Logistic","Gompertz")~name )) %>%
+                                    name %in% c("Exponential", "Monomolecular", "Logistic", "Gompertz") ~ name)) %>%
     dplyr::select(-name) %>%
     tidyr::pivot_wider(values_from = "value",
                        names_from  = c("type"),
@@ -150,7 +117,7 @@ fit_lin <- function(time, y) {
 
 
   za <- z %>%
-    dplyr::mutate(Estimate = r, Std.error = r_se, Lower = r_ci_lwr, Upper = r_ci_lwr)
+    dplyr::mutate(Estimate = r, Std.error = r_se, Lower = r_ci_lwr, Upper = r_ci_upr)
   zb <- z %>%
     dplyr::mutate(Estimate = y0, Linearized  = v0, lin.SE = v0_se, Lower = y0_ci_lwr, Upper = y0_ci_upr)
 

@@ -1,3 +1,22 @@
+#' Simulate an exponential disease progress curve
+#'
+#' Simulate disease progress data under the exponential epidemic model, with
+#' optional replicated observations.
+#'
+#' @param N Total epidemic duration.
+#' @param dt Time interval between assessments.
+#' @param y0 Initial disease intensity.
+#' @param r Apparent infection rate.
+#' @param n Number of replicated curves.
+#' @param alpha Noise level applied to replicated observations.
+#'
+#' @return A data frame with simulated disease progress values and replicated
+#'   noisy observations.
+#'
+#' @examples
+#' sim_exponential(N = 30, dt = 5, y0 = 0.01, r = 0.05, n = 4)
+#'
+#' @export
 sim_exponential <- function(N = 10, dt = 1, y0 = 0.01, r, n, alpha = 0.2) {
   time <- seq(0, N, by = dt)
   w <- numeric(length(time))

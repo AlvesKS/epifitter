@@ -1,8 +1,64 @@
+url: https://alvesks.github.io/epifitter/
+
 destination: docs
 template:
-  params:
-    ganalytics: UA-177181576-1
+  bootstrap: 5
+  bootswatch: flatly
+  bslib:
+    base_font:
+      google: "Source Sans 3"
+    heading_font:
+      google: "Sora"
+    code_font:
+      google: "JetBrains Mono"
 home:
   title: An R package for analysis and simulation of plant disease progress curves
   description: >
-    The epifitter is a user-friendly R package for conducting all sorts of analysis of plant disease progress data.
+    epifitter is a user-friendly R package for fitting, comparing and simulating plant disease progress curves.
+navbar:
+  structure:
+    left: [intro, articles, reference, news]
+    right: [lightswitch, github]
+reference:
+  - title: Curve fitting
+    contents:
+      - fit_lin
+      - fit_nlin
+      - fit_nlin2
+      - fit_multi
+      - plot_fit
+  - title: Methods
+    contents:
+      - print.fit_lin
+      - print.fit_nlin2
+  - title: Disease summaries
+    contents:
+      - AUDPC
+      - AUDPC_2_points
+      - AUDPS
+  - title: Simulation
+    contents:
+      - starts_with("sim_")
+  - title: Model helpers
+    contents:
+      - expo_fun
+      - mono_fun
+      - logi_fun
+      - gompi_fun
+  - title: Data
+    contents:
+      - PowderyMildew
+articles:
+  - title: Get started
+    navbar: ~
+    contents:
+      - getting-started
+      - powdery-mildew-data
+      - model-fitting
+      - area-under-curve
+      - simulation-workflows
+  - title: Legacy articles
+    navbar: ~
+    contents:
+      - fitting
+      - simulation

@@ -1,3 +1,23 @@
+#' Simulate a monomolecular disease progress curve
+#'
+#' Simulate disease progress data under the monomolecular epidemic model, with
+#' optional replicated observations.
+#'
+#' @param N Total epidemic duration.
+#' @param dt Time interval between assessments.
+#' @param y0 Initial disease intensity.
+#' @param r Apparent infection rate.
+#' @param K Maximum disease intensity.
+#' @param n Number of replicated curves.
+#' @param alpha Noise level applied to replicated observations.
+#'
+#' @return A data frame with simulated disease progress values and replicated
+#'   noisy observations.
+#'
+#' @examples
+#' sim_monomolecular(N = 30, dt = 5, y0 = 0.01, r = 0.05, K = 1, n = 4)
+#'
+#' @export
 sim_monomolecular <- function(N = 10, dt = 1, y0 = 0.01, r,K = 1, n, alpha = 0.2){
   if (K>1) {
     stop(gettextf("K must be lower or equal than 1 (k <= 1)"))

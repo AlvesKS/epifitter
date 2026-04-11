@@ -1,3 +1,25 @@
+#' Estimate AUDPC from two observations
+#'
+#' Estimate the area under the disease progress curve from only the initial and
+#' final observations under a logistic epidemic assumption.
+#'
+#' @param time Time elapsed between the two assessments.
+#' @param y0 Initial disease intensity as a proportion.
+#' @param yT Final disease intensity as a proportion.
+#'
+#' @return A numeric scalar with the estimated AUDPC.
+#'
+#' @references
+#' Jeger, M. J., and Viljanen-Rollinson, S. L. H. (2001). The use of the area
+#' under the disease-progress curve (AUDPC) to assess quantitative disease
+#' resistance in crop cultivars. \emph{Theoretical and Applied Genetics},
+#' 102, 32-40.
+#'
+#' @examples
+#' epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.5, n = 1)
+#' AUDPC_2_points(time = epi$time[7], y0 = epi$y[1], yT = epi$y[7])
+#'
+#' @export
 AUDPC_2_points = function(time, y0, yT) {
   # Input existence checks
   if (missing(time) || missing(y0) || missing(yT)) {

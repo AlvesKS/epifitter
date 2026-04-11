@@ -1,3 +1,22 @@
+#' Plot fitted epidemic models
+#'
+#' Create a faceted `ggplot2` panel showing observed and fitted values for the
+#' selected epidemic models.
+#'
+#' @param object A fitted object returned by `fit_lin()`, `fit_nlin()`, or
+#'   `fit_nlin2()`.
+#' @param point_size Point size for observed values.
+#' @param line_size Line width for fitted curves.
+#' @param models Character vector with the models to display.
+#'
+#' @return A `ggplot2` object.
+#'
+#' @examples
+#' epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.2, n = 4)
+#' fit <- fit_lin(time = epi$time, y = epi$random_y)
+#' plot_fit(fit)
+#'
+#' @export
 plot_fit <- function(object,
                      point_size = 1.2,
                      line_size = 1,
@@ -6,7 +25,7 @@ plot_fit <- function(object,
     stop(gettextf("Missing 'object'"))
   }
 
-  model = time = y =NULL
+  model = time = y = NULL
 
   if(!is.matrix(object$`Maximum disease intensity`)) {
 
@@ -50,7 +69,7 @@ plot_fit <- function(object,
         # fun = df$fun[[selected_models[i]]],args = list(r = r_par ,y0 =y0_par), size =line_size)+
         ggplot2::geom_line(
           stat = "function", data = plot_data_sep, ggplot2::aes(x = time, color = model),
-          fun = df$fun[[selected_models[i]]], args = list(r = r_par, y0 = y0_par), size = line_size
+          fun = df$fun[[selected_models[i]]], args = list(r = r_par, y0 = y0_par), linewidth = line_size
         ) +
         ggplot2::facet_wrap(~model)
     }
@@ -108,11 +127,15 @@ plot_fit <- function(object,
         # fun = df$fun[[selected_models[i]]],args = list(r = r_par ,y0 =y0_par), size =line_size)+
         ggplot2::geom_line(
           stat = "function", data = plot_data_sep, ggplot2::aes(x = time, color = model),
-          fun = df$fun[[selected_models[i]]], args = list(r = r_par, y0 = y0_par, K = K_par), size = line_size
+          fun = df$fun[[selected_models[i]]], args = list(r = r_par, y0 = y0_par, K = K_par), linewidth = line_size
         ) +
         ggplot2::facet_wrap(~model)
     }
   }
+
+  base <- base +
+    cowplot::theme_half_open(font_size = 12) +
+    cowplot::background_grid(major = "y", minor = "none")
 
   return(base)
 }

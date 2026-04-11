@@ -1,14 +1,15 @@
 Package: epifitter
 Type: Package
 Title: Analysis and Simulation of Plant Disease Progress Curves
-Version: 0.3.0 
-Description: Analysis and visualization of plant disease progress curve data. Functions for
-    fitting two-parameter population dynamics models (exponential, monomolecular, logistic
-    and Gompertz) to proportion data for single or multiple epidemics using either linear
-    or no-linear regression.  Statistical and visual outputs are provided to aid in model
-    selection. Synthetic curves can be simulated for any of the models given the parameters.
-    See Laurence V. Madden, Gareth Hughes, and Frank van den Bosch (2007) <doi:10.1094/9780890545058>
-    for further information on the methods.
+Version: 1.0.0
+Description: Tools for analysis, visualization, and simulation of plant disease
+    progress curves. Includes functions to calculate area-under-the-curve
+    summaries, fit and compare exponential, monomolecular, logistic, and
+    Gompertz models using linear or nonlinear regression, work with single or
+    multiple epidemics, and produce 'ggplot2'-based visualizations. Also
+    includes an experimental powdery mildew dataset for reproducible teaching
+    and research workflows. See Madden, Hughes, and van den Bosch (2007)
+    <doi:10.1094/9780890545058> for background on the epidemiological methods.
 Authors@R: c(
     person(given = "Kaique dos S.",
            family = "Alves", 
@@ -26,19 +27,20 @@ Authors@R: c(
          email = "adamhsparks@gmail.com",
          comment = c("ORCID" = "0000-0002-0061-8359"))
           )
-Depends: R (>= 3.2)
-Imports: deSolve, dplyr, stats, ggplot2, knitr, tidyr, DescTools, minpack.lm, magrittr, tibble
+Depends: R (>= 4.1)
+Imports: DescTools, cowplot, deSolve, dplyr, ggplot2, magrittr, minpack.lm, stats, tibble, tidyr
 Suggests: 
+    knitr,
     rmarkdown,
-    ggridges,
-    cowplot,
+    lemon,
     testthat (>= 3.0.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-Date: 2021-06-13 22:30:00 UTC
-URL: https://github.com/AlvesKS/epifitter
+Date: 2026-04-11
+URL: https://github.com/AlvesKS/epifitter, https://alvesks.github.io/epifitter/
 BugReports: https://github.com/AlvesKS/epifitter/issues
 X-schema.org-applicationCategory: Tools
 Config/testthat/edition: 3
+RoxygenNote: 7.3.2

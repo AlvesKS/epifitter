@@ -1,12 +1,12 @@
-# *epifitter* <img src="man/figures/logo.png" width = 150px align="right"/>
+# *epifitter* <img src="man/figures/logo.png" width="150" align="right"/>
 
 [![CRAN](https://www.r-pkg.org/badges/version/epifitter)](https://CRAN.R-project.org/package=epifitter) [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/epifitter)](https://CRAN.R-project.org/package=epifitter)
 
-Provides a set of tools for aiding in the **visualization, description, and comparison of plant disease progress curve** (DPC) data. A DPC depict the change in a disease-intensity variable measured sequentially at different times during the epidemics. Their analysis, that may include fitting "classic" population dynamics models (e.g. logistic, monomolecular, Gompertz), allows gaining understanding of the epidemiological processes, but is most used for comparing epidemics.
+`epifitter` provides tools for the **visualization, description, and comparison of plant disease progress curves** (DPCs). A DPC describes how disease intensity changes over time during an epidemic. By fitting classic population dynamics models such as logistic, monomolecular, Gompertz, and exponential curves, users can compare epidemics and better understand their epidemiological behavior.
 
-The mathematics behind model fitting is straightforward and general-purpose spreadsheet or statistical softwares can be used to perform the calculations and select the "best" model. What `epifitter` does is to provide the analyst with R functions for performing several tasks commonly used for the temporal analysis of epidemics, including graphical output.
+`epifitter` wraps those workflows into a package-oriented interface that includes model fitting, summary measures, simulation helpers, and plotting functions tailored to plant disease epidemiology.
 
-Current implementation includes functions for the analyst to:
+Current functionality includes:
 
 -   Fit classic population dynamics models using linear and nonlinear approaches
 -   Select models based on statistical and visual analysis
@@ -14,22 +14,65 @@ Current implementation includes functions for the analyst to:
 -   Compare epidemics via visual inference
 -   Simulate synthetic epidemics of various shapes and uncertainty
 
+## Why use epifitter?
+
+-   Compare the same epidemic against multiple canonical disease progress models.
+-   Move from simulation to fitting with a consistent data structure.
+-   Work with single epidemics or grouped data using the same package vocabulary.
+-   Produce `ggplot2`-ready outputs for reports, papers, and teaching material.
+
 ## Quick start
 
-Install the stable release from CRAN.
+Install the stable release from CRAN:
 
 ``` {.r}
 install.packages("epifitter")
 ```
 
-The development version of **epifitter** is available from GitHub. The **devtools** package, available from CRAN, is required for installation.
+Install the development version from GitHub with `pak`:
 
 ``` {.r}
-if (!require(devtools)) {
-  install.packages("devtools")
+if (!requireNamespace("pak", quietly = TRUE)) {
+  install.packages("pak")
 }
 
-devtools::install_github("AlvesKS/epifitter")
+pak::pak("AlvesKS/epifitter")
+```
+
+## Example
+
+``` {.r}
+library(epifitter)
+
+set.seed(1)
+epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.2, n = 4)
+fit <- fit_lin(time = epi$time, y = epi$y)
+
+plot_fit(fit)
+```
+
+For more complete workflows, see the package articles on model fitting, area summaries, simulation, and the bundled experimental dataset in the documentation site.
+
+## Article and citation
+
+`epifitter` is described in the following paper:
+
+Alves, K. S., & Del Ponte, E. M. (2021). Analysis and simulation of plant disease progress curves in R: introducing the epifitter package. *Phytopathology Research*, 3, 22. [https://doi.org/10.1186/s42483-021-00098-7](https://doi.org/10.1186/s42483-021-00098-7)
+
+If you use `epifitter` in research, please cite the article above. You can also retrieve the package citation directly in R with `citation("epifitter")`. A BibTeX entry is shown below:
+
+```bibtex
+@article{Alves2021epifitter,
+  author = {Alves, Kaique S. and Del Ponte, Emerson M.},
+  title = {Analysis and simulation of plant disease progress curves in R: introducing the epifitter package},
+  journal = {Phytopathology Research},
+  year = {2021},
+  volume = {3},
+  number = {1},
+  pages = {22},
+  doi = {10.1186/s42483-021-00098-7},
+  url = {https://doi.org/10.1186/s42483-021-00098-7}
+}
 ```
 
 ## Meta

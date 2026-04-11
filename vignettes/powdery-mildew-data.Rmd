@@ -1,0 +1,224 @@
+---
+title: "Working with the PowderyMildew dataset"
+author: "Kaique S. Alves"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with the PowderyMildew dataset}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(epifitter)
+library(dplyr)
+library(ggplot2)
+library(cowplot)
+theme_set(cowplot::theme_half_open(font_size = 12))
+data("PowderyMildew")
+```
+
+## Overview
+
+`PowderyMildew` is an experimental dataset included in `epifitter`. It contains disease progress curves for powdery mildew in organic tomato under different irrigation systems and soil moisture levels.
+
+The data are derived from the study by Lage, Marouelli, and Cafe-Filho (2019) on powdery mildew management under different irrigation configurations in organic tomato.
+
+The dataset is especially useful for demonstrating workflows with:
+
+- a real epidemic dataset rather than simulated curves;
+- repeated observations over time within experimental blocks;
+- treatment comparisons using summary measures and fitted models.
+
+## Load the data
+
+Use the usual `data()` interface for packaged datasets.
+
+```{r}
+data("PowderyMildew")
+knitr::kable(head(PowderyMildew, 12), digits = 4)
+```
+
+The dataset contains five variables:
+
+- `irrigation_type` for the irrigation system;
+- `moisture` for the soil moisture regime;
+- `block` for the experimental block;
+- `time` for the assessment date;
+- `sev` for disease severity on a proportional scale.
+
+## Inspect the experimental structure
+
+```{r}
+PowderyMildew %>%
+  distinct(irrigation_type, moisture, block) %>%
+  arrange(irrigation_type, moisture, block) %>%
+  knitr::kable()
+```
+
+This is a repeated-measures dataset: each block was assessed across several time points within each irrigation-by-moisture combination.
+
+## Visualize treatment means over time
+
+A useful first step is to summarize replicated blocks within each treatment and visualize the mean disease progress curve.
+
+```{r}
+pm_summary <- PowderyMildew %>%
+  group_by(irrigation_type, moisture, time) %>%
+  summarise(
+    mean_sev = mean(sev),
+    .groups = "drop"
+  )
+
+knitr::kable(head(pm_summary, 12), digits = 4)
+```
+
+```{r fig.alt="Line plot of mean powdery mildew severity over time for each irrigation treatment, faceted by soil moisture level."}
+ggplot(pm_summary, aes(time, mean_sev, color = irrigation_type)) +
+  geom_point(size = 1.8) +
+  geom_line(linewidth = 0.9) +
+  facet_wrap(~ moisture) +
+  labs(
+    title = "Mean powdery mildew progress by treatment",
+    x = "Time",
+    y = "Mean severity",
+    color = "Irrigation"
+  )
+```
+
+## Calculate AUDPC and AUDPS per experimental unit
+
+Because `block` identifies repeated experimental units, a common analysis is to calculate one summary value per block within each treatment.
+
+```{r}
+pm_area <- PowderyMildew %>%
+  group_by(irrigation_type, moisture, block) %>%
+  summarise(
+    audpc = AUDPC(time = time, y = sev, aggregate = "none"),
+    audps = AUDPS(time = time, y = sev, aggregate = "none"),
+    .groups = "drop"
+  )
+
+knitr::kable(pm_area, digits = 4)
+```
+
+This differs from pooling all rows together. If all blocks are passed at once, `AUDPC()` and `AUDPS()` assume that you want one treatment-level summary curve and aggregate repeated observations at each time point before calculating the area.
+
+To compare treatments visually, it is often useful to plot one point per block on top of a boxplot.
+
+```{r fig.alt="Boxplots with jittered points showing the distribution of AUDPC and AUDPS values across irrigation treatments, faceted by moisture level and summary metric."}
+pm_area_long <- pm_area %>%
+  tidyr::pivot_longer(
+    cols = c(audpc, audps),
+    names_to = "summary_measure",
+    values_to = "value"
+  )
+
+facet_aud <- if (requireNamespace("lemon", quietly = TRUE)) {
+  lemon::facet_rep_grid(summary_measure ~ moisture, scales = "free_y")
+} else {
+  ggplot2::facet_grid(summary_measure ~ moisture, scales = "free_y")
+}
+
+ggplot(
+  pm_area_long,
+  aes(irrigation_type, value, fill = irrigation_type)
+) +
+  geom_boxplot(
+    width = 0.65,
+    outlier.shape = NA,
+    alpha = 0.28,
+    linewidth = 0.6
+  ) +
+  geom_jitter(
+    aes(color = irrigation_type),
+    width = 0.12,
+    height = 0,
+    size = 2.4,
+    alpha = 0.85
+  ) +
+  facet_aud +
+  labs(
+    title = "Area-under-the-curve summaries by treatment",
+    x = "Irrigation treatment",
+    y = "Summary value",
+    color = "Irrigation"
+  ) +
+  cowplot::theme_half_open(font_size = 12) +
+  background_grid(major = "y", minor = "none") +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_text(angle = 20, hjust = 1),
+    strip.background = element_rect(fill = "#e7f1f3", color = NA),
+    strip.text = element_text(face = "bold")
+  )
+```
+
+## Fit a model to one observed curve
+
+To work with a single disease progress curve, first filter one treatment-by-block combination.
+
+```{r}
+single_curve <- PowderyMildew %>%
+  filter(
+    irrigation_type == "Drip",
+    moisture == "High moisture",
+    block == 1
+  )
+
+knitr::kable(single_curve, digits = 4)
+```
+
+```{r fig.alt="Scatter and line plot of a single observed powdery mildew disease progress curve for drip irrigation under high moisture in block 1."}
+ggplot(single_curve, aes(time, sev)) +
+  geom_point(size = 2, color = "#15616d") +
+  geom_line(linewidth = 0.9, color = "#15616d") +
+  labs(
+    title = "Single observed disease progress curve",
+    subtitle = "Drip irrigation, high moisture, block 1",
+    x = "Time",
+    y = "Severity"
+  )
+```
+
+Now fit the candidate models to that curve.
+
+```{r}
+single_fit <- fit_lin(time = single_curve$time, y = single_curve$sev)
+knitr::kable(single_fit$stats_all, digits = 4)
+```
+
+```{r fig.alt="Faceted plot comparing fitted disease progress curves for a single observed powdery mildew epidemic."}
+plot_fit(single_fit, point_size = 2, line_size = 0.9)
+```
+
+## Fit models to many observed curves at once
+
+`fit_multi()` is useful when each treatment-by-block combination should be fitted separately.
+
+```{r}
+pm_multi_fit <- fit_multi(
+  time_col = "time",
+  intensity_col = "sev",
+  data = PowderyMildew,
+  strata_cols = c("irrigation_type", "moisture", "block")
+)
+
+knitr::kable(head(pm_multi_fit$Parameters, 12), digits = 4)
+```
+
+This output keeps the original stratification variables, which makes it easier to compare fitted parameters among irrigation systems, moisture regimes, and blocks.
+
+## Practical guidance
+
+- Use `data("PowderyMildew")` to load the bundled dataset.
+- Use grouped summaries by `block` when you want one AUDPC or AUDPS value per experimental unit.
+- Use grouped means over time when the goal is a treatment-level visualization.
+- Use `fit_lin()` for a quick model ranking on one observed curve.
+- Use `fit_multi()` when you want to fit many treatment-block curves in a single workflow.
+
+## Data source
+
+The `PowderyMildew` dataset included in `epifitter` comes from:
+
+Lage, D. A. C., Marouelli, W. A., and Cafe-Filho, A. C. (2019). Management of powdery mildew and behaviour of late blight under different irrigation configurations in organic tomato. *Crop Protection*, 125, 104886.

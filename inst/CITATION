@@ -1,0 +1,43 @@
+citHeader("To cite epifitter in publications use:")
+
+citEntry(
+  entry = "Article",
+  title = "Analysis and simulation of plant disease progress curves in R: introducing the epifitter package",
+  author = personList(
+    as.person("Kaique S. Alves"),
+    as.person("Emerson M. Del Ponte")
+  ),
+  journal = "Phytopathology Research",
+  year = "2021",
+  volume = "3",
+  number = "1",
+  pages = "22",
+  doi = "10.1186/s42483-021-00098-7",
+  url = "https://doi.org/10.1186/s42483-021-00098-7",
+  textVersion = paste(
+    "Alves, K. S., and Del Ponte, E. M. (2021).",
+    "Analysis and simulation of plant disease progress curves in R:",
+    "introducing the epifitter package.",
+    "Phytopathology Research, 3(1), 22.",
+    "https://doi.org/10.1186/s42483-021-00098-7"
+  )
+)
+
+citEntry(
+  entry = "Manual",
+  title = "epifitter: Analysis and Simulation of Plant Disease Progress Curves",
+  author = personList(
+    as.person("Kaique dos S. Alves"),
+    as.person("Emerson M. Del Ponte"),
+    as.person("Adam H. Sparks")
+  ),
+  year = "2026",
+  note = "R package version 1.0.0",
+  url = "https://alvesks.github.io/epifitter/",
+  textVersion = paste(
+    "Alves, K. d. S., Del Ponte, E. M., and Sparks, A. H. (2026).",
+    "epifitter: Analysis and Simulation of Plant Disease Progress Curves.",
+    "R package version 1.0.0.",
+    "https://alvesks.github.io/epifitter/"
+  )
+)

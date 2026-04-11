@@ -6,3 +6,5 @@
 ^manuscript$
 ^CODE_OF_CONDUCT\.md$
 ^cran-comments\.md$
+^vignettes/fitting\.Rmd$
+^vignettes/simulation\.Rmd$

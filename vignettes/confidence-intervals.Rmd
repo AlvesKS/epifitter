@@ -134,9 +134,17 @@ plot_fit(
   conf_int = TRUE,
   ci_method = "bootstrap",
   nsim = 100,
-  seed = 123
+  seed = 123,
+  y_bounds = NULL
 )
 ```
+
+Here `y_bounds = NULL` leaves fitted values on their natural model scale. This
+is useful when comparing model forms because the exponential model can
+extrapolate above 1, which is a warning sign when disease intensity is a
+proportion. The fitted curve also does not have to sit in the middle of the
+band: bootstrap intervals are built from quantiles of refitted curves, so they
+can be asymmetric when the model is nonlinear or poorly matched to the data.
 
 ## Nonlinear fits
 

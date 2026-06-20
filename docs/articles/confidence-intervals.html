@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -189,9 +189,17 @@ time.</p>
 <span>  conf_int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ci_method <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
 <span>  nsim <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">123</span></span>
+<span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
+<span>  y_bounds <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="confidence-intervals_files/figure-html/unnamed-chunk-5-1.png" alt="Fitted exponential, logistic, and Gompertz disease progress curves with bootstrap confidence bands." width="672" style="display: block; margin: auto;"></p>
+<p>Here <code>y_bounds = NULL</code> leaves fitted values on their
+natural model scale. This is useful when comparing model forms because
+the exponential model can extrapolate above 1, which is a warning sign
+when disease intensity is a proportion. The fitted curve also does not
+have to sit in the middle of the band: bootstrap intervals are built
+from quantiles of refitted curves, so they can be asymmetric when the
+model is nonlinear or poorly matched to the data.</p>
 </div>
 <div class="section level2">
 <h2 id="nonlinear-fits">Nonlinear fits<a class="anchor" aria-label="anchor" href="#nonlinear-fits"></a>

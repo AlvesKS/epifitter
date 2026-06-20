@@ -19,13 +19,12 @@ progress curves stored in a data frame."><meta property="og:image" content="http
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with epifitter</a></li>
-    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Working with the PowderyMildew dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/model-fitting.html">Model fitting workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Area-under-the-curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/fitting.html">Fitting and selecting models</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation.html">Simulating disease progress curves</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Start here: your first disease progress workflow</a></li>
+    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Real-data workflow: powdery mildew in organic tomato</a></li>
+    <li><a class="dropdown-item" href="../articles/model-fitting.html">Choosing and fitting disease progress models</a></li>
+    <li><a class="dropdown-item" href="../articles/confidence-intervals.html">Uncertainty bands for fitted disease progress curves</a></li>
+    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Summarizing epidemics with AUDPC and AUDPS</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows for disease progress curves</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -57,7 +56,11 @@ progress curves stored in a data frame.</p>
 <span>  starting_par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>y0 <span class="op">=</span> <span class="fl">0.01</span>, r <span class="op">=</span> <span class="fl">0.03</span>, K <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>,</span>
 <span>  maxiter <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>  nlin <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  estimate_K <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  estimate_K <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  weights_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  weight_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"binomial"</span>, <span class="st">"mean"</span>, <span class="st">"cv"</span>, <span class="st">"power"</span><span class="op">)</span>,</span>
+<span>  weight_eps <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  weight_power <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -97,6 +100,28 @@ positive number.</p></dd>
 
 <dt id="arg-estimate-k">estimate_K<a class="anchor" aria-label="anchor" href="#arg-estimate-k"></a></dt>
 <dd><p>Logical. Should the asymptote `K` be estimated?</p></dd>
+
+
+<dt id="arg-weights-col">weights_col<a class="anchor" aria-label="anchor" href="#arg-weights-col"></a></dt>
+<dd><p>Optional character name specifying a column of positive
+weights for weighted nonlinear least squares. Used only when
+`nlin = TRUE`.</p></dd>
+
+
+<dt id="arg-weight-method">weight_method<a class="anchor" aria-label="anchor" href="#arg-weight-method"></a></dt>
+<dd><p>Weighting strategy passed to [fit_nlin()] or
+[fit_nlin2()]. Use `"none"` for ordinary nonlinear least squares or
+`"binomial"`, `"mean"`, `"cv"`, or `"power"` for two-step fitted-value
+weighting approximations.</p></dd>
+
+
+<dt id="arg-weight-eps">weight_eps<a class="anchor" aria-label="anchor" href="#arg-weight-eps"></a></dt>
+<dd><p>Small positive constant used by
+fitted-value weighting methods to keep weights finite near 0 and 1.</p></dd>
+
+
+<dt id="arg-weight-power">weight_power<a class="anchor" aria-label="anchor" href="#arg-weight-power"></a></dt>
+<dd><p>Non-negative power used when `weight_method = "power"`.</p></dd>
 
 </dl></div>
     <div class="section level2">

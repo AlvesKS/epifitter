@@ -1,10 +1,12 @@
 ---
-title: "Model fitting workflows"
+title: "Choosing and fitting disease progress models"
 author: "Kaique S. Alves"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    df_print: paged
 vignette: >
-  %\VignetteIndexEntry{Model fitting workflows}
+  %\VignetteIndexEntry{Choosing and fitting disease progress models}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -19,13 +21,29 @@ theme_set(cowplot::theme_half_open(font_size = 12))
 
 ## Overview
 
-`epifitter` offers three complementary fitting workflows:
+Disease progress models are simplified descriptions of epidemic development.
+They are useful when the goal is to estimate biologically interpretable
+features such as initial disease intensity, apparent infection rate, or an
+upper asymptote. They should not be selected only because a curve looks smooth
+or because a single fit statistic is largest.
+
+This article explains the main model-fitting workflows in `epifitter`:
 
 - `fit_lin()` for linearized model comparison;
 - `fit_nlin()` for nonlinear fitting of two-parameter models;
 - `fit_nlin2()` for nonlinear fitting when the asymptote `K` should be estimated.
 
+Use `fit_lin()` for quick screening and teaching. Use nonlinear fitting when
+you want to fit the model on the original disease intensity scale. Use
+`fit_nlin2()` when the epidemic appears to plateau below 1 and estimating the
+maximum disease intensity is scientifically meaningful.
+
 ## Compare models quickly with `fit_lin()`
+
+Linearized models transform disease intensity before fitting a straight line.
+This is fast and often useful for model comparison, but transformations also
+change the error scale. Always inspect the fitted curves on the original
+disease intensity scale.
 
 ```{r}
 set.seed(1)
@@ -41,6 +59,12 @@ plot_fit(fit_lin_out, models = c("Logistic", "Gompertz"))
 
 ## Nonlinear fitting with starting values
 
+`fit_nlin()` fits the same candidate models directly to the original disease
+intensity values. Nonlinear optimization needs starting values, so poor starts
+or weakly informative data can lead to non-convergence. When this happens,
+inspect the curve, adjust `starting_par`, and consider whether the chosen model
+is identifiable from the observed time points.
+
 ```{r eval=FALSE}
 fit_nlin_out <- fit_nlin(
   time = epi$time,
@@ -51,7 +75,123 @@ fit_nlin_out <- fit_nlin(
 fit_nlin_out$stats_all
 ```
 
+## Weighted nonlinear fitting
+
+By default, `fit_nlin()` and `fit_nlin2()` use ordinary nonlinear least
+squares. This gives every observation the same weight and is consistent with
+many traditional disease progress curve workflows. For disease incidence or
+severity measured as a proportion, however, residual variability may change
+across the epidemic. For example, binomial-like measurements often have
+variance related to \(p(1 - p)\), where \(p\) is the fitted disease intensity.
+
+`epifitter` therefore allows optional weighted nonlinear least squares. These
+options are working variance assumptions, not a substitute for a full binomial
+or beta likelihood. The default is unchanged:
+
+```{r eval=FALSE}
+fit_nlin(
+  time = epi$time,
+  y = epi$random_y,
+  weight_method = "none"
+)
+```
+
+To use a two-step binomial-like weighting approximation, use
+`weight_method = "binomial"`. The model is first fitted without weights, fitted
+values are used to construct weights, and the model is then refitted using
+\(1 / (p(1 - p) + \epsilon)\).
+
+```{r eval=FALSE}
+fit_weighted <- fit_nlin(
+  time = epi$time,
+  y = epi$random_y,
+  weight_method = "binomial",
+  weight_eps = 0.01
+)
+
+fit_weighted$stats_all
+```
+
+Other built-in weighting rules are available for sensitivity analyses:
+
+- `weight_method = "mean"` uses \(1 / (p + \epsilon)\), a mean-dependent variance approximation.
+- `weight_method = "cv"` uses \(1 / (p^2 + \epsilon)\), corresponding to roughly constant coefficient of variation.
+- `weight_method = "power"` uses \(1 / (|p|^{2\theta} + \epsilon)\), where `weight_power` controls \(\theta\).
+
+These options follow the practical idea of modeling non-constant variance
+without leaving the nonlinear least-squares framework. They are not universal
+defaults. Use them as sensitivity analyses, and prefer the rule that best
+matches how the disease intensity was measured.
+
+```{r eval=FALSE}
+fit_cv <- fit_nlin(
+  time = epi$time,
+  y = epi$random_y,
+  weight_method = "cv"
+)
+
+fit_power <- fit_nlin(
+  time = epi$time,
+  y = epi$random_y,
+  weight_method = "power",
+  weight_power = 0.5
+)
+```
+
+You can also provide your own positive weights. This is useful when weights
+come from sample sizes, known measurement precision, or a variance model chosen
+outside `epifitter`.
+
+```{r eval=FALSE}
+custom_weights <- rep(1, nrow(epi))
+
+fit_custom <- fit_nlin(
+  time = epi$time,
+  y = epi$random_y,
+  weights = custom_weights
+)
+```
+
+For advanced use, `weights` can also be a function. The function receives a data
+frame with `time`, `y`, `predicted`, and `model`, and must return one positive
+weight per observation.
+
+```{r eval=FALSE}
+fit_custom_fun <- fit_nlin(
+  time = epi$time,
+  y = epi$random_y,
+  weights = function(data) {
+    1 / (data$predicted + 0.05)
+  }
+)
+```
+
+For grouped nonlinear fitting, use `weight_method` for the same strategy across
+all curves, or `weights_col` when weights are stored in the data.
+
+```{r eval=FALSE}
+multi_weighted <- fit_multi(
+  time_col = "time",
+  intensity_col = "random_y",
+  data = multi_epi,
+  strata_cols = "curve",
+  nlin = TRUE,
+  weight_method = "binomial"
+)
+```
+
+Weighted fits are assumptions, not automatic improvements. They are most useful
+when residual diagnostics or the sampling design suggest heteroscedasticity.
+Compare weighted and unweighted fits, inspect residuals, and report the chosen
+weighting rule.
+
 ## Estimate `K` when the epidemic plateaus below 1
+
+The two-parameter monomolecular, logistic, and Gompertz models assume a fixed
+maximum disease intensity of 1. In real epidemics, disease may plateau below 1
+because of host resistance, limited favorable conditions, management, sampling
+scale, or a short observation window. In those cases, `fit_nlin2()` estimates
+the upper asymptote `K`.
 
 ```{r eval=FALSE}
 epi_partial <- epi %>%
@@ -67,6 +207,10 @@ fit_k$stats_all
 ```
 
 ## Grouped fitting with `fit_multi()`
+
+Use `fit_multi()` when the same model-fitting workflow should be repeated for
+many curves, such as treatment-by-block combinations, cultivars, sites, or
+isolates. Keep grouping variables aligned with the experimental unit.
 
 ```{r}
 epi1 <- sim_gompertz(N = 50, y0 = 0.001, dt = 5, r = 0.08, alpha = 0.2, n = 3)
@@ -84,3 +228,15 @@ multi_fit <- fit_multi(
 knitr::kable(head(multi_fit$Parameters), digits = 4)
 knitr::kable(head(multi_fit$Data), digits = 4)
 ```
+
+## Practical reporting
+
+When reporting fitted disease progress models, include:
+
+- the disease metric and scale, such as severity proportion or incidence proportion;
+- the time scale and assessment schedule;
+- the model family and whether `K` was fixed or estimated;
+- whether the fit used ordinary or weighted nonlinear least squares;
+- the weighting rule, if any;
+- convergence issues or models that failed to fit;
+- uncertainty intervals or sensitivity analyses when they inform interpretation.

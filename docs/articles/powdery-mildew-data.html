@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Working with the PowderyMildew dataset • epifitter</title>
+<title>Real-data workflow: powdery mildew in organic tomato • epifitter</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -20,7 +20,7 @@
 <link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Working with the PowderyMildew dataset">
+<meta property="og:title" content="Real-data workflow: powdery mildew in organic tomato">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -42,13 +42,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with epifitter</a></li>
-    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Working with the PowderyMildew dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/model-fitting.html">Model fitting workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Area-under-the-curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/fitting.html">Fitting and selecting models</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation.html">Simulating disease progress curves</a></li>
+<li><a class="dropdown-item" href="../articles/getting-started.html">Start here: your first disease progress workflow</a></li>
+    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Real-data workflow: powdery mildew in organic tomato</a></li>
+    <li><a class="dropdown-item" href="../articles/model-fitting.html">Choosing and fitting disease progress models</a></li>
+    <li><a class="dropdown-item" href="../articles/confidence-intervals.html">Uncertainty bands for fitted disease progress curves</a></li>
+    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Summarizing epidemics with AUDPC and AUDPS</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows for disease progress curves</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -68,11 +67,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Working with the PowderyMildew dataset</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Real-data workflow: powdery mildew in organic tomato</h1>
                         <h4 data-toc-skip class="author">Kaique S.
 Alves</h4>
             
-            <h4 data-toc-skip class="date">2026-04-11</h4>
+            <h4 data-toc-skip class="date">2026-05-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/HEAD/vignettes/powdery-mildew-data.Rmd" class="external-link"><code>vignettes/powdery-mildew-data.Rmd</code></a></small>
       <div class="d-none name"><code>powdery-mildew-data.Rmd</code></div>
@@ -104,6 +103,11 @@ with:</p>
 <li>repeated observations over time within experimental blocks;</li>
 <li>treatment comparisons using summary measures and fitted models.</li>
 </ul>
+<p>This article is intended for users who want to move from raw
+experimental data to interpretable epidemic summaries. The guiding
+principle is to keep the experimental unit clear. Here, each block
+within an irrigation-by-moisture treatment is repeatedly assessed over
+time.</p>
 </div>
 <div class="section level2">
 <h2 id="load-the-data">Load the data<a class="anchor" aria-label="anchor" href="#load-the-data"></a>
@@ -386,6 +390,10 @@ datasets.</p>
 </table>
 <p>This is a repeated-measures dataset: each block was assessed across
 several time points within each irrigation-by-moisture combination.</p>
+<p>For most treatment comparisons, the block-level curve is the unit
+that should produce one summary value or one fitted model. Pooling all
+blocks together is useful for visualization of treatment means, but it
+changes the inferential target.</p>
 </div>
 <div class="section level2">
 <h2 id="visualize-treatment-means-over-time">Visualize treatment means over time<a class="anchor" aria-label="anchor" href="#visualize-treatment-means-over-time"></a>
@@ -695,6 +703,11 @@ treatment.</p>
 at once, <code><a href="../reference/AUDPC.html">AUDPC()</a></code> and <code><a href="../reference/AUDPS.html">AUDPS()</a></code> assume that you
 want one treatment-level summary curve and aggregate repeated
 observations at each time point before calculating the area.</p>
+<p>Statistically, these block-level values can later be analyzed with
+methods that match the experimental design, such as models including
+treatment terms and block structure. <code>epifitter</code> computes the
+epidemiological summaries; the downstream treatment analysis should
+still respect randomization, blocking, and replication.</p>
 <p>To compare treatments visually, it is often useful to plot one point
 per block on top of a boxplot.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -863,6 +876,10 @@ treatment-by-block combination.</p>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="powdery-mildew-data_files/figure-html/unnamed-chunk-8-1.png" alt="Scatter and line plot of a single observed powdery mildew disease progress curve for drip irrigation under high moisture in block 1." width="700"></p>
 <p>Now fit the candidate models to that curve.</p>
+<p>The fitted parameters are descriptive summaries of the selected
+curve. For example, the apparent infection rate is meaningful only in
+relation to the model form, disease scale, and observed time
+interval.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">single_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_lin.html">fit_lin</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">single_curve</span><span class="op">$</span><span class="va">time</span>, y <span class="op">=</span> <span class="va">single_curve</span><span class="op">$</span><span class="va">sev</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">single_fit</span><span class="op">$</span><span class="va">stats_all</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
@@ -1257,6 +1274,10 @@ combination should be fitted separately.</p>
 <p>This output keeps the original stratification variables, which makes
 it easier to compare fitted parameters among irrigation systems,
 moisture regimes, and blocks.</p>
+<p>For formal treatment comparisons of fitted parameters, treat these
+outputs as derived variables and analyze them using a model consistent
+with the trial design. Avoid treating repeated assessments from the same
+block as independent treatment replicates.</p>
 </div>
 <div class="section level2">
 <h2 id="practical-guidance">Practical guidance<a class="anchor" aria-label="anchor" href="#practical-guidance"></a>

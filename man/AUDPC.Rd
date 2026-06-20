@@ -23,7 +23,8 @@ AUDPC(
 
 \item{aggregate}{How to handle multiple observations at the same time point.
 The default, `"mean"`, averages replicated observations before calculating
-area. `"median"` uses the median and `"none"` requires unique time values.}
+area. `"median"` uses the median and `"none"` requires unique time values.
+A warning is issued when repeated time values are aggregated.}
 }
 \value{
 A numeric scalar with the AUDPC value.

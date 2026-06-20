@@ -1,10 +1,12 @@
 ---
-title: "Simulation workflows"
+title: "Simulation workflows for disease progress curves"
 author: "Kaique S. Alves"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    df_print: paged
 vignette: >
-  %\VignetteIndexEntry{Simulation workflows}
+  %\VignetteIndexEntry{Simulation workflows for disease progress curves}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -20,7 +22,18 @@ theme_set(cowplot::theme_half_open(font_size = 12))
 
 The `sim_` family creates synthetic disease progress curves that match the same model families used by the fitting functions.
 
+Simulations are useful for teaching, testing analysis workflows, checking
+whether a model can recover known parameters, and generating reproducible
+examples. They are not a substitute for biological validation. Choose parameter
+values that make sense for the host-pathogen system, disease metric, and time
+scale.
+
 ## Simulate four canonical curve shapes
+
+The four model families represent different epidemic shapes. Exponential
+growth is most appropriate for early unconstrained increase, while
+monomolecular, logistic, and Gompertz curves include different forms of
+deceleration as disease approaches an upper limit.
 
 ```{r}
 exp_model <- sim_exponential(N = 100, y0 = 0.01, dt = 10, r = 0.045, alpha = 0.2, n = 5)
@@ -61,3 +74,8 @@ plot_grid(exp_plot, mono_plot, log_plot, gomp_plot, ncol = 2)
 fit_from_sim <- fit_lin(time = log_model$time, y = log_model$random_y)
 fit_from_sim$stats_all
 ```
+
+When using simulations for method checking, compare the fitted model with the
+known data-generating model. When using simulations for teaching, show both the
+underlying curve (`y`) and the noisy observations (`random_y`) so users can
+distinguish the epidemic process from the observation process.

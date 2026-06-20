@@ -1,10 +1,12 @@
 ---
-title: "Getting started with epifitter"
+title: "Start here: your first disease progress workflow"
 author: "Kaique S. Alves"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    df_print: paged
 vignette: >
-  %\VignetteIndexEntry{Getting started with epifitter}
+  %\VignetteIndexEntry{Start here: your first disease progress workflow}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
@@ -21,14 +23,29 @@ theme_set(cowplot::theme_half_open(font_size = 12))
 
 ## What epifitter does
 
-`epifitter` helps analyze plant disease progress curves by combining:
+`epifitter` helps analyze plant disease progress curves (DPCs): repeated
+measurements of disease intensity through time. These curves are common in
+plant pathology because they connect epidemic development, host-pathogen
+biology, management effects, and quantitative summaries such as apparent
+infection rate and area under the disease progress curve.
 
-- simulation helpers for synthetic epidemics;
-- fitting functions for canonical disease progress models;
-- summary measures such as `AUDPC()` and `AUDPS()`;
-- plotting functions that return `ggplot2` objects.
+This article is the shortest path to a complete workflow. You will:
+
+- simulate a synthetic epidemic;
+- fit canonical disease progress models;
+- inspect fitted parameters and model rankings;
+- plot observed and fitted disease progress curves;
+- see how the same workflow extends to multiple epidemics.
+
+The examples use simulated data so that the workflow is reproducible, but the
+same functions can be applied to observed disease incidence or severity data on
+a proportional scale.
 
 ## A first epidemic
+
+We start by simulating a logistic epidemic. The column `y` is the underlying
+curve and `random_y` represents replicated observations with sampling or
+measurement noise.
 
 ```{r}
 set.seed(1)
@@ -58,6 +75,11 @@ ggplot(epi, aes(time, y, group = replicates)) +
 
 ## Fit candidate models
 
+`fit_lin()` compares the four canonical disease progress models by fitting
+linearized forms of each model. This is useful for quick screening and teaching,
+but the ranking should be interpreted together with the plot and biological
+plausibility.
+
 ```{r}
 fit <- fit_lin(time = epi$time, y = epi$random_y)
 fit
@@ -71,11 +93,19 @@ knitr::kable(fit$stats_all, digits = 4)
 
 ## Visualize predictions
 
+The fitted object stores observed values, transformed values, predictions, and
+parameter summaries. `plot_fit()` turns that object into a faceted `ggplot2`
+figure.
+
 ```{r fig.alt="Faceted plot comparing observed disease intensity values with fitted curves from candidate models."}
 plot_fit(fit, point_size = 1.8, line_size = 0.9)
 ```
 
 ## Work with multiple epidemics
+
+Many experiments include multiple treatments, cultivars, blocks, or locations.
+Use `fit_multi()` when the same fitting workflow should be applied separately
+to each group.
 
 ```{r}
 epi_a <- sim_gompertz(N = 50, y0 = 0.002, dt = 5, r = 0.10, alpha = 0.2, n = 3)
@@ -95,6 +125,8 @@ knitr::kable(head(multi_fit$Parameters), digits = 4)
 
 ## Next steps
 
-- Use the model fitting article for a deeper walkthrough of `fit_lin()`, `fit_nlin()`, `fit_nlin2()`, and `fit_multi()`.
-- Use the simulation article for examples built around the `sim_` family.
 - Use the PowderyMildew article for a real-data workflow based on the bundled experimental dataset.
+- Use the model fitting article for a deeper walkthrough of `fit_lin()`, `fit_nlin()`, `fit_nlin2()`, weighted nonlinear fits, and `fit_multi()`.
+- Use the confidence interval article when you need uncertainty bands around fitted curves.
+- Use the area-under-the-curve article when your goal is to summarize each epidemic as AUDPC or AUDPS.
+- Use the simulation workflow article for examples built around the `sim_` family.

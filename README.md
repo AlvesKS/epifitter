@@ -9,6 +9,7 @@
 Current functionality includes:
 
 -   Fit classic population dynamics models using linear and nonlinear approaches
+-   Fit nonlinear models with optional built-in or custom weighting for proportional disease intensity data
 -   Select models based on statistical and visual analysis
 -   Calculate the area under the disease progress curve
 -   Compare epidemics via visual inference

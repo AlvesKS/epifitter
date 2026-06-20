@@ -10,6 +10,7 @@
 #' @param aggregate How to handle multiple observations at the same time point.
 #'   The default, `"mean"`, averages replicated observations before calculating
 #'   area. `"median"` uses the median and `"none"` requires unique time values.
+#'   A warning is issued when repeated time values are aggregated.
 #'
 #' @return A numeric scalar with the AUDPC value.
 #'
@@ -41,8 +42,10 @@ AUDPC = function(time, y, y_proportion = TRUE, type = "absolute",
   ymax <- if (y_proportion) 1 else 100
 
   # Vectorized AUDPC
-  n <- length(curve_data$y) - 1L
-  audpc1 <- sum(((curve_data$y[-n] + curve_data$y[-1L]) / 2) * diff(curve_data$time))
+  audpc1 <- sum(
+    ((curve_data$y[-length(curve_data$y)] + curve_data$y[-1L]) / 2) *
+      diff(curve_data$time)
+  )
 
   # Calculate relative AUDPC if requested
   if (type == "relative") {

@@ -12,7 +12,11 @@ fit_multi(
   starting_par = list(y0 = 0.01, r = 0.03, K = 0.8),
   maxiter = 500,
   nlin = FALSE,
-  estimate_K = FALSE
+  estimate_K = FALSE,
+  weights_col = NULL,
+  weight_method = c("none", "binomial", "mean", "cv", "power"),
+  weight_eps = 0.01,
+  weight_power = 1
 )
 }
 \arguments{
@@ -33,6 +37,20 @@ positive number.}
 \item{nlin}{Logical. Should nonlinear fitting be used?}
 
 \item{estimate_K}{Logical. Should the asymptote `K` be estimated?}
+
+\item{weights_col}{Optional character name specifying a column of positive
+weights for weighted nonlinear least squares. Used only when
+`nlin = TRUE`.}
+
+\item{weight_method}{Weighting strategy passed to [fit_nlin()] or
+[fit_nlin2()]. Use `"none"` for ordinary nonlinear least squares or
+`"binomial"`, `"mean"`, `"cv"`, or `"power"` for two-step fitted-value
+weighting approximations.}
+
+\item{weight_eps}{Small positive constant used by
+fitted-value weighting methods to keep weights finite near 0 and 1.}
+
+\item{weight_power}{Non-negative power used when `weight_method = "power"`.}
 }
 \value{
 A list with grouped parameter estimates and prediction data.

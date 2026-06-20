@@ -17,13 +17,12 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with epifitter</a></li>
-    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Working with the PowderyMildew dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/model-fitting.html">Model fitting workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Area-under-the-curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/fitting.html">Fitting and selecting models</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation.html">Simulating disease progress curves</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Start here: your first disease progress workflow</a></li>
+    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Real-data workflow: powdery mildew in organic tomato</a></li>
+    <li><a class="dropdown-item" href="../articles/model-fitting.html">Choosing and fitting disease progress models</a></li>
+    <li><a class="dropdown-item" href="../articles/confidence-intervals.html">Uncertainty bands for fitted disease progress curves</a></li>
+    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Summarizing epidemics with AUDPC and AUDPS</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows for disease progress curves</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -40,13 +39,16 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.0" id="epifitter-100">epifitter 1.0.0<a class="anchor" aria-label="anchor" href="#epifitter-100"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.0.0" id="epifitter-100">epifitter 1.0.0<a class="anchor" aria-label="anchor" href="#epifitter-100"></a></h2><p class="text-muted">CRAN release: 2026-04-12</p>
 <div class="section level4">
 <h4 id="highlights-1-0-0">Highlights<a class="anchor" aria-label="anchor" href="#highlights-1-0-0"></a></h4>
 <ul><li>Modernized the fitting workflow with shared input validation, more informative error messages, and improved grouped-model ergonomics.</li>
 <li>Refreshed the documentation site with updated articles, improved accessibility, dark mode support, and a clearer visual style for figures.</li>
 <li>Added a formal package citation, a vignette built around the bundled <code>PowderyMildew</code> dataset, and expanded regression tests for area summaries and model fitting.</li>
 <li>Corrected area-under-the-curve handling for repeated assessment times and strengthened defaults for nonlinear fitting workflows.</li>
+<li>Added optional confidence bands to <code><a href="../reference/plot_fit.html">plot_fit()</a></code> with residual and wild bootstrap interval methods.</li>
+<li>Strengthened simulation input validation and corrected the logistic simulation equation when <code>K</code> is lower than 1.</li>
+<li>Added optional weighted nonlinear least squares to <code><a href="../reference/fit_nlin.html">fit_nlin()</a></code> and <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code>, including custom numeric weights, custom weight functions, and fitted-value weighting methods (<code>"binomial"</code>, <code>"mean"</code>, <code>"cv"</code>, and <code>"power"</code>) for proportional disease intensity data.</li>
 </ul><hr></div>
 </div>
     <div class="section level2">

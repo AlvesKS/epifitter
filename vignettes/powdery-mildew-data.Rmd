@@ -1,10 +1,12 @@
 ---
-title: "Working with the PowderyMildew dataset"
+title: "Real-data workflow: powdery mildew in organic tomato"
 author: "Kaique S. Alves"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    df_print: paged
 vignette: >
-  %\VignetteIndexEntry{Working with the PowderyMildew dataset}
+  %\VignetteIndexEntry{Real-data workflow: powdery mildew in organic tomato}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -29,6 +31,11 @@ The dataset is especially useful for demonstrating workflows with:
 - a real epidemic dataset rather than simulated curves;
 - repeated observations over time within experimental blocks;
 - treatment comparisons using summary measures and fitted models.
+
+This article is intended for users who want to move from raw experimental data
+to interpretable epidemic summaries. The guiding principle is to keep the
+experimental unit clear. Here, each block within an irrigation-by-moisture
+treatment is repeatedly assessed over time.
 
 ## Load the data
 
@@ -57,6 +64,11 @@ PowderyMildew %>%
 ```
 
 This is a repeated-measures dataset: each block was assessed across several time points within each irrigation-by-moisture combination.
+
+For most treatment comparisons, the block-level curve is the unit that should
+produce one summary value or one fitted model. Pooling all blocks together is
+useful for visualization of treatment means, but it changes the inferential
+target.
 
 ## Visualize treatment means over time
 
@@ -103,6 +115,12 @@ knitr::kable(pm_area, digits = 4)
 ```
 
 This differs from pooling all rows together. If all blocks are passed at once, `AUDPC()` and `AUDPS()` assume that you want one treatment-level summary curve and aggregate repeated observations at each time point before calculating the area.
+
+Statistically, these block-level values can later be analyzed with methods that
+match the experimental design, such as models including treatment terms and
+block structure. `epifitter` computes the epidemiological summaries; the
+downstream treatment analysis should still respect randomization, blocking, and
+replication.
 
 To compare treatments visually, it is often useful to plot one point per block on top of a boxplot.
 
@@ -183,6 +201,10 @@ ggplot(single_curve, aes(time, sev)) +
 
 Now fit the candidate models to that curve.
 
+The fitted parameters are descriptive summaries of the selected curve. For
+example, the apparent infection rate is meaningful only in relation to the
+model form, disease scale, and observed time interval.
+
 ```{r}
 single_fit <- fit_lin(time = single_curve$time, y = single_curve$sev)
 knitr::kable(single_fit$stats_all, digits = 4)
@@ -208,6 +230,11 @@ knitr::kable(head(pm_multi_fit$Parameters, 12), digits = 4)
 ```
 
 This output keeps the original stratification variables, which makes it easier to compare fitted parameters among irrigation systems, moisture regimes, and blocks.
+
+For formal treatment comparisons of fitted parameters, treat these outputs as
+derived variables and analyze them using a model consistent with the trial
+design. Avoid treating repeated assessments from the same block as independent
+treatment replicates.
 
 ## Practical guidance
 

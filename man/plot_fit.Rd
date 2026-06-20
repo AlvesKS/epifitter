@@ -8,7 +8,15 @@ plot_fit(
   object,
   point_size = 1.2,
   line_size = 1,
-  models = c("Exponential", "Monomolecular", "Logistic", "Gompertz")
+  models = c("Exponential", "Monomolecular", "Logistic", "Gompertz"),
+  conf_int = FALSE,
+  ci_method = c("bootstrap", "wild"),
+  nsim = 500,
+  level = 0.95,
+  seed = NULL,
+  n_grid = 100,
+  ci_alpha = 0.2,
+  y_bounds = c(0, 1)
 )
 }
 \arguments{
@@ -20,17 +28,45 @@ plot_fit(
 \item{line_size}{Line width for fitted curves.}
 
 \item{models}{Character vector with the models to display.}
+
+\item{conf_int}{Logical. If `TRUE`, draw confidence bands around fitted
+curves.}
+
+\item{ci_method}{Method used to estimate confidence bands. Use
+`"bootstrap"` for residual bootstrap intervals, or `"wild"` for wild
+residual bootstrap intervals. The older `"case"` option is accepted as a
+deprecated alias for `"wild"`.}
+
+\item{nsim}{Number of bootstrap samples used when `conf_int = TRUE`.}
+
+\item{level}{Confidence level for the interval.}
+
+\item{seed}{Optional random seed used for interval estimation.}
+
+\item{n_grid}{Number of time points used to draw fitted curves and
+confidence bands.}
+
+\item{ci_alpha}{Transparency of the confidence band.}
+
+\item{y_bounds}{Numeric vector of length two used to constrain plotted
+fitted values and confidence bands. The default keeps disease intensity on
+the usual proportion scale from 0 to 1. Use `NULL` to show unconstrained
+fitted values.}
 }
 \value{
 A `ggplot2` object.
 }
 \description{
 Create a faceted `ggplot2` panel showing observed and fitted values for the
-selected epidemic models.
+selected epidemic models. Optionally, add confidence bands around the fitted
+curves.
 }
 \examples{
 epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.2, n = 4)
 fit <- fit_lin(time = epi$time, y = epi$random_y)
 plot_fit(fit)
+\donttest{
+plot_fit(fit, conf_int = TRUE, nsim = 100)
+}
 
 }

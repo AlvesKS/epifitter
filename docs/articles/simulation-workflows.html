@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Simulation workflows • epifitter</title>
+<title>Simulation workflows for disease progress curves • epifitter</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -20,7 +20,7 @@
 <link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Simulation workflows">
+<meta property="og:title" content="Simulation workflows for disease progress curves">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -42,13 +42,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with epifitter</a></li>
-    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Working with the PowderyMildew dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/model-fitting.html">Model fitting workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Area-under-the-curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/fitting.html">Fitting and selecting models</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation.html">Simulating disease progress curves</a></li>
+<li><a class="dropdown-item" href="../articles/getting-started.html">Start here: your first disease progress workflow</a></li>
+    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Real-data workflow: powdery mildew in organic tomato</a></li>
+    <li><a class="dropdown-item" href="../articles/model-fitting.html">Choosing and fitting disease progress models</a></li>
+    <li><a class="dropdown-item" href="../articles/confidence-intervals.html">Uncertainty bands for fitted disease progress curves</a></li>
+    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Summarizing epidemics with AUDPC and AUDPS</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows for disease progress curves</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -68,11 +67,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Simulation workflows</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Simulation workflows for disease progress curves</h1>
                         <h4 data-toc-skip class="author">Kaique S.
 Alves</h4>
             
-            <h4 data-toc-skip class="date">2026-04-11</h4>
+            <h4 data-toc-skip class="date">2026-05-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/HEAD/vignettes/simulation-workflows.Rmd" class="external-link"><code>vignettes/simulation-workflows.Rmd</code></a></small>
       <div class="d-none name"><code>simulation-workflows.Rmd</code></div>
@@ -91,10 +90,19 @@ Alves</h4>
 <p>The <code>sim_</code> family creates synthetic disease progress
 curves that match the same model families used by the fitting
 functions.</p>
+<p>Simulations are useful for teaching, testing analysis workflows,
+checking whether a model can recover known parameters, and generating
+reproducible examples. They are not a substitute for biological
+validation. Choose parameter values that make sense for the
+host-pathogen system, disease metric, and time scale.</p>
 </div>
 <div class="section level2">
 <h2 id="simulate-four-canonical-curve-shapes">Simulate four canonical curve shapes<a class="anchor" aria-label="anchor" href="#simulate-four-canonical-curve-shapes"></a>
 </h2>
+<p>The four model families represent different epidemic shapes.
+Exponential growth is most appropriate for early unconstrained increase,
+while monomolecular, logistic, and Gompertz curves include different
+forms of deceleration as disease approaches an upper limit.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">exp_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_exponential.html">sim_exponential</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">10</span>, r <span class="op">=</span> <span class="fl">0.045</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">mono_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_monomolecular.html">sim_monomolecular</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
@@ -138,6 +146,11 @@ functions.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span>          3 Mono… 0.055<span style="text-decoration: underline;">9</span> 2.02<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>   0.051<span style="text-decoration: underline;">9</span>   0.059<span style="text-decoration: underline;">9</span> -<span style="color: #BB0000;">1.10</span> 0.118      0.881 0.628</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">4</span>          4 Expo… 0.045<span style="text-decoration: underline;">3</span> 1.99<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>   0.041<span style="text-decoration: underline;">3</span>   0.049<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">3.55</span> 0.116      0.834 0.617</span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 4 more variables: CCC &lt;dbl&gt;, y0 &lt;dbl&gt;, y0_ci_lwr &lt;dbl&gt;, y0_ci_upr &lt;dbl&gt;</span></span></span></code></pre>
+<p>When using simulations for method checking, compare the fitted model
+with the known data-generating model. When using simulations for
+teaching, show both the underlying curve (<code>y</code>) and the noisy
+observations (<code>random_y</code>) so users can distinguish the
+epidemic process from the observation process.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

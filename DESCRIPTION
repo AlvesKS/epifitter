@@ -1,7 +1,7 @@
 Package: epifitter
 Type: Package
 Title: Analysis and Simulation of Plant Disease Progress Curves
-Version: 1.0.0
+Version: 1.0.1
 Description: Tools for analysis, visualization, and simulation of plant disease
     progress curves. Includes functions to calculate area-under-the-curve
     summaries, fit and compare exponential, monomolecular, logistic, and
@@ -28,7 +28,7 @@ Authors@R: c(
          comment = c("ORCID" = "0000-0002-0061-8359"))
           )
 Depends: R (>= 4.1)
-Imports: DescTools, cowplot, deSolve, dplyr, ggplot2, magrittr, minpack.lm, stats, tibble, tidyr
+Imports: DescTools, cowplot, deSolve, dplyr, ggplot2, magrittr, minpack.lm, stats, tidyr
 Suggests: 
     knitr,
     rmarkdown,
@@ -38,7 +38,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-Date: 2026-04-11
+Date: 2026-06-20
 URL: https://github.com/AlvesKS/epifitter, https://alvesks.github.io/epifitter/
 BugReports: https://github.com/AlvesKS/epifitter/issues
 X-schema.org-applicationCategory: Tools

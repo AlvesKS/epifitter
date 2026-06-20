@@ -49,16 +49,21 @@ reference:
     contents:
       - PowderyMildew
 articles:
-  - title: Get started
+  - title: Start here
+    desc: >
+      A short path for new users: simulate a curve, fit candidate models, plot
+      fitted disease progress curves, and learn where to go next.
     navbar: ~
     contents:
       - getting-started
-      - powdery-mildew-data
-      - model-fitting
-      - area-under-curve
-      - simulation-workflows
-  - title: Legacy articles
+  - title: Applied workflows
+    desc: >
+      Worked examples for real experiments, model fitting, uncertainty,
+      area-under-the-curve summaries, and simulation.
     navbar: ~
     contents:
-      - fitting
-      - simulation
+      - powdery-mildew-data
+      - model-fitting
+      - confidence-intervals
+      - area-under-curve
+      - simulation-workflows

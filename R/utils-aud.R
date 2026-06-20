@@ -32,6 +32,13 @@
   }
 
   if (has_duplicates) {
+    warning(
+      "Duplicated `time` values detected; repeated observations at the same time were aggregated using `",
+      aggregate,
+      "`. To calculate one area value per observational unit or replicate, split your data by that unit and run the area function separately.",
+      call. = FALSE
+    )
+
     aggregate_fun <- switch(
       aggregate,
       mean = mean,

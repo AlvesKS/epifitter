@@ -1,15 +1,14 @@
-pandoc: 3.6.3
+pandoc: 3.8.3
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   area-under-curve: area-under-curve.html
-  fitting: fitting.html
+  confidence-intervals: confidence-intervals.html
   getting-started: getting-started.html
   model-fitting: model-fitting.html
   powdery-mildew-data: powdery-mildew-data.html
   simulation-workflows: simulation-workflows.html
-  simulation: simulation.html
-last_built: 2026-04-11T21:40Z
+last_built: 2026-05-17T23:08Z
 urls:
   reference: https://alvesks.github.io/epifitter/reference
   article: https://alvesks.github.io/epifitter/articles

@@ -4,7 +4,16 @@
 \alias{fit_nlin}
 \title{Fit epidemic models using nonlinear regression}
 \usage{
-fit_nlin(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter = 50)
+fit_nlin(
+  time,
+  y,
+  starting_par = list(y0 = 0.01, r = 0.03),
+  maxiter = 50,
+  weights = NULL,
+  weight_method = c("none", "binomial", "mean", "cv", "power"),
+  weight_eps = 0.01,
+  weight_power = 1
+)
 }
 \arguments{
 \item{time}{Numeric vector of assessment times.}
@@ -16,6 +25,24 @@ When omitted or partially specified, `epifitter` supplies data-driven
 fallback values.}
 
 \item{maxiter}{Maximum number of iterations. Must be a positive number.}
+
+\item{weights}{Optional numeric vector of positive weights, or a function
+that receives a data frame with columns `time`, `y`, `predicted`, and
+`model` and returns positive weights. When supplied, these weights are used
+directly and `weight_method` must be `"none"`.}
+
+\item{weight_method}{Weighting strategy for nonlinear least squares. Use
+`"none"` for ordinary nonlinear least squares, `"binomial"` for
+\eqn{1 / (\hat{p}(1 - \hat{p}) + \epsilon)}, `"mean"` for
+\eqn{1 / (\hat{p} + \epsilon)}, `"cv"` for
+\eqn{1 / (\hat{p}^2 + \epsilon)}, or `"power"` for
+\eqn{1 / (|\hat{p}|^{2\theta} + \epsilon)}.}
+
+\item{weight_eps}{Small positive constant added to fitted-value variance
+approximations to keep weights finite near 0 and 1.}
+
+\item{weight_power}{Non-negative power \eqn{\theta} used only when
+`weight_method = "power"`.}
 }
 \value{
 A list with fit statistics, parameter estimates, and prediction
@@ -24,6 +51,13 @@ A list with fit statistics, parameter estimates, and prediction
 \description{
 Fit exponential, monomolecular, logistic, and Gompertz models to disease
 progress data using nonlinear regression.
+}
+\details{
+Weighted fits use weighted nonlinear least squares, not a binomial or beta
+likelihood. `weight_method` options other than `"none"` use a two-step
+working approximation: first fit the model without weights, derive weights
+from the fitted values, and then refit the model. Report the selected
+weighting rule as an assumption.
 }
 \examples{
 set.seed(1)

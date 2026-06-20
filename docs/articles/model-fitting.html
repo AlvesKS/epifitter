@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Model fitting workflows • epifitter</title>
+<title>Choosing and fitting disease progress models • epifitter</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -20,7 +20,7 @@
 <link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Model fitting workflows">
+<meta property="og:title" content="Choosing and fitting disease progress models">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -42,13 +42,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with epifitter</a></li>
-    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Working with the PowderyMildew dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/model-fitting.html">Model fitting workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Area-under-the-curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/fitting.html">Fitting and selecting models</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation.html">Simulating disease progress curves</a></li>
+<li><a class="dropdown-item" href="../articles/getting-started.html">Start here: your first disease progress workflow</a></li>
+    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Real-data workflow: powdery mildew in organic tomato</a></li>
+    <li><a class="dropdown-item" href="../articles/model-fitting.html">Choosing and fitting disease progress models</a></li>
+    <li><a class="dropdown-item" href="../articles/confidence-intervals.html">Uncertainty bands for fitted disease progress curves</a></li>
+    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Summarizing epidemics with AUDPC and AUDPS</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows for disease progress curves</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -68,11 +67,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Model fitting workflows</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Choosing and fitting disease progress models</h1>
                         <h4 data-toc-skip class="author">Kaique S.
 Alves</h4>
             
-            <h4 data-toc-skip class="date">2026-04-11</h4>
+            <h4 data-toc-skip class="date">2026-05-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/HEAD/vignettes/model-fitting.Rmd" class="external-link"><code>vignettes/model-fitting.Rmd</code></a></small>
       <div class="d-none name"><code>model-fitting.Rmd</code></div>
@@ -89,8 +88,14 @@ Alves</h4>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p><code>epifitter</code> offers three complementary fitting
-workflows:</p>
+<p>Disease progress models are simplified descriptions of epidemic
+development. They are useful when the goal is to estimate biologically
+interpretable features such as initial disease intensity, apparent
+infection rate, or an upper asymptote. They should not be selected only
+because a curve looks smooth or because a single fit statistic is
+largest.</p>
+<p>This article explains the main model-fitting workflows in
+<code>epifitter</code>:</p>
 <ul>
 <li>
 <code><a href="../reference/fit_lin.html">fit_lin()</a></code> for linearized model comparison;</li>
@@ -101,10 +106,19 @@ models;</li>
 <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code> for nonlinear fitting when the asymptote
 <code>K</code> should be estimated.</li>
 </ul>
+<p>Use <code><a href="../reference/fit_lin.html">fit_lin()</a></code> for quick screening and teaching. Use
+nonlinear fitting when you want to fit the model on the original disease
+intensity scale. Use <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code> when the epidemic appears
+to plateau below 1 and estimating the maximum disease intensity is
+scientifically meaningful.</p>
 </div>
 <div class="section level2">
 <h2 id="compare-models-quickly-with-fit_lin">Compare models quickly with <code>fit_lin()</code><a class="anchor" aria-label="anchor" href="#compare-models-quickly-with-fit_lin"></a>
 </h2>
+<p>Linearized models transform disease intensity before fitting a
+straight line. This is fast and often useful for model comparison, but
+transformations also change the error scale. Always inspect the fitted
+curves on the original disease intensity scale.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">epi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_logistic.html">sim_logistic</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">60</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.12</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
@@ -218,6 +232,12 @@ models;</li>
 <div class="section level2">
 <h2 id="nonlinear-fitting-with-starting-values">Nonlinear fitting with starting values<a class="anchor" aria-label="anchor" href="#nonlinear-fitting-with-starting-values"></a>
 </h2>
+<p><code><a href="../reference/fit_nlin.html">fit_nlin()</a></code> fits the same candidate models directly to
+the original disease intensity values. Nonlinear optimization needs
+starting values, so poor starts or weakly informative data can lead to
+non-convergence. When this happens, inspect the curve, adjust
+<code>starting_par</code>, and consider whether the chosen model is
+identifiable from the observed time points.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_nlin_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
 <span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
@@ -228,9 +248,126 @@ models;</li>
 <span><span class="va">fit_nlin_out</span><span class="op">$</span><span class="va">stats_all</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="weighted-nonlinear-fitting">Weighted nonlinear fitting<a class="anchor" aria-label="anchor" href="#weighted-nonlinear-fitting"></a>
+</h2>
+<p>By default, <code><a href="../reference/fit_nlin.html">fit_nlin()</a></code> and <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code> use
+ordinary nonlinear least squares. This gives every observation the same
+weight and is consistent with many traditional disease progress curve
+workflows. For disease incidence or severity measured as a proportion,
+however, residual variability may change across the epidemic. For
+example, binomial-like measurements often have variance related to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p(1 - p)</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+is the fitted disease intensity.</p>
+<p><code>epifitter</code> therefore allows optional weighted nonlinear
+least squares. These options are working variance assumptions, not a
+substitute for a full binomial or beta likelihood. The default is
+unchanged:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
+<span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
+<span>  weight_method <span class="op">=</span> <span class="st">"none"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>To use a two-step binomial-like weighting approximation, use
+<code>weight_method = "binomial"</code>. The model is first fitted
+without weights, fitted values are used to construct weights, and the
+model is then refitted using
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1 / (p(1 - p) + \epsilon)</annotation></semantics></math>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_weighted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
+<span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
+<span>  weight_method <span class="op">=</span> <span class="st">"binomial"</span>,</span>
+<span>  weight_eps <span class="op">=</span> <span class="fl">0.01</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit_weighted</span><span class="op">$</span><span class="va">stats_all</span></span></code></pre></div>
+<p>Other built-in weighting rules are available for sensitivity
+analyses:</p>
+<ul>
+<li>
+<code>weight_method = "mean"</code> uses
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo>+</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1 / (p + \epsilon)</annotation></semantics></math>,
+a mean-dependent variance approximation.</li>
+<li>
+<code>weight_method = "cv"</code> uses
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>p</mi><mn>2</mn></msup><mo>+</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1 / (p^2 + \epsilon)</annotation></semantics></math>,
+corresponding to roughly constant coefficient of variation.</li>
+<li>
+<code>weight_method = "power"</code> uses
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="prefix">|</mo><mi>p</mi><msup><mo stretchy="false" form="prefix">|</mo><mrow><mn>2</mn><mi>θ</mi></mrow></msup><mo>+</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1 / (|p|^{2\theta} + \epsilon)</annotation></semantics></math>,
+where <code>weight_power</code> controls
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>.</li>
+</ul>
+<p>These options follow the practical idea of modeling non-constant
+variance without leaving the nonlinear least-squares framework. They are
+not universal defaults. Use them as sensitivity analyses, and prefer the
+rule that best matches how the disease intensity was measured.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
+<span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
+<span>  weight_method <span class="op">=</span> <span class="st">"cv"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit_power</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
+<span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
+<span>  weight_method <span class="op">=</span> <span class="st">"power"</span>,</span>
+<span>  weight_power <span class="op">=</span> <span class="fl">0.5</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>You can also provide your own positive weights. This is useful when
+weights come from sample sizes, known measurement precision, or a
+variance model chosen outside <code>epifitter</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">custom_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">epi</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit_custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
+<span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
+<span>  weights <span class="op">=</span> <span class="va">custom_weights</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>For advanced use, <code>weights</code> can also be a function. The
+function receives a data frame with <code>time</code>, <code>y</code>,
+<code>predicted</code>, and <code>model</code>, and must return one
+positive weight per observation.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_custom_fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
+<span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
+<span>  weights <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">predicted</span> <span class="op">+</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>For grouped nonlinear fitting, use <code>weight_method</code> for the
+same strategy across all curves, or <code>weights_col</code> when
+weights are stored in the data.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">multi_weighted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_multi.html">fit_multi</a></span><span class="op">(</span></span>
+<span>  time_col <span class="op">=</span> <span class="st">"time"</span>,</span>
+<span>  intensity_col <span class="op">=</span> <span class="st">"random_y"</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">multi_epi</span>,</span>
+<span>  strata_cols <span class="op">=</span> <span class="st">"curve"</span>,</span>
+<span>  nlin <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  weight_method <span class="op">=</span> <span class="st">"binomial"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Weighted fits are assumptions, not automatic improvements. They are
+most useful when residual diagnostics or the sampling design suggest
+heteroscedasticity. Compare weighted and unweighted fits, inspect
+residuals, and report the chosen weighting rule.</p>
+</div>
+<div class="section level2">
 <h2 id="estimate-k-when-the-epidemic-plateaus-below-1">Estimate <code>K</code> when the epidemic plateaus below 1<a class="anchor" aria-label="anchor" href="#estimate-k-when-the-epidemic-plateaus-below-1"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>The two-parameter monomolecular, logistic, and Gompertz models assume
+a fixed maximum disease intensity of 1. In real epidemics, disease may
+plateau below 1 because of host resistance, limited favorable
+conditions, management, sampling scale, or a short observation window.
+In those cases, <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code> estimates the upper asymptote
+<code>K</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epi_partial</span> <span class="op">&lt;-</span> <span class="va">epi</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>random_y <span class="op">=</span> <span class="va">random_y</span> <span class="op">*</span> <span class="fl">0.8</span><span class="op">)</span></span>
 <span></span>
@@ -245,7 +382,11 @@ models;</li>
 <div class="section level2">
 <h2 id="grouped-fitting-with-fit_multi">Grouped fitting with <code>fit_multi()</code><a class="anchor" aria-label="anchor" href="#grouped-fitting-with-fit_multi"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Use <code><a href="../reference/fit_multi.html">fit_multi()</a></code> when the same model-fitting workflow
+should be repeated for many curves, such as treatment-by-block
+combinations, cultivars, sites, or isolates. Keep grouping variables
+aligned with the experimental unit.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epi1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">50</span>, y0 <span class="op">=</span> <span class="fl">0.001</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.08</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">epi2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">50</span>, y0 <span class="op">=</span> <span class="fl">0.002</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.11</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
@@ -399,7 +540,7 @@ models;</li>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">multi_fit</span><span class="op">$</span><span class="va">Data</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -468,6 +609,24 @@ models;</li>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section level2">
+<h2 id="practical-reporting">Practical reporting<a class="anchor" aria-label="anchor" href="#practical-reporting"></a>
+</h2>
+<p>When reporting fitted disease progress models, include:</p>
+<ul>
+<li>the disease metric and scale, such as severity proportion or
+incidence proportion;</li>
+<li>the time scale and assessment schedule;</li>
+<li>the model family and whether <code>K</code> was fixed or
+estimated;</li>
+<li>whether the fit used ordinary or weighted nonlinear least
+squares;</li>
+<li>the weighting rule, if any;</li>
+<li>convergence issues or models that failed to fit;</li>
+<li>uncertainty intervals or sensitivity analyses when they inform
+interpretation.</li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

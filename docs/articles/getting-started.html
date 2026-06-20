@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Getting started with epifitter • epifitter</title>
+<title>Start here: your first disease progress workflow • epifitter</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -20,7 +20,7 @@
 <link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Getting started with epifitter">
+<meta property="og:title" content="Start here: your first disease progress workflow">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -42,13 +42,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with epifitter</a></li>
-    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Working with the PowderyMildew dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/model-fitting.html">Model fitting workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Area-under-the-curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/fitting.html">Fitting and selecting models</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation.html">Simulating disease progress curves</a></li>
+<li><a class="dropdown-item" href="../articles/getting-started.html">Start here: your first disease progress workflow</a></li>
+    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Real-data workflow: powdery mildew in organic tomato</a></li>
+    <li><a class="dropdown-item" href="../articles/model-fitting.html">Choosing and fitting disease progress models</a></li>
+    <li><a class="dropdown-item" href="../articles/confidence-intervals.html">Uncertainty bands for fitted disease progress curves</a></li>
+    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Summarizing epidemics with AUDPC and AUDPS</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows for disease progress curves</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -68,11 +67,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Getting started with epifitter</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Start here: your first disease progress workflow</h1>
                         <h4 data-toc-skip class="author">Kaique S.
 Alves</h4>
             
-            <h4 data-toc-skip class="date">2026-04-11</h4>
+            <h4 data-toc-skip class="date">2026-05-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/HEAD/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="d-none name"><code>getting-started.Rmd</code></div>
@@ -89,19 +88,31 @@ Alves</h4>
 <div class="section level2">
 <h2 id="what-epifitter-does">What epifitter does<a class="anchor" aria-label="anchor" href="#what-epifitter-does"></a>
 </h2>
-<p><code>epifitter</code> helps analyze plant disease progress curves by
-combining:</p>
+<p><code>epifitter</code> helps analyze plant disease progress curves
+(DPCs): repeated measurements of disease intensity through time. These
+curves are common in plant pathology because they connect epidemic
+development, host-pathogen biology, management effects, and quantitative
+summaries such as apparent infection rate and area under the disease
+progress curve.</p>
+<p>This article is the shortest path to a complete workflow. You
+will:</p>
 <ul>
-<li>simulation helpers for synthetic epidemics;</li>
-<li>fitting functions for canonical disease progress models;</li>
-<li>summary measures such as <code><a href="../reference/AUDPC.html">AUDPC()</a></code> and
-<code><a href="../reference/AUDPS.html">AUDPS()</a></code>;</li>
-<li>plotting functions that return <code>ggplot2</code> objects.</li>
+<li>simulate a synthetic epidemic;</li>
+<li>fit canonical disease progress models;</li>
+<li>inspect fitted parameters and model rankings;</li>
+<li>plot observed and fitted disease progress curves;</li>
+<li>see how the same workflow extends to multiple epidemics.</li>
 </ul>
+<p>The examples use simulated data so that the workflow is reproducible,
+but the same functions can be applied to observed disease incidence or
+severity data on a proportional scale.</p>
 </div>
 <div class="section level2">
 <h2 id="a-first-epidemic">A first epidemic<a class="anchor" aria-label="anchor" href="#a-first-epidemic"></a>
 </h2>
+<p>We start by simulating a logistic epidemic. The column <code>y</code>
+is the underlying curve and <code>random_y</code> represents replicated
+observations with sampling or measurement noise.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span></span>
@@ -175,6 +186,10 @@ combining:</p>
 <div class="section level2">
 <h2 id="fit-candidate-models">Fit candidate models<a class="anchor" aria-label="anchor" href="#fit-candidate-models"></a>
 </h2>
+<p><code><a href="../reference/fit_lin.html">fit_lin()</a></code> compares the four canonical disease progress
+models by fitting linearized forms of each model. This is useful for
+quick screening and teaching, but the ranking should be interpreted
+together with the plot and biological plausibility.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_lin.html">fit_lin</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>, y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span><span class="op">)</span></span>
 <span><span class="va">fit</span></span></code></pre></div>
@@ -308,6 +323,9 @@ models.</p>
 <div class="section level2">
 <h2 id="visualize-predictions">Visualize predictions<a class="anchor" aria-label="anchor" href="#visualize-predictions"></a>
 </h2>
+<p>The fitted object stores observed values, transformed values,
+predictions, and parameter summaries. <code><a href="../reference/plot_fit.html">plot_fit()</a></code> turns that
+object into a faceted <code>ggplot2</code> figure.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">fit</span>, point_size <span class="op">=</span> <span class="fl">1.8</span>, line_size <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-5-1.png" alt="Faceted plot comparing observed disease intensity values with fitted curves from candidate models." width="700"></p>
@@ -315,6 +333,9 @@ models.</p>
 <div class="section level2">
 <h2 id="work-with-multiple-epidemics">Work with multiple epidemics<a class="anchor" aria-label="anchor" href="#work-with-multiple-epidemics"></a>
 </h2>
+<p>Many experiments include multiple treatments, cultivars, blocks, or
+locations. Use <code><a href="../reference/fit_multi.html">fit_multi()</a></code> when the same fitting workflow
+should be applied separately to each group.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epi_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">50</span>, y0 <span class="op">=</span> <span class="fl">0.002</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.10</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">epi_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">50</span>, y0 <span class="op">=</span> <span class="fl">0.002</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.14</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
@@ -474,13 +495,18 @@ models.</p>
 <h2 id="next-steps">Next steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
 </h2>
 <ul>
-<li>Use the model fitting article for a deeper walkthrough of
-<code><a href="../reference/fit_lin.html">fit_lin()</a></code>, <code><a href="../reference/fit_nlin.html">fit_nlin()</a></code>,
-<code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code>, and <code><a href="../reference/fit_multi.html">fit_multi()</a></code>.</li>
-<li>Use the simulation article for examples built around the
-<code>sim_</code> family.</li>
 <li>Use the PowderyMildew article for a real-data workflow based on the
 bundled experimental dataset.</li>
+<li>Use the model fitting article for a deeper walkthrough of
+<code><a href="../reference/fit_lin.html">fit_lin()</a></code>, <code><a href="../reference/fit_nlin.html">fit_nlin()</a></code>,
+<code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code>, weighted nonlinear fits, and
+<code><a href="../reference/fit_multi.html">fit_multi()</a></code>.</li>
+<li>Use the confidence interval article when you need uncertainty bands
+around fitted curves.</li>
+<li>Use the area-under-the-curve article when your goal is to summarize
+each epidemic as AUDPC or AUDPS.</li>
+<li>Use the simulation workflow article for examples built around the
+<code>sim_</code> family.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

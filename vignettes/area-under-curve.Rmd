@@ -1,10 +1,12 @@
 ---
-title: "Area-under-the-curve summaries"
+title: "Summarizing epidemics with AUDPC and AUDPS"
 author: "Kaique S. Alves"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    df_print: paged
 vignette: >
-  %\VignetteIndexEntry{Area-under-the-curve summaries}
+  %\VignetteIndexEntry{Summarizing epidemics with AUDPC and AUDPS}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -21,6 +23,11 @@ theme_set(cowplot::theme_half_open(font_size = 12))
 
 Area-under-the-curve summaries are useful when the goal is to condense an entire disease progress curve into a single number that represents epidemic intensity over time.
 
+These summaries are especially helpful when the scientific question is about
+cumulative disease burden rather than the exact shape of the epidemic. They are
+less informative when curves cross, when epidemic onset differs strongly among
+treatments, or when the timing of disease increase is itself the main response.
+
 `epifitter` currently provides three related functions:
 
 - `AUDPC()` for the area under the disease progress curve.
@@ -28,6 +35,10 @@ Area-under-the-curve summaries are useful when the goal is to condense an entire
 - `AUDPS()` for the area under the disease progress stairs, which gives more balanced weight to the first and last observations.
 
 For `AUDPC()` and `AUDPS()`, repeated observations at the same time point are now handled explicitly through the `aggregate` argument. By default, replicated observations are averaged per time point before the area is calculated.
+
+The most important practical decision is the unit of summary. Decide whether
+you want one area value for a mean curve or one area value per experimental
+unit before calculating AUDPC or AUDPS.
 
 ## Build an example curve
 
@@ -62,6 +73,10 @@ ggplot(epi, aes(time, y)) +
 ## Compute AUDPC
 
 `AUDPC()` uses the trapezoidal method to summarize the curve over the observed period.
+
+The absolute value has units of disease intensity multiplied by time. For
+example, if severity is a proportion and time is days, the AUDPC is expressed
+in proportion-days.
 
 ```{r}
 audpc_abs <- AUDPC(
@@ -177,6 +192,9 @@ In practice:
 
 `AUDPS()` is closely related to `AUDPC()`, but uses a staircase correction that often improves discrimination among curves in comparative studies.
 
+Because AUDPC and AUDPS emphasize the time course differently, report which
+summary was used and avoid mixing them as if they were interchangeable.
+
 ```{r}
 audps_abs <- AUDPS(
   time = epi$time,
@@ -233,6 +251,9 @@ c(
 Use absolute values when duration and measurement scale are already part of the interpretation.
 
 Use relative values when you want a normalized measure between epidemics observed on the same conceptual scale.
+
+Relative values can be easier to compare across studies, but only when the
+disease scale, time interval, and interpretation are compatible.
 
 ## Practical guidance
 

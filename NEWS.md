@@ -1,3 +1,11 @@
+# epifitter 1.0.1
+
+### Bug fix
+* Fixed `AUDPC()` trapezoid indexing so results match the documented `agricolae::audpc()` calculation.
+* `AUDPC()` and `AUDPS()` now warn when repeated assessment times are aggregated before area calculation.
+
+--------------------------------------------------------------------------------
+
 # epifitter 1.0.0
 
 ### Highlights
@@ -5,6 +13,9 @@
 * Refreshed the documentation site with updated articles, improved accessibility, dark mode support, and a clearer visual style for figures.
 * Added a formal package citation, a vignette built around the bundled `PowderyMildew` dataset, and expanded regression tests for area summaries and model fitting.
 * Corrected area-under-the-curve handling for repeated assessment times and strengthened defaults for nonlinear fitting workflows.
+* Added optional confidence bands to `plot_fit()` with residual and wild bootstrap interval methods.
+* Strengthened simulation input validation and corrected the logistic simulation equation when `K` is lower than 1.
+* Added optional weighted nonlinear least squares to `fit_nlin()` and `fit_nlin2()`, including custom numeric weights, custom weight functions, and fitted-value weighting methods (`"binomial"`, `"mean"`, `"cv"`, and `"power"`) for proportional disease intensity data.
 
 --------------------------------------------------------------------------------
 

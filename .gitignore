@@ -31,6 +31,12 @@ vignettes/*.pdf
 *_cache/
 /cache/
 
+# Local visual diagnostics
+diagnostics/
+
+# OS metadata
+desktop.ini
+
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md

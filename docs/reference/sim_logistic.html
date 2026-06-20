@@ -19,13 +19,12 @@ optional replicated observations."><meta property="og:image" content="https://al
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with epifitter</a></li>
-    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Working with the PowderyMildew dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/model-fitting.html">Model fitting workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Area-under-the-curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/fitting.html">Fitting and selecting models</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation.html">Simulating disease progress curves</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Start here: your first disease progress workflow</a></li>
+    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Real-data workflow: powdery mildew in organic tomato</a></li>
+    <li><a class="dropdown-item" href="../articles/model-fitting.html">Choosing and fitting disease progress models</a></li>
+    <li><a class="dropdown-item" href="../articles/confidence-intervals.html">Uncertainty bands for fitted disease progress curves</a></li>
+    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Summarizing epidemics with AUDPC and AUDPS</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows for disease progress curves</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -57,31 +56,34 @@ optional replicated observations.</p>
 
 
 <dl><dt id="arg-n">N<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
-<dd><p>Total epidemic duration.</p></dd>
+<dd><p>Total epidemic duration. Must be positive.</p></dd>
 
 
 <dt id="arg-dt">dt<a class="anchor" aria-label="anchor" href="#arg-dt"></a></dt>
-<dd><p>Time interval between assessments.</p></dd>
+<dd><p>Time interval between assessments. Must be positive and less than
+or equal to `N`.</p></dd>
 
 
 <dt id="arg-y-">y0<a class="anchor" aria-label="anchor" href="#arg-y-"></a></dt>
-<dd><p>Initial disease intensity.</p></dd>
+<dd><p>Initial disease intensity as a proportion, strictly between 0 and
+1.</p></dd>
 
 
 <dt id="arg-r">r<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
-<dd><p>Apparent infection rate.</p></dd>
+<dd><p>Apparent infection rate. Must be positive.</p></dd>
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>Maximum disease intensity.</p></dd>
+<dd><p>Maximum disease intensity as a proportion. Must be greater than or
+equal to `y0` and less than or equal to 1.</p></dd>
 
 
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
-<dd><p>Number of replicated curves.</p></dd>
+<dd><p>Number of replicated curves. Must be a positive whole number.</p></dd>
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
-<dd><p>Noise level applied to replicated observations.</p></dd>
+<dd><p>Non-negative noise level applied to replicated observations.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -94,34 +96,34 @@ optional replicated observations.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">sim_logistic</span><span class="op">(</span>N <span class="op">=</span> <span class="fl">30</span>, dt <span class="op">=</span> <span class="fl">5</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, r <span class="op">=</span> <span class="fl">0.05</span>, K <span class="op">=</span> <span class="fl">1</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    replicates time          y   random_y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1    0 0.01000000 0.01283592</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1    5 0.01280525 0.01116012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           1   10 0.01638399 0.01571557</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1   15 0.02094122 0.01933049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           1   20 0.02673115 0.02506613</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6           1   25 0.03406581 0.03222894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7           1   30 0.04332302 0.04741946</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8           2    0 0.01000000 0.01000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9           2    5 0.01280525 0.01152606</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10          2   10 0.01638399 0.02071275</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11          2   15 0.02094122 0.02006133</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12          2   20 0.02673115 0.02579686</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13          2   25 0.03406581 0.03340644</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14          2   30 0.04332302 0.04923047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1    0 0.01000000 0.01193947</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1    5 0.01280525 0.01344186</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           1   10 0.01638399 0.01848616</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1   15 0.02094122 0.01554351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           1   20 0.02673115 0.02868450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           1   25 0.03406581 0.03277957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           1   30 0.04332302 0.04554951</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           2    0 0.01000000 0.01048391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           2    5 0.01280525 0.01272673</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          2   10 0.01638399 0.01672375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          2   15 0.02094122 0.01901935</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          2   20 0.02673115 0.02157482</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13          2   25 0.03406581 0.04644417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14          2   30 0.04332302 0.04485410</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15          3    0 0.01000000 0.01000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16          3    5 0.01280525 0.01271010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17          3   10 0.01638399 0.01418692</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18          3   15 0.02094122 0.01961153</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19          3   20 0.02673115 0.02704419</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20          3   25 0.03406581 0.03019025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21          3   30 0.04332302 0.04772871</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16          3    5 0.01280525 0.01286273</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          3   10 0.01638399 0.01900716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18          3   15 0.02094122 0.02310570</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19          3   20 0.02673115 0.03134748</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20          3   25 0.03406581 0.03158061</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21          3   30 0.04332302 0.04426866</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22          4    0 0.01000000 0.01000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23          4    5 0.01280525 0.01358031</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24          4   10 0.01638399 0.01143184</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25          4   15 0.02094122 0.01970705</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26          4   20 0.02673115 0.02398235</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27          4   25 0.03406581 0.02977433</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28          4   30 0.04332302 0.04285139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23          4    5 0.01280525 0.01468549</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24          4   10 0.01638399 0.01352917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25          4   15 0.02094122 0.02228050</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26          4   20 0.02673115 0.01784140</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27          4   25 0.03406581 0.02315644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28          4   30 0.04332302 0.03855410</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

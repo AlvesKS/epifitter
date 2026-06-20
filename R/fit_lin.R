@@ -18,6 +18,8 @@
 fit_lin <- function(time, y) {
 .validate_epidemic_inputs(time, y, allow_boundary = TRUE)
   y <- .sanitize_boundary_proportions(y)
+  input_time <- time
+  input_y <- y
   epi <- data.frame(time = time, y = y)
   model = value = v0 = v0_se = v0_ci_lwr = v0_ci_upr = CCC = best_model =
     linear = linearized = name = r = r_se = r_ci_lwr = r_ci_upr = y0 =
@@ -137,7 +139,9 @@ fit_lin <- function(time, y) {
     `Infection rate` = z2,
     `Initial inoculum` = z3,
     data = as.data.frame(predicted),
-    stats_all = z
+    stats_all = z,
+    input = list(time = input_time, y = input_y),
+    control = list(fitter = "fit_lin")
   )
 
   class(a) <- "fit_lin"

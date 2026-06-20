@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Area-under-the-curve summaries • epifitter</title>
+<title>Summarizing epidemics with AUDPC and AUDPS • epifitter</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -20,7 +20,7 @@
 <link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Area-under-the-curve summaries">
+<meta property="og:title" content="Summarizing epidemics with AUDPC and AUDPS">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -42,13 +42,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with epifitter</a></li>
-    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Working with the PowderyMildew dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/model-fitting.html">Model fitting workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Area-under-the-curve summaries</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/fitting.html">Fitting and selecting models</a></li>
-    <li><a class="dropdown-item" href="../articles/simulation.html">Simulating disease progress curves</a></li>
+<li><a class="dropdown-item" href="../articles/getting-started.html">Start here: your first disease progress workflow</a></li>
+    <li><a class="dropdown-item" href="../articles/powdery-mildew-data.html">Real-data workflow: powdery mildew in organic tomato</a></li>
+    <li><a class="dropdown-item" href="../articles/model-fitting.html">Choosing and fitting disease progress models</a></li>
+    <li><a class="dropdown-item" href="../articles/confidence-intervals.html">Uncertainty bands for fitted disease progress curves</a></li>
+    <li><a class="dropdown-item" href="../articles/area-under-curve.html">Summarizing epidemics with AUDPC and AUDPS</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation-workflows.html">Simulation workflows for disease progress curves</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -68,11 +67,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Area-under-the-curve summaries</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Summarizing epidemics with AUDPC and AUDPS</h1>
                         <h4 data-toc-skip class="author">Kaique S.
 Alves</h4>
             
-            <h4 data-toc-skip class="date">2026-04-11</h4>
+            <h4 data-toc-skip class="date">2026-05-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/HEAD/vignettes/area-under-curve.Rmd" class="external-link"><code>vignettes/area-under-curve.Rmd</code></a></small>
       <div class="d-none name"><code>area-under-curve.Rmd</code></div>
@@ -92,6 +91,11 @@ Alves</h4>
 <p>Area-under-the-curve summaries are useful when the goal is to
 condense an entire disease progress curve into a single number that
 represents epidemic intensity over time.</p>
+<p>These summaries are especially helpful when the scientific question
+is about cumulative disease burden rather than the exact shape of the
+epidemic. They are less informative when curves cross, when epidemic
+onset differs strongly among treatments, or when the timing of disease
+increase is itself the main response.</p>
 <p><code>epifitter</code> currently provides three related
 functions:</p>
 <ul>
@@ -110,6 +114,9 @@ observations.</li>
 observations at the same time point are now handled explicitly through
 the <code>aggregate</code> argument. By default, replicated observations
 are averaged per time point before the area is calculated.</p>
+<p>The most important practical decision is the unit of summary. Decide
+whether you want one area value for a mean curve or one area value per
+experimental unit before calculating AUDPC or AUDPS.</p>
 </div>
 <div class="section level2">
 <h2 id="build-an-example-curve">Build an example curve<a class="anchor" aria-label="anchor" href="#build-an-example-curve"></a>
@@ -209,6 +216,9 @@ values across time.</p>
 </h2>
 <p><code><a href="../reference/AUDPC.html">AUDPC()</a></code> uses the trapezoidal method to summarize the
 curve over the observed period.</p>
+<p>The absolute value has units of disease intensity multiplied by time.
+For example, if severity is a proportion and time is days, the AUDPC is
+expressed in proportion-days.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">audpc_abs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AUDPC.html">AUDPC</a></span><span class="op">(</span></span>
 <span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
@@ -408,6 +418,9 @@ unit.</li>
 <p><code><a href="../reference/AUDPS.html">AUDPS()</a></code> is closely related to <code><a href="../reference/AUDPC.html">AUDPC()</a></code>, but
 uses a staircase correction that often improves discrimination among
 curves in comparative studies.</p>
+<p>Because AUDPC and AUDPS emphasize the time course differently, report
+which summary was used and avoid mixing them as if they were
+interchangeable.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">audps_abs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AUDPS.html">AUDPS</a></span><span class="op">(</span></span>
 <span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
@@ -467,6 +480,9 @@ full-curve AUDPC computed from all intermediate observations.</p>
 part of the interpretation.</p>
 <p>Use relative values when you want a normalized measure between
 epidemics observed on the same conceptual scale.</p>
+<p>Relative values can be easier to compare across studies, but only
+when the disease scale, time interval, and interpretation are
+compatible.</p>
 </div>
 <div class="section level2">
 <h2 id="practical-guidance">Practical guidance<a class="anchor" aria-label="anchor" href="#practical-guidance"></a>

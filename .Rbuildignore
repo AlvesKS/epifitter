@@ -1,8 +1,13 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.git$
+^\.agents$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^diagnostics$
+^vignettes/.*\.html$
+(^|/)desktop\.ini$
 ^manuscript$
 ^CODE_OF_CONDUCT\.md$
 ^cran-comments\.md$

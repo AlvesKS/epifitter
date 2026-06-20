@@ -8,6 +8,22 @@ test_that("AUDPC is invariant to row order for unique times", {
   )
 })
 
+test_that("AUDPC matches agricolae documented trapezoid example", {
+  expect_equal(
+    AUDPC(time = c(14, 21, 28), y = c(40, 80, 90), y_proportion = FALSE),
+    1015
+  )
+  expect_equal(
+    AUDPC(
+      time = c(14, 21, 28),
+      y = c(40, 80, 90),
+      y_proportion = FALSE,
+      type = "relative"
+    ),
+    0.725
+  )
+})
+
 test_that("AUDPC aggregates repeated observations per time by default", {
   time_rep <- c(0, 0, 5, 5, 10, 10)
   y_rep <- c(0.1, 0.3, 0.4, 0.6, 0.7, 0.9)
@@ -18,7 +34,10 @@ test_that("AUDPC aggregates repeated observations per time by default", {
     aggregate = "none"
   )
 
-  expect_equal(AUDPC(time = time_rep, y = y_rep), expected)
+  expect_warning(
+    expect_equal(AUDPC(time = time_rep, y = y_rep), expected),
+    "aggregated using `mean`"
+  )
 })
 
 test_that("AUDPC can reject repeated time values when requested", {
@@ -38,9 +57,12 @@ test_that("AUDPS aggregates repeated observations using distinct time points", {
   time_mean <- c(0, 5, 10)
   y_mean <- c(0.2, 0.5, 0.8)
 
-  expect_equal(
-    AUDPS(time = time_rep, y = y_rep),
-    AUDPS(time = time_mean, y = y_mean, aggregate = "none")
+  expect_warning(
+    expect_equal(
+      AUDPS(time = time_rep, y = y_rep),
+      AUDPS(time = time_mean, y = y_mean, aggregate = "none")
+    ),
+    "aggregated using `mean`"
   )
 })
 
@@ -50,9 +72,12 @@ test_that("AUDPS validates type and minimum number of distinct time points", {
     "arg"
   )
 
-  expect_error(
-    AUDPS(time = c(0, 0), y = c(0.1, 0.2), aggregate = "mean"),
-    "2 distinct time points"
+  expect_warning(
+    expect_error(
+      AUDPS(time = c(0, 0), y = c(0.1, 0.2), aggregate = "mean"),
+      "2 distinct time points"
+    ),
+    "aggregated using `mean`"
   )
 })
 

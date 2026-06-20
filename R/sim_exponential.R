@@ -3,12 +3,14 @@
 #' Simulate disease progress data under the exponential epidemic model, with
 #' optional replicated observations.
 #'
-#' @param N Total epidemic duration.
-#' @param dt Time interval between assessments.
-#' @param y0 Initial disease intensity.
-#' @param r Apparent infection rate.
-#' @param n Number of replicated curves.
-#' @param alpha Noise level applied to replicated observations.
+#' @param N Total epidemic duration. Must be positive.
+#' @param dt Time interval between assessments. Must be positive and less than
+#'   or equal to `N`.
+#' @param y0 Initial disease intensity as a proportion, strictly between 0 and
+#'   1.
+#' @param r Apparent infection rate. Must be positive.
+#' @param n Number of replicated curves. Must be a positive whole number.
+#' @param alpha Non-negative noise level applied to replicated observations.
 #'
 #' @return A data frame with simulated disease progress values and replicated
 #'   noisy observations.
@@ -18,18 +20,16 @@
 #'
 #' @export
 sim_exponential <- function(N = 10, dt = 1, y0 = 0.01, r, n, alpha = 0.2) {
+  .validate_simulation_inputs(N = N, dt = dt, y0 = y0, r = r, n = n, alpha = alpha)
+
   time <- seq(0, N, by = dt)
   w <- numeric(length(time))
   y <- numeric(length(time))
   y[1] <- y0
-  aa <- -1
-  bb <- 1
   for (k in 1:(length(time) - 1)) {
-    r[k + 1] <- r[k]
-
     InitCond <- c(y[k])
     steps <- seq(time[k], time[k + 1], by = dt)
-    parms <- list(r = r[k])
+    parms <- list(r = r)
     ode_logi <- deSolve::ode(InitCond, steps, expo_fun, parms)
     y[k + 1] <- ode_logi[length(ode_logi[, 2]), 2]
   }

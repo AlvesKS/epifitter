@@ -7,19 +7,22 @@
 sim_monomolecular(N = 10, dt = 1, y0 = 0.01, r, K = 1, n, alpha = 0.2)
 }
 \arguments{
-\item{N}{Total epidemic duration.}
+\item{N}{Total epidemic duration. Must be positive.}
 
-\item{dt}{Time interval between assessments.}
+\item{dt}{Time interval between assessments. Must be positive and less than
+or equal to `N`.}
 
-\item{y0}{Initial disease intensity.}
+\item{y0}{Initial disease intensity as a proportion, strictly between 0 and
+1.}
 
-\item{r}{Apparent infection rate.}
+\item{r}{Apparent infection rate. Must be positive.}
 
-\item{K}{Maximum disease intensity.}
+\item{K}{Maximum disease intensity as a proportion. Must be greater than or
+equal to `y0` and less than or equal to 1.}
 
-\item{n}{Number of replicated curves.}
+\item{n}{Number of replicated curves. Must be a positive whole number.}
 
-\item{alpha}{Noise level applied to replicated observations.}
+\item{alpha}{Non-negative noise level applied to replicated observations.}
 }
 \value{
 A data frame with simulated disease progress values and replicated

@@ -119,7 +119,19 @@ fit_nlin <- function(time, y, starting_par = list(y0 = 0.01, r = 0.03), maxiter 
 
       initial_fit
     },
-    error = function(e) NULL
+    error = function(e) {
+      warning(
+        sprintf(
+          paste0(
+            "The %s model could not be fitted; its results are reported ",
+            "as NA. The underlying error was: %s"
+          ),
+          model_name, conditionMessage(e)
+        ),
+        call. = FALSE
+      )
+      NULL
+    }
     )
   }
 

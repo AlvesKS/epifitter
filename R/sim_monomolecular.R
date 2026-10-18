@@ -12,10 +12,18 @@
 #' @param K Maximum disease intensity as a proportion. Must be greater than or
 #'   equal to `y0` and less than or equal to 1.
 #' @param n Number of replicated curves. Must be a positive whole number.
-#' @param alpha Non-negative noise level applied to replicated observations.
+#' @param alpha Non-negative noise multiplier. Before clipping, observations
+#'   are normal draws centered on `y`, with standard deviation
+#'   `alpha * y * (1 - y)`.
 #'
-#' @return A data frame with simulated disease progress values and replicated
-#'   noisy observations.
+#' @return A data frame with columns `replicates`, `time`, `y` (the underlying
+#'   curve), and `random_y` (noisy observations).
+#'
+#' @details The curve is evaluated analytically at `seq(0, N, by = dt)`.
+#'   Replicates share the same curve parameters. Draws above 1 are replaced
+#'   with 0.999, then draws below `y0` are replaced with `y0`. Clipping changes
+#'   the observation distribution near these bounds. Observations can exceed
+#'   `K`, which bounds the underlying curve. Set `alpha = 0` for noiseless data.
 #'
 #' @examples
 #' sim_monomolecular(N = 30, dt = 5, y0 = 0.01, r = 0.05, K = 1, n = 4)
@@ -26,16 +34,8 @@ sim_monomolecular <- function(N = 10, dt = 1, y0 = 0.01, r, K = 1, n, alpha = 0.
 
   time <- seq(0, N, by = dt)
   w <- numeric(length(time))
-  y <- numeric(length(time))
+  y <- pmin(K, y0 - (K - y0) * expm1(-r * time))
   y[1] <- y0
-
-  for (k in 1:(length(time) - 1)) {
-    InitCond <- c(y[k])
-    steps <- seq(time[k], time[k + 1], by = dt)
-    parms <- list(r = r, K = K)
-    ode_logi <- deSolve::ode(InitCond, steps, mono_fun, parms)
-    y[k + 1] <- ode_logi[length(ode_logi[, 2]), 2]
-  }
 
   data_uni <- matrix(0, ncol = 4, nrow = length(y))
   data_all <- matrix(0, ncol = 4, nrow = 0)

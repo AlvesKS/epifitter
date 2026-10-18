@@ -1,7 +1,7 @@
 #' Logistic model differential equation
 #'
-#' Internal helper used by the simulation functions to solve the logistic
-#' epidemic model with `deSolve::ode()`: \eqn{dy/dt = r y (1 - y / K)}.
+#' Logistic epidemic derivative function that can be passed to an ODE solver:
+#' \eqn{dy/dt = r y (1 - y / K)}.
 #'
 #' @param t Time.
 #' @param y State variable.

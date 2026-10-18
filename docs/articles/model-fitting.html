@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Kaique S.
 Alves</h4>
             
-            <h4 data-toc-skip class="date">2026-05-17</h4>
+            <h4 data-toc-skip class="date">2026-10-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/HEAD/vignettes/model-fitting.Rmd" class="external-link"><code>vignettes/model-fitting.Rmd</code></a></small>
       <div class="d-none name"><code>model-fitting.Rmd</code></div>
@@ -84,7 +84,7 @@ Alves</h4>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_cowplot.html" class="external-link">theme_half_open</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_cowplot.html" class="external-link">theme_half_open</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -119,6 +119,15 @@ scientifically meaningful.</p>
 straight line. This is fast and often useful for model comparison, but
 transformations also change the error scale. Always inspect the fitted
 curves on the original disease intensity scale.</p>
+<p>Disease intensity must be a proportion between 0 and 1. To make the
+transformations finite, <code><a href="../reference/fit_lin.html">fit_lin()</a></code> replaces exact zeros with
+0.0001 and exact ones with 0.999, issuing a warning. The returned
+observation data also contain these adjusted values. Check whether this
+approximation is appropriate when many observations lie at a boundary.
+The nonlinear fitters accept observed zeros and ones without these
+replacements. This concerns observed data: among the nonlinear models,
+only the monomolecular model permits an estimated initial intensity
+<code>y0 = 0</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">epi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_logistic.html">sim_logistic</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">60</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.12</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
@@ -166,13 +175,13 @@ curves on the original disease intensity scale.</p>
 <td align="right">0.0011</td>
 <td align="right">0.1180</td>
 <td align="right">0.1224</td>
-<td align="right">-4.5730</td>
+<td align="right">-4.5731</td>
 <td align="right">0.0394</td>
 <td align="right">0.9957</td>
 <td align="right">0.1504</td>
 <td align="right">0.9979</td>
 <td align="right">0.0102</td>
-<td align="right">0.0095</td>
+<td align="right">0.0094</td>
 <td align="right">0.0111</td>
 </tr>
 <tr class="even">
@@ -198,7 +207,7 @@ curves on the original disease intensity scale.</p>
 <td align="right">0.0029</td>
 <td align="right">0.0722</td>
 <td align="right">0.0839</td>
-<td align="right">-4.0617</td>
+<td align="right">-4.0618</td>
 <td align="right">0.1032</td>
 <td align="right">0.9346</td>
 <td align="right">0.3938</td>
@@ -216,18 +225,18 @@ curves on the original disease intensity scale.</p>
 <td align="right">0.0478</td>
 <td align="right">-0.5113</td>
 <td align="right">0.0983</td>
-<td align="right">0.8215</td>
+<td align="right">0.8214</td>
 <td align="right">0.3751</td>
 <td align="right">0.9020</td>
 <td align="right">-0.6674</td>
-<td align="right">-1.0315</td>
-<td align="right">-0.3687</td>
+<td align="right">-1.0314</td>
+<td align="right">-0.3686</td>
 </tr>
 </tbody>
 </table>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">fit_lin_out</span>, models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Logistic"</span>, <span class="st">"Gompertz"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="model-fitting_files/figure-html/unnamed-chunk-2-1.png" alt="Faceted plot comparing logistic and Gompertz fitted curves against observed disease intensity values." width="700"></p>
+<p><img src="model-fitting_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="Faceted plot comparing logistic and Gompertz fitted curves against observed disease intensity values." width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="nonlinear-fitting-with-starting-values">Nonlinear fitting with starting values<a class="anchor" aria-label="anchor" href="#nonlinear-fitting-with-starting-values"></a>
@@ -242,10 +251,91 @@ identifiable from the observed time points.</p>
 <code class="sourceCode R"><span><span class="va">fit_nlin_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
 <span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
 <span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
-<span>  starting_par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>y0 <span class="op">=</span> <span class="fl">0.01</span>, r <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span>
+<span>  starting_par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>y0 <span class="op">=</span> <span class="fl">0.01</span>, r <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span>,</span>
+<span>  maxiter <span class="op">=</span> <span class="fl">500</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit_nlin_out</span><span class="op">$</span><span class="va">stats_all</span></span></code></pre></div>
+<pre><code><span><span class="co">##           model           y0        y0_se          r        r_se df       CCC</span></span>
+<span><span class="co">## 1      Logistic 1.110082e-02 9.439604e-04 0.11810484 0.002209520 50 0.9980199</span></span>
+<span><span class="co">## 2      Gompertz 1.304958e-06 1.558987e-06 0.08048787 0.002418467 50 0.9949487</span></span>
+<span><span class="co">## 3   Exponential 8.086638e-02 9.969216e-03 0.04310625 0.002366431 50 0.9601480</span></span>
+<span><span class="co">## 4 Monomolecular 0.000000e+00 5.472151e-02 0.02042068 0.002337748 50 0.8362430</span></span>
+<span><span class="co">##   r_squared        RSE     y0_ci_lwr    y0_ci_upr   r_ci_lwr   r_ci_upr</span></span>
+<span><span class="co">## 1 0.9960574 0.02168574  9.204819e-03 1.299682e-02 0.11366689 0.12254279</span></span>
+<span><span class="co">## 2 0.9913749 0.03483535 -1.826359e-06 4.436275e-06 0.07563023 0.08534550</span></span>
+<span><span class="co">## 3 0.9356764 0.09266417  6.084262e-02 1.008901e-01 0.03835314 0.04785937</span></span>
+<span><span class="co">## 4 0.8528735 0.16707077 -1.099114e-01 1.099114e-01 0.01572517 0.02511618</span></span>
+<span><span class="co">##   best_model</span></span>
+<span><span class="co">## 1          1</span></span>
+<span><span class="co">## 2          2</span></span>
+<span><span class="co">## 3          3</span></span>
+<span><span class="co">## 4          4</span></span></code></pre>
+<p>If some models fail, the fitter warns and returns <code>NA</code> for
+those models in the statistics, parameter estimates, and predictions.
+Inspect these warnings before comparing the successful models. If all
+models fail, fitting stops with an error and guidance on starting
+values, iteration limits, and the data.</p>
+</div>
+<div class="section level2">
+<h2 id="compare-starting-values-with-multistart">Compare starting values with <code>multistart</code><a class="anchor" aria-label="anchor" href="#compare-starting-values-with-multistart"></a>
+</h2>
+<p>By default, <code>multistart = FALSE</code> accepts the first
+converged attempt. If an attempt fails, the remaining starting values
+are tried. Use <code>multistart = TRUE</code> to evaluate all available
+starting values and retain the converged fit with the smallest residual
+sum of squares. The search uses the same deterministic starting values
+and takes more time; it does not guarantee a global optimum.</p>
+<p>The following example has several converged solutions. Comparing the
+starting values finds a smaller error for the logistic model:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">5</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">mean_y</span> <span class="op">&lt;-</span> <span class="fl">0.6</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">59</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span> <span class="op">*</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">mean_y</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.1</span>, <span class="op">-</span><span class="fl">0.05</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span><span class="op">)</span>, <span class="fl">11</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">time</span> <span class="op">&gt;=</span> <span class="fl">25</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">first_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin2.html">fit_nlin2</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span>, maxiter <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">best_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin2.html">fit_nlin2</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span>, maxiter <span class="op">=</span> <span class="fl">1000</span>, multistart <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">logistic_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  strategy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"First converged attempt"</span>, <span class="st">"Compare starting values"</span><span class="op">)</span>,</span>
+<span>  K <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">first_fit</span><span class="op">$</span><span class="va">`Maximum disease intensity`</span><span class="op">[</span><span class="st">"Logistic"</span>, <span class="st">"Estimate"</span><span class="op">]</span>,</span>
+<span>        <span class="va">best_fit</span><span class="op">$</span><span class="va">`Maximum disease intensity`</span><span class="op">[</span><span class="st">"Logistic"</span>, <span class="st">"Estimate"</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  RSS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">first_fit</span><span class="op">$</span><span class="va">data</span><span class="op">$</span><span class="va">residual</span><span class="op">[</span><span class="va">first_fit</span><span class="op">$</span><span class="va">data</span><span class="op">$</span><span class="va">model</span> <span class="op">==</span> <span class="st">"Logistic"</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
+<span>          <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">best_fit</span><span class="op">$</span><span class="va">data</span><span class="op">$</span><span class="va">residual</span><span class="op">[</span><span class="va">best_fit</span><span class="op">$</span><span class="va">data</span><span class="op">$</span><span class="va">model</span> <span class="op">==</span> <span class="st">"Logistic"</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">logistic_comparison</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">strategy</th>
+<th align="right">K</th>
+<th align="right">RSS</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">First converged attempt</td>
+<td align="right">1.0</td>
+<td align="right">0.4403</td>
+</tr>
+<tr class="even">
+<td align="left">Compare starting values</td>
+<td align="right">0.6</td>
+<td align="right">0.1500</td>
+</tr>
+</tbody>
+</table>
+<p>Printing a nonlinear fitted object shows its starting-value strategy.
+A fit created with <code>FALSE</code> includes a reminder about
+<code>multistart = TRUE</code>. This is information in the printed
+result, not a warning or a message emitted by every fit or bootstrap
+sample.</p>
+<p>If every starting value fails, enabling comparison alone does not
+supply new starting values or more iterations. Inspect the data and
+model assumptions, change <code>starting_par</code>, or increase
+<code>maxiter</code> as appropriate.</p>
+<p>The option is also available in <code><a href="../reference/fit_nlin.html">fit_nlin()</a></code> and in
+<code><a href="../reference/fit_multi.html">fit_multi()</a></code> when <code>nlin = TRUE</code>. Bootstrap
+intervals from <code><a href="../reference/plot_fit.html">plot_fit()</a></code> retain the setting used for the
+original fit.</p>
 </div>
 <div class="section level2">
 <h2 id="weighted-nonlinear-fitting">Weighted nonlinear fitting<a class="anchor" aria-label="anchor" href="#weighted-nonlinear-fitting"></a>
@@ -264,7 +354,7 @@ is the fitted disease intensity.</p>
 least squares. These options are working variance assumptions, not a
 substitute for a full binomial or beta likelihood. The default is
 unchanged:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
 <span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
 <span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
@@ -275,7 +365,15 @@ unchanged:</p>
 without weights, fitted values are used to construct weights, and the
 model is then refitted using
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1 / (p(1 - p) + \epsilon)</annotation></semantics></math>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>With <code>multistart = TRUE</code>, starting values are compared
+separately in each stage. The initial unweighted fit is selected first,
+weights are calculated once from that fit, and the final attempts are
+compared using the same fixed weights and the weighted residual sum of
+squares. Custom numeric weights remain fixed throughout; custom weight
+functions are evaluated once per model. Changing the starting-value
+strategy can therefore also change the estimated weights in a two-step
+fit.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_weighted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
 <span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
 <span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
@@ -305,7 +403,7 @@ where <code>weight_power</code> controls
 variance without leaving the nonlinear least-squares framework. They are
 not universal defaults. Use them as sensitivity analyses, and prefer the
 rule that best matches how the disease intensity was measured.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
 <span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
 <span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
@@ -321,7 +419,7 @@ rule that best matches how the disease intensity was measured.</p>
 <p>You can also provide your own positive weights. This is useful when
 weights come from sample sizes, known measurement precision, or a
 variance model chosen outside <code>epifitter</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">custom_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">epi</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit_custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
@@ -333,25 +431,13 @@ variance model chosen outside <code>epifitter</code>.</p>
 function receives a data frame with <code>time</code>, <code>y</code>,
 <code>predicted</code>, and <code>model</code>, and must return one
 positive weight per observation.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_custom_fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
 <span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
 <span>  y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>,</span>
 <span>  weights <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">predicted</span> <span class="op">+</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>For grouped nonlinear fitting, use <code>weight_method</code> for the
-same strategy across all curves, or <code>weights_col</code> when
-weights are stored in the data.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">multi_weighted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_multi.html">fit_multi</a></span><span class="op">(</span></span>
-<span>  time_col <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>  intensity_col <span class="op">=</span> <span class="st">"random_y"</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">multi_epi</span>,</span>
-<span>  strata_cols <span class="op">=</span> <span class="st">"curve"</span>,</span>
-<span>  nlin <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  weight_method <span class="op">=</span> <span class="st">"binomial"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Weighted fits are assumptions, not automatic improvements. They are
 most useful when residual diagnostics or the sampling design suggest
@@ -364,10 +450,18 @@ residuals, and report the chosen weighting rule.</p>
 <p>The two-parameter monomolecular, logistic, and Gompertz models assume
 a fixed maximum disease intensity of 1. In real epidemics, disease may
 plateau below 1 because of host resistance, limited favorable
-conditions, management, sampling scale, or a short observation window.
-In those cases, <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code> estimates the upper asymptote
-<code>K</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+conditions, management, or sampling scale. In those cases,
+<code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code> estimates the upper asymptote <code>K</code>. A
+short observation window may leave the plateau unobserved, making
+<code>K</code> weakly identified; it does not establish that the
+epidemic has a lower plateau.</p>
+<p><code>K</code> describes the fitted mean curve, not the largest
+observed value. Noisy observations can exceed the estimated
+<code>K</code>. Nonlinear parameter intervals use a Wald approximation
+and can extend outside the bounds imposed on the point estimates. Wide
+or implausible intervals call for checking information in the data and
+model fit, even when optimization converges.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epi_partial</span> <span class="op">&lt;-</span> <span class="va">epi</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>random_y <span class="op">=</span> <span class="va">random_y</span> <span class="op">*</span> <span class="fl">0.8</span><span class="op">)</span></span>
 <span></span>
@@ -386,7 +480,7 @@ In those cases, <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></cod
 should be repeated for many curves, such as treatment-by-block
 combinations, cultivars, sites, or isolates. Keep grouping variables
 aligned with the experimental unit.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epi1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">50</span>, y0 <span class="op">=</span> <span class="fl">0.001</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.08</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">epi2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">50</span>, y0 <span class="op">=</span> <span class="fl">0.002</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.11</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
@@ -400,8 +494,9 @@ aligned with the experimental unit.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">multi_fit</span><span class="op">$</span><span class="va">Parameters</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
+<col width="2%">
 <col width="4%">
 <col width="8%">
 <col width="10%">
@@ -409,16 +504,17 @@ aligned with the experimental unit.</p>
 <col width="5%">
 <col width="6%">
 <col width="6%">
-<col width="6%">
+<col width="5%">
 <col width="5%">
 <col width="7%">
 <col width="5%">
 <col width="5%">
-<col width="6%">
+<col width="5%">
 <col width="7%">
 <col width="7%">
 </colgroup>
 <thead><tr class="header">
+<th align="left"></th>
 <th align="left">curve</th>
 <th align="right">best_model</th>
 <th align="left">model</th>
@@ -438,13 +534,14 @@ aligned with the experimental unit.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
+<td align="left">1</td>
 <td align="right">1</td>
 <td align="left">Gompertz</td>
 <td align="right">0.0813</td>
 <td align="right">0.0016</td>
 <td align="right">0.0780</td>
 <td align="right">0.0846</td>
-<td align="right">-1.9382</td>
+<td align="right">-1.9383</td>
 <td align="right">0.0480</td>
 <td align="right">0.9878</td>
 <td align="right">0.1475</td>
@@ -454,6 +551,7 @@ aligned with the experimental unit.</p>
 <td align="right">0.0018</td>
 </tr>
 <tr class="even">
+<td align="left">1.1</td>
 <td align="left">1</td>
 <td align="right">2</td>
 <td align="left">Logistic</td>
@@ -461,16 +559,17 @@ aligned with the experimental unit.</p>
 <td align="right">0.0091</td>
 <td align="right">0.1438</td>
 <td align="right">0.1808</td>
-<td align="right">-5.1753</td>
+<td align="right">-5.1755</td>
 <td align="right">0.2685</td>
 <td align="right">0.9116</td>
-<td align="right">0.8244</td>
-<td align="right">0.9537</td>
+<td align="right">0.8243</td>
+<td align="right">0.9538</td>
 <td align="right">0.0056</td>
 <td align="right">0.0033</td>
 <td align="right">0.0097</td>
 </tr>
 <tr class="odd">
+<td align="left">1.2</td>
 <td align="left">1</td>
 <td align="right">3</td>
 <td align="left">Monomolecular</td>
@@ -488,6 +587,7 @@ aligned with the experimental unit.</p>
 <td align="right">-0.2276</td>
 </tr>
 <tr class="even">
+<td align="left">1.3</td>
 <td align="left">1</td>
 <td align="right">4</td>
 <td align="left">Exponential</td>
@@ -495,7 +595,7 @@ aligned with the experimental unit.</p>
 <td align="right">0.0111</td>
 <td align="right">0.0948</td>
 <td align="right">0.1400</td>
-<td align="right">-4.8135</td>
+<td align="right">-4.8138</td>
 <td align="right">0.3276</td>
 <td align="right">0.7838</td>
 <td align="right">1.0058</td>
@@ -506,6 +606,7 @@ aligned with the experimental unit.</p>
 </tr>
 <tr class="odd">
 <td align="left">2</td>
+<td align="left">2</td>
 <td align="right">1</td>
 <td align="left">Gompertz</td>
 <td align="right">0.1126</td>
@@ -513,7 +614,7 @@ aligned with the experimental unit.</p>
 <td align="right">0.1095</td>
 <td align="right">0.1157</td>
 <td align="right">-1.8561</td>
-<td align="right">0.0448</td>
+<td align="right">0.0449</td>
 <td align="right">0.9944</td>
 <td align="right">0.1377</td>
 <td align="right">0.9972</td>
@@ -522,6 +623,7 @@ aligned with the experimental unit.</p>
 <td align="right">0.0029</td>
 </tr>
 <tr class="even">
+<td align="left">2.1</td>
 <td align="left">2</td>
 <td align="right">2</td>
 <td align="left">Monomolecular</td>
@@ -534,16 +636,27 @@ aligned with the experimental unit.</p>
 <td align="right">0.9427</td>
 <td align="right">0.3224</td>
 <td align="right">0.9705</td>
-<td align="right">-0.7606</td>
-<td align="right">-1.1810</td>
+<td align="right">-0.7607</td>
+<td align="right">-1.1811</td>
 <td align="right">-0.4212</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">multi_fit</span><span class="op">$</span><span class="va">Data</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
+<colgroup>
+<col width="6%">
+<col width="9%">
+<col width="7%">
+<col width="10%">
+<col width="21%">
+<col width="16%">
+<col width="15%">
+<col width="13%">
+</colgroup>
 <thead><tr class="header">
+<th align="left"></th>
 <th align="left">curve</th>
 <th align="right">time</th>
 <th align="right">y</th>
@@ -555,14 +668,16 @@ aligned with the experimental unit.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
+<td align="left">1</td>
 <td align="right">0</td>
 <td align="right">0.0011</td>
 <td align="left">Exponential</td>
 <td align="right">-6.8418</td>
 <td align="right">0.0081</td>
-<td align="right">-0.0071</td>
+<td align="right">-0.0070</td>
 </tr>
 <tr class="even">
+<td align="left">1.1</td>
 <td align="left">1</td>
 <td align="right">0</td>
 <td align="right">0.0011</td>
@@ -572,6 +687,7 @@ aligned with the experimental unit.</p>
 <td align="right">0.4370</td>
 </tr>
 <tr class="odd">
+<td align="left">1.2</td>
 <td align="left">1</td>
 <td align="right">0</td>
 <td align="right">0.0011</td>
@@ -581,6 +697,7 @@ aligned with the experimental unit.</p>
 <td align="right">-0.0046</td>
 </tr>
 <tr class="even">
+<td align="left">1.3</td>
 <td align="left">1</td>
 <td align="right">0</td>
 <td align="right">0.0011</td>
@@ -590,15 +707,17 @@ aligned with the experimental unit.</p>
 <td align="right">0.0001</td>
 </tr>
 <tr class="odd">
+<td align="left">1.4</td>
 <td align="left">1</td>
 <td align="right">5</td>
 <td align="right">0.0076</td>
 <td align="left">Exponential</td>
-<td align="right">-4.8831</td>
+<td align="right">-4.8836</td>
 <td align="right">0.0146</td>
 <td align="right">-0.0070</td>
 </tr>
 <tr class="even">
+<td align="left">1.5</td>
 <td align="left">1</td>
 <td align="right">5</td>
 <td align="right">0.0076</td>
@@ -609,6 +728,21 @@ aligned with the experimental unit.</p>
 </tr>
 </tbody>
 </table>
+<p>For grouped nonlinear fitting, use <code>weight_method</code> for the
+same strategy across all curves, or <code>weights_col</code> when
+weights are stored in the data. Here each curve also compares all
+available starting values:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">multi_weighted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_multi.html">fit_multi</a></span><span class="op">(</span></span>
+<span>  time_col <span class="op">=</span> <span class="st">"time"</span>,</span>
+<span>  intensity_col <span class="op">=</span> <span class="st">"random_y"</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">multi_epi</span>,</span>
+<span>  strata_cols <span class="op">=</span> <span class="st">"curve"</span>,</span>
+<span>  nlin <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  weight_method <span class="op">=</span> <span class="st">"binomial"</span>,</span>
+<span>  multistart <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  maxiter <span class="op">=</span> <span class="fl">500</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="practical-reporting">Practical reporting<a class="anchor" aria-label="anchor" href="#practical-reporting"></a>
@@ -623,6 +757,8 @@ estimated;</li>
 <li>whether the fit used ordinary or weighted nonlinear least
 squares;</li>
 <li>the weighting rule, if any;</li>
+<li>whether <code>multistart</code> was enabled and the supplied
+starting values;</li>
 <li>convergence issues or models that failed to fit;</li>
 <li>uncertainty intervals or sensitivity analyses when they inform
 interpretation.</li>

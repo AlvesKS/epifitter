@@ -19,6 +19,7 @@ A numeric scalar with the estimated AUDPC.
 \description{
 Estimate the area under the disease progress curve from only the initial and
 final observations under a logistic epidemic assumption.
+Equal intensities represent a constant curve, with area `time * y0`.
 }
 \examples{
 epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.5, n = 1)

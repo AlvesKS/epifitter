@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Kaique S.
 Alves</h4>
             
-            <h4 data-toc-skip class="date">2026-05-17</h4>
+            <h4 data-toc-skip class="date">2026-10-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/HEAD/vignettes/simulation-workflows.Rmd" class="external-link"><code>vignettes/simulation-workflows.Rmd</code></a></small>
       <div class="d-none name"><code>simulation-workflows.Rmd</code></div>
@@ -83,7 +83,7 @@ Alves</h4>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlvesKS/epifitter" class="external-link">epifitter</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_cowplot.html" class="external-link">theme_half_open</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_cowplot.html" class="external-link">theme_half_open</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -97,6 +97,70 @@ validation. Choose parameter values that make sense for the
 host-pathogen system, disease metric, and time scale.</p>
 </div>
 <div class="section level2">
+<h2 id="read-the-simulation-output">Read the simulation output<a class="anchor" aria-label="anchor" href="#read-the-simulation-output"></a>
+</h2>
+<p>Each simulator evaluates an analytical curve at
+<code>seq(0, N, by = dt)</code> and returns:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Column</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>replicates</code></td>
+<td>Replicate identifier, from 1 to <code>n</code>
+</td>
+</tr>
+<tr class="even">
+<td><code>time</code></td>
+<td>Assessment time; the last time can be less than <code>N</code> if
+<code>dt</code> does not divide it evenly</td>
+</tr>
+<tr class="odd">
+<td><code>y</code></td>
+<td>Underlying deterministic disease progress curve</td>
+</tr>
+<tr class="even">
+<td><code>random_y</code></td>
+<td>Replicated observations after adding noise and applying the bounds
+below</td>
+</tr>
+</tbody>
+</table>
+<p>Replicates share the same curve parameters; <code>n</code> does not
+introduce variation in infection rates, initial intensities, or
+asymptotes. Use <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> for reproducible observations
+and <code>alpha = 0</code> to turn off the added noise.</p>
+</div>
+<div class="section level2">
+<h2 id="understand-observation-noise">Understand observation noise<a class="anchor" aria-label="anchor" href="#understand-observation-noise"></a>
+</h2>
+<p>Before clipping, observations are independent normal draws centered
+on <code>y</code>. The noise parameter <code>alpha</code> controls their
+standard deviation:</p>
+<ul>
+<li>Exponential: <code>alpha * y</code>.</li>
+<li>Monomolecular, logistic, and Gompertz:
+<code>alpha * y * (1 - y)</code>.</li>
+</ul>
+<p>All four simulators replace draws below <code>y0</code> with
+<code>y0</code>. The three bounded models also replace draws above 1
+with 0.999, then apply the lower bound at <code>y0</code>. Clipping
+changes the observation distribution near these limits, so the final
+observations need not have mean exactly <code>y</code>.</p>
+<p><code>K</code> bounds the underlying curve of the three bounded
+models. Noisy observations can exceed <code>K</code>; the upper
+observation bound is 1, rather than <code>K</code>. Exponential curves
+and observations can exceed 1. If exponential growth or noise exceeds
+the finite numeric range, the simulator stops; reduce <code>N</code>,
+<code>r</code>, or <code>alpha</code>.</p>
+</div>
+<div class="section level2">
 <h2 id="simulate-four-canonical-curve-shapes">Simulate four canonical curve shapes<a class="anchor" aria-label="anchor" href="#simulate-four-canonical-curve-shapes"></a>
 </h2>
 <p>The four model families represent different epidemic shapes.
@@ -104,7 +168,9 @@ Exponential growth is most appropriate for early unconstrained increase,
 while monomolecular, logistic, and Gompertz curves include different
 forms of deceleration as disease approaches an upper limit.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">exp_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_exponential.html">sim_exponential</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">10</span>, r <span class="op">=</span> <span class="fl">0.045</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">exp_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_exponential.html">sim_exponential</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">10</span>, r <span class="op">=</span> <span class="fl">0.045</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">mono_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_monomolecular.html">sim_monomolecular</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">log_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_logistic.html">sim_logistic</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.10</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">gomp_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_gompertz.html">sim_gompertz</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.07</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
@@ -130,7 +196,7 @@ forms of deceleration as disease approaches an upper limit.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Gompertz"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">exp_plot</span>, <span class="va">mono_plot</span>, <span class="va">log_plot</span>, <span class="va">gomp_plot</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="simulation-workflows_files/figure-html/unnamed-chunk-3-1.png" alt="Grid of four simulated disease progress curves showing exponential, monomolecular, logistic, and Gompertz shapes." width="768"></p>
+<p><img src="simulation-workflows_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="Grid of four simulated disease progress curves showing exponential, monomolecular, logistic, and Gompertz shapes." width="768"></p>
 </div>
 <div class="section level2">
 <h2 id="send-simulated-data-into-the-fitting-pipeline">Send simulated data into the fitting pipeline<a class="anchor" aria-label="anchor" href="#send-simulated-data-into-the-fitting-pipeline"></a>
@@ -138,14 +204,14 @@ forms of deceleration as disease approaches an upper limit.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_from_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_lin.html">fit_lin</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">log_model</span><span class="op">$</span><span class="va">time</span>, y <span class="op">=</span> <span class="va">log_model</span><span class="op">$</span><span class="va">random_y</span><span class="op">)</span></span>
 <span><span class="va">fit_from_sim</span><span class="op">$</span><span class="va">stats_all</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 14</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 4 x 14</span></span>
 <span><span class="co">##   best_model model      r    r_se r_ci_lwr r_ci_upr    v0  v0_se r_squared   RSE</span></span>
-<span><span class="co">##        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>          1 Logi… 0.101  6.96<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span>   0.099<span style="text-decoration: underline;">8</span>   0.103  -<span style="color: #BB0000;">4.65</span> 0.040<span style="text-decoration: underline;">7</span>     0.995 0.216</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>          2 Gomp… 0.072<span style="text-decoration: underline;">3</span> 1.50<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>   0.069<span style="text-decoration: underline;">4</span>   0.075<span style="text-decoration: underline;">3</span> -<span style="color: #BB0000;">2.41</span> 0.087<span style="text-decoration: underline;">9</span>     0.957 0.467</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>          3 Mono… 0.055<span style="text-decoration: underline;">9</span> 2.02<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>   0.051<span style="text-decoration: underline;">9</span>   0.059<span style="text-decoration: underline;">9</span> -<span style="color: #BB0000;">1.10</span> 0.118      0.881 0.628</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>          4 Expo… 0.045<span style="text-decoration: underline;">3</span> 1.99<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span>   0.041<span style="text-decoration: underline;">3</span>   0.049<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">3.55</span> 0.116      0.834 0.617</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 4 more variables: CCC &lt;dbl&gt;, y0 &lt;dbl&gt;, y0_ci_lwr &lt;dbl&gt;, y0_ci_upr &lt;dbl&gt;</span></span></span></code></pre>
+<span><span class="co">##        &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">## 1          1 Logi~ 0.101  6.94e-4   0.0996   0.102  -4.63 0.0406     0.995 0.215</span></span>
+<span><span class="co">## 2          2 Gomp~ 0.0723 1.52e-3   0.0693   0.0754 -2.41 0.0887     0.957 0.471</span></span>
+<span><span class="co">## 3          3 Mono~ 0.0560 2.04e-3   0.0519   0.0600 -1.10 0.119      0.880 0.632</span></span>
+<span><span class="co">## 4          4 Expo~ 0.0450 1.97e-3   0.0411   0.0489 -3.53 0.115      0.834 0.613</span></span>
+<span><span class="co">## # i 4 more variables: CCC &lt;dbl&gt;, y0 &lt;dbl&gt;, y0_ci_lwr &lt;dbl&gt;, y0_ci_upr &lt;dbl&gt;</span></span></code></pre>
 <p>When using simulations for method checking, compare the fitted model
 with the known data-generating model. When using simulations for
 teaching, show both the underlying curve (<code>y</code>) and the noisy

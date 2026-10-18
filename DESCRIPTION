@@ -28,7 +28,7 @@ Authors@R: c(
          comment = c("ORCID" = "0000-0002-0061-8359"))
           )
 Depends: R (>= 4.1)
-Imports: DescTools, cowplot, deSolve, dplyr, ggplot2, magrittr, minpack.lm, stats, tidyr
+Imports: DescTools, cowplot, dplyr, ggplot2, magrittr, minpack.lm, stats, tidyr
 Suggests: 
     knitr,
     rmarkdown,
@@ -43,4 +43,4 @@ URL: https://github.com/AlvesKS/epifitter, https://alvesks.github.io/epifitter/
 BugReports: https://github.com/AlvesKS/epifitter/issues
 X-schema.org-applicationCategory: Tools
 Config/testthat/edition: 3
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3

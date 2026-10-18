@@ -13,4 +13,6 @@
 }
 \description{
 Print method for objects returned by [fit_nlin2()].
+Also show the recorded starting-value strategy and how to enable comparison
+with `multistart = TRUE`.
 }

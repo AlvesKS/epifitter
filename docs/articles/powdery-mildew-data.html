@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Kaique S.
 Alves</h4>
             
-            <h4 data-toc-skip class="date">2026-05-17</h4>
+            <h4 data-toc-skip class="date">2026-10-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AlvesKS/epifitter/blob/HEAD/vignettes/powdery-mildew-data.Rmd" class="external-link"><code>vignettes/powdery-mildew-data.Rmd</code></a></small>
       <div class="d-none name"><code>powdery-mildew-data.Rmd</code></div>
@@ -84,7 +84,7 @@ Alves</h4>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_cowplot.html" class="external-link">theme_half_open</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/theme_cowplot.html" class="external-link">theme_half_open</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"PowderyMildew"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
@@ -502,7 +502,7 @@ treatment and visualize the mean disease progress curve.</p>
 <span>    y <span class="op">=</span> <span class="st">"Mean severity"</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"Irrigation"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="powdery-mildew-data_files/figure-html/unnamed-chunk-4-1.png" alt="Line plot of mean powdery mildew severity over time for each irrigation treatment, faceted by soil moisture level." width="700"></p>
+<p><img src="powdery-mildew-data_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="Line plot of mean powdery mildew severity over time for each irrigation treatment, faceted by soil moisture level." width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="calculate-audpc-and-audps-per-experimental-unit">Calculate AUDPC and AUDPS per experimental unit<a class="anchor" aria-label="anchor" href="#calculate-audpc-and-audps-per-experimental-unit"></a>
@@ -533,169 +533,169 @@ treatment.</p>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">1</td>
-<td align="right">13.1530</td>
-<td align="right">14.7105</td>
+<td align="right">12.9955</td>
+<td align="right">14.553</td>
 </tr>
 <tr class="even">
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">2</td>
-<td align="right">13.8040</td>
-<td align="right">15.3615</td>
+<td align="right">13.8845</td>
+<td align="right">15.442</td>
 </tr>
 <tr class="odd">
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">3</td>
-<td align="right">13.3700</td>
-<td align="right">14.9275</td>
+<td align="right">13.2895</td>
+<td align="right">14.847</td>
 </tr>
 <tr class="even">
 <td align="left">Furrow</td>
 <td align="left">Moderate moisture</td>
 <td align="right">1</td>
-<td align="right">13.7270</td>
-<td align="right">15.3615</td>
+<td align="right">13.5275</td>
+<td align="right">15.162</td>
 </tr>
 <tr class="odd">
 <td align="left">Furrow</td>
 <td align="left">Moderate moisture</td>
 <td align="right">2</td>
-<td align="right">14.1645</td>
-<td align="right">15.7990</td>
+<td align="right">14.0035</td>
+<td align="right">15.638</td>
 </tr>
 <tr class="even">
 <td align="left">Furrow</td>
 <td align="left">Moderate moisture</td>
 <td align="right">3</td>
 <td align="right">13.8670</td>
-<td align="right">15.4210</td>
+<td align="right">15.421</td>
 </tr>
 <tr class="odd">
 <td align="left">MS</td>
 <td align="left">High moisture</td>
 <td align="right">1</td>
-<td align="right">8.3020</td>
-<td align="right">9.6005</td>
+<td align="right">8.0605</td>
+<td align="right">9.359</td>
 </tr>
 <tr class="even">
 <td align="left">MS</td>
 <td align="left">High moisture</td>
 <td align="right">2</td>
-<td align="right">9.3625</td>
-<td align="right">10.6260</td>
+<td align="right">9.2435</td>
+<td align="right">10.507</td>
 </tr>
 <tr class="odd">
 <td align="left">MS</td>
 <td align="left">High moisture</td>
 <td align="right">3</td>
-<td align="right">8.3755</td>
-<td align="right">9.5620</td>
+<td align="right">8.2565</td>
+<td align="right">9.443</td>
 </tr>
 <tr class="even">
 <td align="left">MS</td>
 <td align="left">Moderate moisture</td>
 <td align="right">1</td>
-<td align="right">10.7205</td>
-<td align="right">12.1905</td>
+<td align="right">10.5210</td>
+<td align="right">11.991</td>
 </tr>
 <tr class="odd">
 <td align="left">MS</td>
 <td align="left">Moderate moisture</td>
 <td align="right">2</td>
-<td align="right">11.3330</td>
-<td align="right">12.7645</td>
+<td align="right">11.3715</td>
+<td align="right">12.803</td>
 </tr>
 <tr class="even">
 <td align="left">MS</td>
 <td align="left">Moderate moisture</td>
 <td align="right">3</td>
-<td align="right">11.6970</td>
-<td align="right">13.1285</td>
+<td align="right">11.6585</td>
+<td align="right">13.090</td>
 </tr>
 <tr class="odd">
 <td align="left">MS above canopy</td>
 <td align="left">High moisture</td>
 <td align="right">1</td>
-<td align="right">3.8395</td>
-<td align="right">4.3225</td>
+<td align="right">3.8010</td>
+<td align="right">4.284</td>
 </tr>
 <tr class="even">
 <td align="left">MS above canopy</td>
 <td align="left">High moisture</td>
 <td align="right">2</td>
-<td align="right">4.2245</td>
-<td align="right">4.7775</td>
+<td align="right">4.1230</td>
+<td align="right">4.676</td>
 </tr>
 <tr class="odd">
 <td align="left">MS above canopy</td>
 <td align="left">High moisture</td>
 <td align="right">3</td>
-<td align="right">4.1930</td>
-<td align="right">4.7740</td>
+<td align="right">4.0530</td>
+<td align="right">4.634</td>
 </tr>
 <tr class="even">
 <td align="left">MS above canopy</td>
 <td align="left">Moderate moisture</td>
 <td align="right">1</td>
-<td align="right">4.6935</td>
-<td align="right">5.2535</td>
+<td align="right">4.6130</td>
+<td align="right">5.173</td>
 </tr>
 <tr class="odd">
 <td align="left">MS above canopy</td>
 <td align="left">Moderate moisture</td>
 <td align="right">2</td>
-<td align="right">5.2010</td>
-<td align="right">5.8940</td>
+<td align="right">5.0400</td>
+<td align="right">5.733</td>
 </tr>
 <tr class="even">
 <td align="left">MS above canopy</td>
 <td align="left">Moderate moisture</td>
 <td align="right">3</td>
-<td align="right">5.0365</td>
-<td align="right">5.6455</td>
+<td align="right">4.9140</td>
+<td align="right">5.523</td>
 </tr>
 <tr class="odd">
 <td align="left">Overhead</td>
 <td align="left">High moisture</td>
 <td align="right">1</td>
-<td align="right">3.5770</td>
-<td align="right">3.9865</td>
-</tr>
-<tr class="even">
-<td align="left">Overhead</td>
-<td align="left">High moisture</td>
-<td align="right">2</td>
 <td align="right">3.5665</td>
-<td align="right">3.9795</td>
+<td align="right">3.976</td>
+</tr>
+<tr class="even">
+<td align="left">Overhead</td>
+<td align="left">High moisture</td>
+<td align="right">2</td>
+<td align="right">3.5560</td>
+<td align="right">3.969</td>
 </tr>
 <tr class="odd">
 <td align="left">Overhead</td>
 <td align="left">High moisture</td>
 <td align="right">3</td>
-<td align="right">3.9725</td>
-<td align="right">4.4940</td>
+<td align="right">3.9305</td>
+<td align="right">4.452</td>
 </tr>
 <tr class="even">
 <td align="left">Overhead</td>
 <td align="left">Moderate moisture</td>
 <td align="right">1</td>
-<td align="right">3.9935</td>
-<td align="right">4.4695</td>
+<td align="right">3.9550</td>
+<td align="right">4.431</td>
 </tr>
 <tr class="odd">
 <td align="left">Overhead</td>
 <td align="left">Moderate moisture</td>
 <td align="right">2</td>
-<td align="right">3.7065</td>
-<td align="right">4.1825</td>
+<td align="right">3.6890</td>
+<td align="right">4.165</td>
 </tr>
 <tr class="even">
 <td align="left">Overhead</td>
 <td align="left">Moderate moisture</td>
 <td align="right">3</td>
-<td align="right">3.8360</td>
-<td align="right">4.2910</td>
+<td align="right">3.7940</td>
+<td align="right">4.249</td>
 </tr>
 </tbody>
 </table>
@@ -722,9 +722,12 @@ per block on top of a boxplot.</p>
 <span>  <span class="fu">lemon</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lemon/man/facet_rep.html" class="external-link">facet_rep_grid</a></span><span class="op">(</span><span class="va">summary_measure</span> <span class="op">~</span> <span class="va">moisture</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">summary_measure</span> <span class="op">~</span> <span class="va">moisture</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in lemon::facet_rep_grid(summary_measure ~ moisture, scales =</span></span>
+<span><span class="co">## "free_y"): `facet_rep_wrap` and `facet_rep_lab` have been soft-deprecated. A</span></span>
+<span><span class="co">## replacement can be found in ggh4x::facet_wrap2.</span></span></code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
 <span>  <span class="va">pm_area_long</span>,</span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">irrigation_type</span>, <span class="va">value</span>, fill <span class="op">=</span> <span class="va">irrigation_type</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">+</span></span>
@@ -756,14 +759,14 @@ per block on top of a boxplot.</p>
 <span>    strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#e7f1f3"</span>, color <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>    strip.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="powdery-mildew-data_files/figure-html/unnamed-chunk-6-1.png" alt="Boxplots with jittered points showing the distribution of AUDPC and AUDPS values across irrigation treatments, faceted by moisture level and summary metric." width="700"></p>
+<p><img src="powdery-mildew-data_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="Boxplots with jittered points showing the distribution of AUDPC and AUDPS values across irrigation treatments, faceted by moisture level and summary metric." width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="fit-a-model-to-one-observed-curve">Fit a model to one observed curve<a class="anchor" aria-label="anchor" href="#fit-a-model-to-one-observed-curve"></a>
 </h2>
 <p>To work with a single disease progress curve, first filter one
 treatment-by-block combination.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">single_curve</span> <span class="op">&lt;-</span> <span class="va">PowderyMildew</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="va">irrigation_type</span> <span class="op">==</span> <span class="st">"Drip"</span>,</span>
@@ -864,7 +867,7 @@ treatment-by-block combination.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">single_curve</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">sev</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span>, color <span class="op">=</span> <span class="st">"#15616d"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">0.9</span>, color <span class="op">=</span> <span class="st">"#15616d"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -874,13 +877,13 @@ treatment-by-block combination.</p>
 <span>    x <span class="op">=</span> <span class="st">"Time"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Severity"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="powdery-mildew-data_files/figure-html/unnamed-chunk-8-1.png" alt="Scatter and line plot of a single observed powdery mildew disease progress curve for drip irrigation under high moisture in block 1." width="700"></p>
+<p><img src="powdery-mildew-data_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="Scatter and line plot of a single observed powdery mildew disease progress curve for drip irrigation under high moisture in block 1." width="700"></p>
 <p>Now fit the candidate models to that curve.</p>
 <p>The fitted parameters are descriptive summaries of the selected
 curve. For example, the apparent infection rate is meaningful only in
 relation to the model form, disease scale, and observed time
 interval.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">single_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_lin.html">fit_lin</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">single_curve</span><span class="op">$</span><span class="va">time</span>, y <span class="op">=</span> <span class="va">single_curve</span><span class="op">$</span><span class="va">sev</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">single_fit</span><span class="op">$</span><span class="va">stats_all</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -983,16 +986,16 @@ interval.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">single_fit</span>, point_size <span class="op">=</span> <span class="fl">2</span>, line_size <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span></code></pre></div>
-<p><img src="powdery-mildew-data_files/figure-html/unnamed-chunk-10-1.png" alt="Faceted plot comparing fitted disease progress curves for a single observed powdery mildew epidemic." width="700"></p>
+<p><img src="powdery-mildew-data_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="Faceted plot comparing fitted disease progress curves for a single observed powdery mildew epidemic." width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="fit-models-to-many-observed-curves-at-once">Fit models to many observed curves at once<a class="anchor" aria-label="anchor" href="#fit-models-to-many-observed-curves-at-once"></a>
 </h2>
 <p><code><a href="../reference/fit_multi.html">fit_multi()</a></code> is useful when each treatment-by-block
 combination should be fitted separately.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pm_multi_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_multi.html">fit_multi</a></span><span class="op">(</span></span>
 <span>  time_col <span class="op">=</span> <span class="st">"time"</span>,</span>
 <span>  intensity_col <span class="op">=</span> <span class="st">"sev"</span>,</span>
@@ -1001,9 +1004,10 @@ combination should be fitted separately.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pm_multi_fit</span><span class="op">$</span><span class="va">Parameters</span>, <span class="fl">12</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="10%">
+<col width="2%">
+<col width="9%">
 <col width="8%">
 <col width="3%">
 <col width="6%">
@@ -1012,16 +1016,17 @@ combination should be fitted separately.</p>
 <col width="4%">
 <col width="5%">
 <col width="5%">
-<col width="5%">
+<col width="4%">
 <col width="4%">
 <col width="6%">
 <col width="4%">
 <col width="4%">
-<col width="5%">
+<col width="4%">
 <col width="6%">
 <col width="6%">
 </colgroup>
 <thead><tr class="header">
+<th align="left"></th>
 <th align="left">irrigation_type</th>
 <th align="left">moisture</th>
 <th align="right">block</th>
@@ -1042,6 +1047,7 @@ combination should be fitted separately.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="left">1</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">1</td>
@@ -1061,6 +1067,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0379</td>
 </tr>
 <tr class="even">
+<td align="left">1.1</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">1</td>
@@ -1080,6 +1087,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0232</td>
 </tr>
 <tr class="odd">
+<td align="left">1.2</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">1</td>
@@ -1099,6 +1107,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0501</td>
 </tr>
 <tr class="even">
+<td align="left">1.3</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">1</td>
@@ -1118,6 +1127,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0558</td>
 </tr>
 <tr class="odd">
+<td align="left">2</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">2</td>
@@ -1137,6 +1147,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0375</td>
 </tr>
 <tr class="even">
+<td align="left">2.1</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">2</td>
@@ -1156,6 +1167,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0367</td>
 </tr>
 <tr class="odd">
+<td align="left">2.2</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">2</td>
@@ -1175,6 +1187,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0486</td>
 </tr>
 <tr class="even">
+<td align="left">2.3</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">2</td>
@@ -1194,6 +1207,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0546</td>
 </tr>
 <tr class="odd">
+<td align="left">3</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">3</td>
@@ -1213,6 +1227,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0338</td>
 </tr>
 <tr class="even">
+<td align="left">3.1</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">3</td>
@@ -1232,6 +1247,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0303</td>
 </tr>
 <tr class="odd">
+<td align="left">3.2</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">3</td>
@@ -1251,6 +1267,7 @@ combination should be fitted separately.</p>
 <td align="right">0.0435</td>
 </tr>
 <tr class="even">
+<td align="left">3.3</td>
 <td align="left">Drip</td>
 <td align="left">High moisture</td>
 <td align="right">3</td>

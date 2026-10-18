@@ -45,6 +45,15 @@ This is fast and often useful for model comparison, but transformations also
 change the error scale. Always inspect the fitted curves on the original
 disease intensity scale.
 
+Disease intensity must be a proportion between 0 and 1. To make the
+transformations finite, `fit_lin()` replaces exact zeros with 0.0001 and exact
+ones with 0.999, issuing a warning. The returned observation data also contain
+these adjusted values. Check whether this approximation is appropriate when
+many observations lie at a boundary. The nonlinear fitters accept observed
+zeros and ones without these replacements.
+This concerns observed data: among the nonlinear models, only the
+monomolecular model permits an estimated initial intensity `y0 = 0`.
+
 ```{r}
 set.seed(1)
 epi <- sim_logistic(N = 60, y0 = 0.01, dt = 5, r = 0.12, alpha = 0.2, n = 4)
@@ -65,15 +74,64 @@ or weakly informative data can lead to non-convergence. When this happens,
 inspect the curve, adjust `starting_par`, and consider whether the chosen model
 is identifiable from the observed time points.
 
-```{r eval=FALSE}
+```{r nonlinear-example}
 fit_nlin_out <- fit_nlin(
   time = epi$time,
   y = epi$random_y,
-  starting_par = list(y0 = 0.01, r = 0.03)
+  starting_par = list(y0 = 0.01, r = 0.03),
+  maxiter = 500
 )
 
 fit_nlin_out$stats_all
 ```
+
+If some models fail, the fitter warns and returns `NA` for those models in the
+statistics, parameter estimates, and predictions. Inspect these warnings
+before comparing the successful models. If all models fail, fitting stops
+with an error and guidance on starting values, iteration limits, and the data.
+
+## Compare starting values with `multistart`
+
+By default, `multistart = FALSE` accepts the first converged attempt. If an
+attempt fails, the remaining starting values are tried. Use
+`multistart = TRUE` to evaluate all available starting values and retain the
+converged fit with the smallest residual sum of squares. The search uses the
+same deterministic starting values and takes more time; it does not guarantee
+a global optimum.
+
+The following example has several converged solutions. Comparing the starting
+values finds a smaller error for the logistic model:
+
+```{r}
+time <- rep(seq(0, 50, 5), each = 4)
+mean_y <- 0.6 / (1 + 59 * exp(-0.2 * time))
+y <- mean_y + rep(c(-0.1, -0.05, 0.05, 0.1), 11) * (time >= 25)
+
+first_fit <- fit_nlin2(time, y, maxiter = 1000)
+best_fit <- fit_nlin2(time, y, maxiter = 1000, multistart = TRUE)
+
+logistic_comparison <- data.frame(
+  strategy = c("First converged attempt", "Compare starting values"),
+  K = c(first_fit$`Maximum disease intensity`["Logistic", "Estimate"],
+        best_fit$`Maximum disease intensity`["Logistic", "Estimate"]),
+  RSS = c(sum(first_fit$data$residual[first_fit$data$model == "Logistic"]^2),
+          sum(best_fit$data$residual[best_fit$data$model == "Logistic"]^2))
+)
+knitr::kable(logistic_comparison, digits = 4)
+```
+
+Printing a nonlinear fitted object shows its starting-value strategy. A fit
+created with `FALSE` includes a reminder about `multistart = TRUE`. This is
+information in the printed result, not a warning or a message emitted by every
+fit or bootstrap sample.
+
+If every starting value fails, enabling comparison alone does not supply new
+starting values or more iterations. Inspect the data and model assumptions,
+change `starting_par`, or increase `maxiter` as appropriate.
+
+The option is also available in `fit_nlin()` and in `fit_multi()` when
+`nlin = TRUE`. Bootstrap intervals from `plot_fit()` retain the setting used
+for the original fit.
 
 ## Weighted nonlinear fitting
 
@@ -100,6 +158,14 @@ To use a two-step binomial-like weighting approximation, use
 `weight_method = "binomial"`. The model is first fitted without weights, fitted
 values are used to construct weights, and the model is then refitted using
 \(1 / (p(1 - p) + \epsilon)\).
+
+With `multistart = TRUE`, starting values are compared separately in each
+stage. The initial unweighted fit is selected first, weights are calculated
+once from that fit, and the final attempts are compared using the same fixed
+weights and the weighted residual sum of squares. Custom numeric weights
+remain fixed throughout; custom weight functions are evaluated once per
+model. Changing the starting-value strategy can therefore also change the
+estimated weights in a two-step fit.
 
 ```{r eval=FALSE}
 fit_weighted <- fit_nlin(
@@ -166,20 +232,6 @@ fit_custom_fun <- fit_nlin(
 )
 ```
 
-For grouped nonlinear fitting, use `weight_method` for the same strategy across
-all curves, or `weights_col` when weights are stored in the data.
-
-```{r eval=FALSE}
-multi_weighted <- fit_multi(
-  time_col = "time",
-  intensity_col = "random_y",
-  data = multi_epi,
-  strata_cols = "curve",
-  nlin = TRUE,
-  weight_method = "binomial"
-)
-```
-
 Weighted fits are assumptions, not automatic improvements. They are most useful
 when residual diagnostics or the sampling design suggest heteroscedasticity.
 Compare weighted and unweighted fits, inspect residuals, and report the chosen
@@ -189,9 +241,16 @@ weighting rule.
 
 The two-parameter monomolecular, logistic, and Gompertz models assume a fixed
 maximum disease intensity of 1. In real epidemics, disease may plateau below 1
-because of host resistance, limited favorable conditions, management, sampling
-scale, or a short observation window. In those cases, `fit_nlin2()` estimates
-the upper asymptote `K`.
+because of host resistance, limited favorable conditions, management, or
+sampling scale. In those cases, `fit_nlin2()` estimates the upper asymptote `K`.
+A short observation window may leave the plateau unobserved, making `K` weakly
+identified; it does not establish that the epidemic has a lower plateau.
+
+`K` describes the fitted mean curve, not the largest observed value. Noisy
+observations can exceed the estimated `K`. Nonlinear parameter intervals use
+a Wald approximation and can extend outside the bounds imposed on the point
+estimates. Wide or implausible intervals call for checking information in the
+data and model fit, even when optimization converges.
 
 ```{r eval=FALSE}
 epi_partial <- epi %>%
@@ -229,6 +288,23 @@ knitr::kable(head(multi_fit$Parameters), digits = 4)
 knitr::kable(head(multi_fit$Data), digits = 4)
 ```
 
+For grouped nonlinear fitting, use `weight_method` for the same strategy across
+all curves, or `weights_col` when weights are stored in the data. Here each
+curve also compares all available starting values:
+
+```{r weighted-group-example}
+multi_weighted <- fit_multi(
+  time_col = "time",
+  intensity_col = "random_y",
+  data = multi_epi,
+  strata_cols = "curve",
+  nlin = TRUE,
+  weight_method = "binomial",
+  multistart = TRUE,
+  maxiter = 500
+)
+```
+
 ## Practical reporting
 
 When reporting fitted disease progress models, include:
@@ -238,5 +314,6 @@ When reporting fitted disease progress models, include:
 - the model family and whether `K` was fixed or estimated;
 - whether the fit used ordinary or weighted nonlinear least squares;
 - the weighting rule, if any;
+- whether `multistart` was enabled and the supplied starting values;
 - convergence issues or models that failed to fit;
 - uncertainty intervals or sensitivity analyses when they inform interpretation.

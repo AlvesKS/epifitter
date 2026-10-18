@@ -10,10 +10,17 @@
 #'   1.
 #' @param r Apparent infection rate. Must be positive.
 #' @param n Number of replicated curves. Must be a positive whole number.
-#' @param alpha Non-negative noise level applied to replicated observations.
+#' @param alpha Non-negative noise multiplier. Before clipping, observations
+#'   are normal draws centered on `y`, with standard deviation `alpha * y`.
 #'
-#' @return A data frame with simulated disease progress values and replicated
-#'   noisy observations.
+#' @return A data frame with columns `replicates`, `time`, `y` (the underlying
+#'   curve), and `random_y` (noisy observations).
+#'
+#' @details The curve is evaluated analytically at `seq(0, N, by = dt)`.
+#'   Replicates share the same curve parameters. Draws below `y0` are replaced
+#'   with `y0`; values above 1 are allowed. Set `alpha = 0` for noiseless data.
+#'   If the curve or noise exceeds the finite numeric range, reduce `N`, `r`,
+#'   or `alpha`.
 #'
 #' @examples
 #' sim_exponential(N = 30, dt = 5, y0 = 0.01, r = 0.05, n = 4)
@@ -24,14 +31,10 @@ sim_exponential <- function(N = 10, dt = 1, y0 = 0.01, r, n, alpha = 0.2) {
 
   time <- seq(0, N, by = dt)
   w <- numeric(length(time))
-  y <- numeric(length(time))
+  y <- exp(log(y0) + r * time)
   y[1] <- y0
-  for (k in 1:(length(time) - 1)) {
-    InitCond <- c(y[k])
-    steps <- seq(time[k], time[k + 1], by = dt)
-    parms <- list(r = r)
-    ode_logi <- deSolve::ode(InitCond, steps, expo_fun, parms)
-    y[k + 1] <- ode_logi[length(ode_logi[, 2]), 2]
+  if (any(!is.finite(y)) || any(!is.finite(alpha * y))) {
+    stop("The exponential curve or noise exceeds the finite numeric range. Reduce `N`, `r`, or `alpha`.", call. = FALSE)
   }
 
   data_uni <- matrix(0, ncol = 4, nrow = length(y))
@@ -39,11 +42,10 @@ sim_exponential <- function(N = 10, dt = 1, y0 = 0.01, r, n, alpha = 0.2) {
 
   for (j in 1:n) {
     for (i in 1:length(time)) {
-      w[i] <- stats::rnorm(1, y[i], sd = alpha * y[i]) #* (1 - y[i]))
-
-      # if (w[i] > 1) {
-      #   w[i] <- 0.999
-      # }
+      w[i] <- stats::rnorm(1, y[i], sd = alpha * y[i])
+      if (!is.finite(w[i])) {
+        stop("The exponential curve or noise exceeds the finite numeric range. Reduce `N`, `r`, or `alpha`.", call. = FALSE)
+      }
       if (w [i] < y0) {
         w[i] <- y0
       }

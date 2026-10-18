@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,33 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.0" id="epifitter-100">epifitter 1.0.0<a class="anchor" aria-label="anchor" href="#epifitter-100"></a></h2><p class="text-muted">CRAN release: 2026-04-12</p>
+<h2 class="pkg-version" data-toc-text="1.0.1" id="epifitter-101">epifitter 1.0.1<a class="anchor" aria-label="anchor" href="#epifitter-101"></a></h2><p class="text-muted">CRAN release: 2026-04-12</p>
+<div class="section level4">
+<h4 id="new-feature-1-0-1">New feature<a class="anchor" aria-label="anchor" href="#new-feature-1-0-1"></a></h4>
+<ul><li>Added optional <code>multistart = TRUE</code> to nonlinear and grouped fitting, comparing converged attempts by residual sum of squares with fixed weights within each stage. The default preserves the first-converged strategy. Printed nonlinear results explain the selected strategy, and bootstrap refits inherit it.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fix-1-0-1">Bug fix<a class="anchor" aria-label="anchor" href="#bug-fix-1-0-1"></a></h4>
+<ul><li>The manual citation takes its package version from metadata instead of a hard-coded release number.</li>
+<li>Linearized fitting reuses each regression, and bootstrap intervals refit only the requested model while sharing the nonlinear fitting rules.</li>
+<li>Bootstrap bands require at least two successful finite predictions per model, with model-specific warnings for failed fits.</li>
+<li>
+<code><a href="../reference/AUDPC_2_points.html">AUDPC_2_points()</a></code> uses a numerically stable logistic integral for nearly equal observations and handles constant curves explicitly.</li>
+<li>Simulators now use analytical solutions, avoiding numerical overshoot near the asymptote and removing the runtime dependency on deSolve.</li>
+<li>Grouped fitting uses native group keys, preserving missing labels and column types without merging distinct strata or overwriting a <code>strata</code> column.</li>
+<li>Wild bootstrap now changes the sign of each centered residual without moving residuals between observations.</li>
+<li>Bootstrap confidence intervals now keep numeric weights aligned when assessment times are sorted.</li>
+<li>Nonlinear fitting now rejects unconverged optimizer results and tries the remaining starting values before reporting failure.</li>
+<li>Fixed monomolecular fits returning <code>NA</code> when initial disease intensity reaches its lower bound in <code><a href="../reference/fit_nlin.html">fit_nlin()</a></code> and <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code> (<a href="https://github.com/AlvesKS/epifitter/issues/6" class="external-link">#6</a>).</li>
+<li>
+<code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code> allows noisy observations above the fitted asymptote instead of forcing <code>K</code> to exceed the largest observation.</li>
+<li>Fixed <code><a href="../reference/AUDPC.html">AUDPC()</a></code> trapezoid indexing so results match the documented <code>agricolae::audpc()</code> calculation.</li>
+<li>
+<code><a href="../reference/AUDPC.html">AUDPC()</a></code> and <code><a href="../reference/AUDPS.html">AUDPS()</a></code> now warn when repeated assessment times are aggregated before area calculation.</li>
+</ul><hr></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="epifitter-100">epifitter 1.0.0<a class="anchor" aria-label="anchor" href="#epifitter-100"></a></h2>
 <div class="section level4">
 <h4 id="highlights-1-0-0">Highlights<a class="anchor" aria-label="anchor" href="#highlights-1-0-0"></a></h4>
 <ul><li>Modernized the fitting workflow with shared input validation, more informative error messages, and improved grouped-model ergonomics.</li>

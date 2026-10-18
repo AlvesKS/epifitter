@@ -12,7 +12,8 @@ fit_nlin(
   weights = NULL,
   weight_method = c("none", "binomial", "mean", "cv", "power"),
   weight_eps = 0.01,
-  weight_power = 1
+  weight_power = 1,
+  multistart = FALSE
 )
 }
 \arguments{
@@ -43,6 +44,11 @@ approximations to keep weights finite near 0 and 1.}
 
 \item{weight_power}{Non-negative power \eqn{\theta} used only when
 `weight_method = "power"`.}
+
+\item{multistart}{Logical. If `FALSE` (default), accept the first converged
+attempt, trying the remaining starting values only after a failure. If
+`TRUE`, compare all available starting values and keep the converged fit
+with the smallest residual sum of squares (weighted when applicable).}
 }
 \value{
 A list with fit statistics, parameter estimates, and prediction
@@ -58,6 +64,15 @@ likelihood. `weight_method` options other than `"none"` use a two-step
 working approximation: first fit the model without weights, derive weights
 from the fitted values, and then refit the model. Report the selected
 weighting rule as an assumption.
+
+Monomolecular fits allow `y0 = 0`. Parameter confidence intervals are
+unconstrained Wald approximations and require caution when an estimate
+reaches a parameter bound.
+
+With `multistart = TRUE`, all available starting values are evaluated in
+each fitting stage. The converged fit with the smallest residual sum of
+squares is retained, using fixed weights within each weighted stage.
+This takes more time and does not guarantee a global optimum.
 }
 \examples{
 set.seed(1)

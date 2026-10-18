@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,10 +117,52 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">epi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sim_logistic.html">sim_logistic</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">30</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.3</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_lin.html">fit_lin</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>, y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">y</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_lin.html">fit_lin</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>, y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
-<p>For more complete workflows, see the package articles on model fitting, area summaries, simulation, and the bundled experimental dataset in the documentation site.</p>
+<p>The simulator returns the underlying curve in <code>y</code> and noisy observations in <code>random_y</code>. Fit <code>random_y</code> when checking how well a method recovers the simulated epidemic.</p>
+</div>
+<div class="section level2">
+<h2 id="find-the-right-workflow">Find the right workflow<a class="anchor" aria-label="anchor" href="#find-the-right-workflow"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Goal</th>
+<th>Article</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Run a first analysis</td>
+<td><a href="https://alvesks.github.io/epifitter/articles/getting-started.html">Getting started</a></td>
+</tr>
+<tr>
+<td>Choose models, starting values, and weights</td>
+<td><a href="https://alvesks.github.io/epifitter/articles/model-fitting.html">Model fitting</a></td>
+</tr>
+<tr>
+<td>Add uncertainty intervals</td>
+<td><a href="https://alvesks.github.io/epifitter/articles/confidence-intervals.html">Confidence intervals</a></td>
+</tr>
+<tr>
+<td>Calculate areas for mean curves or individual replicates</td>
+<td><a href="https://alvesks.github.io/epifitter/articles/area-under-curve.html">AUDPC and AUDPS</a></td>
+</tr>
+<tr>
+<td>Understand simulated curves and observation noise</td>
+<td><a href="https://alvesks.github.io/epifitter/articles/simulation-workflows.html">Simulation workflows</a></td>
+</tr>
+<tr>
+<td>Analyze experimental data</td>
+<td><a href="https://alvesks.github.io/epifitter/articles/powdery-mildew-data.html">Powdery mildew example</a></td>
+</tr>
+</tbody>
+</table>
+<p>For nonlinear fits, <code>multistart = TRUE</code> compares all available starting values instead of accepting the first converged attempt. The <a href="https://alvesks.github.io/epifitter/articles/model-fitting.html#compare-starting-values-with-multistart">starting-value guide</a> explains when this can help, its computational cost, and what to check if fitting fails.</p>
+<p>The website may describe features newer than your installed release. Check <code>packageVersion("epifitter")</code> and the local function help if an argument is unavailable.</p>
 </div>
 <div class="section level2">
 <h2 id="article-and-citation">Article and citation<a class="anchor" aria-label="anchor" href="#article-and-citation"></a>
@@ -186,11 +228,13 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Kaique dos S. Alves <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9187-0252" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Emerson M. Del Ponte <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4398-409X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Adam H. Sparks <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-0061-8359" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Kaique dos S. Alves <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9187-0252" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Emerson M. Del Ponte <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4398-409X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Adam H. Sparks <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-0061-8359" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
+
+
 
 
 

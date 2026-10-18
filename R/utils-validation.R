@@ -219,7 +219,7 @@
     start$K <- provided[["K"]]
   }
 
-  start$K <- min(max(start$K, max(y), start$y0 + .Machine$double.eps), 1 - .Machine$double.eps)
+  start$K <- min(max(start$K, start$y0 + .Machine$double.eps), 1 - .Machine$double.eps)
   start
 }
 
@@ -245,8 +245,11 @@
   .validate_nls_weights(custom_weights, nrow(data))
 }
 
-.fit_nlslm_with_fallback <- function(formula, data, starts, lower, upper, maxiter, weights = NULL) {
+.fit_nlslm_with_fallback <- function(formula, data, starts, lower, upper, maxiter,
+                                     weights = NULL, multistart = FALSE) {
   last_error <- NULL
+  best_fit <- NULL
+  best_rss <- Inf
 
   for (start in starts) {
     nls_args <- list(
@@ -263,17 +266,39 @@
     }
 
     fit <- tryCatch(
-      do.call(minpack.lm::nlsLM, nls_args),
+      {
+        if (multistart) {
+          suppressWarnings(do.call(minpack.lm::nlsLM, nls_args))
+        } else {
+          do.call(minpack.lm::nlsLM, nls_args)
+        }
+      },
       error = function(e) {
         last_error <<- e
         NULL
       }
     )
 
+    if (!is.null(fit) && isTRUE(fit$convInfo$isConv)) {
+      if (!multistart) return(fit)
+      rss <- stats::deviance(fit)
+      if (is.finite(rss)) {
+        if (rss < best_rss) {
+          best_fit <- fit
+          best_rss <- rss
+        }
+      } else {
+        last_error <- simpleError("The converged fit has a non-finite residual sum of squares.")
+      }
+      next
+    }
+
     if (!is.null(fit)) {
-      return(fit)
+      last_error <- simpleError(fit$convInfo$stopMessage)
     }
   }
+
+  if (!is.null(best_fit)) return(best_fit)
 
   stop(
     sprintf(

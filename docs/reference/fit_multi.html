@@ -9,7 +9,7 @@ progress curves stored in a data frame."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,8 @@ progress curves stored in a data frame.</p>
 <span>  weights_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  weight_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"binomial"</span>, <span class="st">"mean"</span>, <span class="st">"cv"</span>, <span class="st">"power"</span><span class="op">)</span>,</span>
 <span>  weight_eps <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>  weight_power <span class="op">=</span> <span class="fl">1</span></span>
+<span>  weight_power <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  multistart <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -82,7 +83,9 @@ progress curves stored in a data frame.</p>
 
 <dt id="arg-strata-cols">strata_cols<a class="anchor" aria-label="anchor" href="#arg-strata-cols"></a></dt>
 <dd><p>Character vector specifying grouping columns. Use `NULL`
-to fit all rows as a single epidemic. Defaults to `NULL`.</p></dd>
+to fit all rows as a single epidemic. Defaults to `NULL`. Group labels
+retain their types, and missing values are distinct from literal text.
+Grouping column names must not conflict with model output column names.</p></dd>
 
 
 <dt id="arg-starting-par">starting_par<a class="anchor" aria-label="anchor" href="#arg-starting-par"></a></dt>
@@ -123,6 +126,12 @@ fitted-value weighting methods to keep weights finite near 0 and 1.</p></dd>
 <dt id="arg-weight-power">weight_power<a class="anchor" aria-label="anchor" href="#arg-weight-power"></a></dt>
 <dd><p>Non-negative power used when `weight_method = "power"`.</p></dd>
 
+
+<dt id="arg-multistart">multistart<a class="anchor" aria-label="anchor" href="#arg-multistart"></a></dt>
+<dd><p>Logical passed to [fit_nlin()] or [fit_nlin2()] to compare
+all available starting values. Defaults to `FALSE`. Used only when
+`nlin = TRUE`.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -137,394 +146,507 @@ fitted-value weighting methods to keep weights finite near 0 and 1.</p></dd>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">epi1</span>, <span class="va">epi2</span>, .id <span class="op">=</span> <span class="st">"curve"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">fit_multi</span><span class="op">(</span>time_col <span class="op">=</span> <span class="st">"time"</span>, intensity_col <span class="op">=</span> <span class="st">"random_y"</span>, data <span class="op">=</span> <span class="va">data</span>, strata_cols <span class="op">=</span> <span class="st">"curve"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   curve best_model         model         r        r_se   r_ci_lwr  r_ci_upr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     1          1      Gompertz 0.2954597 0.005145698 0.28424814 0.3066712</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     1          2 Monomolecular 0.2555731 0.009434191 0.23501777 0.2761284</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     1          3      Logistic 0.3684716 0.022879886 0.31862056 0.4183225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     1          4   Exponential 0.1128984 0.030578030 0.04627464 0.1795223</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     2          1      Gompertz 0.2008236 0.004042745 0.19201523 0.2096320</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     2          2 Monomolecular 0.1564261 0.008372027 0.13818504 0.1746672</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     2          3      Logistic 0.2795232 0.017683136 0.24099492 0.3180514</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     2          4   Exponential 0.1230970 0.024755054 0.06916042 0.1770337</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           v0      v0_se r_squared       RSE       CCC          y0    y0_ci_lwr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.4405713 0.09276540 0.9963734 0.1925344 0.9981834  0.01465304  0.005689949</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.5391255 0.17007730 0.9839115 0.3529951 0.9918905 -0.71450693 -1.483557804</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -3.0640435 0.41247302 0.9557780 0.8560870 0.9773891  0.04461503  0.018656188</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -2.5249180 0.55125328 0.5318337 1.1441251 0.6943752  0.08006488  0.024089103</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -1.5189406 0.07288163 0.9951605 0.1512657 0.9975744  0.01038509  0.004731929</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 -0.4632800 0.15092887 0.9667688 0.3132526 0.9831036 -0.58927829 -1.208085307</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 -3.3337389 0.31878726 0.9541760 0.6616423 0.9765507  0.03443171  0.017492827</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 -2.8704589 0.44627808 0.6732629 0.9262493 0.8047306  0.05667291  0.021433175</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     y0_ci_upr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.03173703</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.18359798</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.10290625</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.26611141</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.02030762</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 -0.14388944</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.06666021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.14985269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     curve best_model         model         r        r_se   r_ci_lwr  r_ci_upr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       1          1      Gompertz 0.2954766 0.005144872 0.28426694 0.3066864</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1     1          2 Monomolecular 0.2555898 0.009436277 0.23502994 0.2761497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.2     1          3      Logistic 0.3684889 0.022877433 0.31864328 0.4183346</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.3     1          4   Exponential 0.1128991 0.030577839 0.04627571 0.1795225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       2          1      Gompertz 0.2008280 0.004042604 0.19201991 0.2096361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.1     2          2 Monomolecular 0.1564301 0.008372784 0.13818738 0.1746728</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.2     2          3      Logistic 0.2795281 0.017681970 0.24100242 0.3180538</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.3     2          4   Exponential 0.1230980 0.024754749 0.06916205 0.1770340</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             v0      v0_se r_squared       RSE       CCC          y0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   -1.4407108 0.09275050 0.9963750 0.1925035 0.9981842  0.01464441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1 -0.5392580 0.17011490 0.9839065 0.3530732 0.9918880 -0.71473408</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.2 -3.0641924 0.41242879 0.9557911 0.8559952 0.9773959  0.04460869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.3 -2.5249344 0.55124983 0.5318397 1.1441180 0.6943803  0.08006357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   -1.5189947 0.07287908 0.9951611 0.1512604 0.9975747  0.01038253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.1 -0.4633236 0.15094252 0.9667646 0.3132809 0.9831015 -0.58934755</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.2 -3.3338091 0.31876624 0.9541833 0.6615987 0.9765546  0.03442938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.3 -2.8704855 0.44627259 0.6732718 0.9262379 0.8047369  0.05667141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y0_ci_lwr   y0_ci_upr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0.005686801  0.03171820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1 -1.484090382 -0.18365781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.2  0.018655226  0.10288361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.3  0.024088889  0.26610504</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    0.004730700  0.02030291</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.1 -1.208247199 -0.14390529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.2  0.017492409  0.06665299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.3  0.021432862  0.14984692</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     curve time          y         model    linearized   predicted      residual</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       1    0 0.01000000   Exponential -4.6051701860  0.08006488 -7.006488e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       1    0 0.01000000 Monomolecular  0.0100503359 -0.71450693  7.245069e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       1    0 0.01000000      Logistic -4.5951198501  0.04461503 -3.461503e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       1    0 0.01000000      Gompertz -1.5271796258  0.01465304 -4.653038e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       1    5 0.36633668   Exponential -1.0042024658  0.14079847  2.255382e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       1    5 0.36633668 Monomolecular  0.4562375135  0.52228454 -1.559479e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7       1    5 0.36633668      Logistic -0.5479649523  0.22763993  1.386968e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8       1    5 0.36633668      Gompertz -0.0041936601  0.38138754 -1.505086e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9       1   10 0.76788928   Exponential -0.2641097288  0.24760180  5.202875e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10      1   10 0.76788928 Monomolecular  1.4605407604  0.86689347 -9.900420e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11      1   10 0.76788928      Logistic  1.1964310316  0.65037138  1.175179e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12      1   10 0.76788928      Gompertz  1.3313906230  0.80250071 -3.461143e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13      1   15 0.96524451   Exponential -0.0353738300  0.43542129  5.298232e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14      1   15 0.96524451 Monomolecular  3.3594177769  0.96291234  2.332170e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15      1   15 0.96524451      Logistic  3.3240439469  0.92150909  4.373542e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16      1   15 0.96524451      Gompertz  3.3417829992  0.95101930  1.422521e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17      1   20 0.98938849   Exponential -0.0106682123  0.76571212  2.236764e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18      1   20 0.98938849 Monomolecular  4.5458161350  0.98966621 -2.777227e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19      1   20 0.98938849      Logistic  4.5351479227  0.98668405  2.704438e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20      1   20 0.98938849      Gompertz  4.5404867709  0.98860235  7.861437e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21      1   25 0.99703953   Exponential -0.0029648559  1.34654661 -3.495071e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22      1   25 0.99703953 Monomolecular  5.8224088965  0.99712068 -8.114782e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23      1   25 0.99703953      Logistic  5.8194440405  0.99786627 -8.267301e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24      1   25 0.99703953      Gompertz  5.8209268348  0.99738693 -3.473912e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25      1   30 0.99948686   Exponential -0.0005132751  2.36797578 -1.368489e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26      1   30 0.99948686 Monomolecular  7.5749551934  0.99919773  2.891248e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27      1   30 0.99948686      Logistic  7.5744419183  0.99966132 -1.744590e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28      1   30 0.99948686      Gompertz  7.5746985668  0.99940295  8.390228e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29      1    0 0.01146188   Exponential -4.4687282779  0.08006488 -6.860300e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30      1    0 0.01146188 Monomolecular  0.0115280766 -0.71450693  7.259688e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31      1    0 0.01146188      Logistic -4.4572002013  0.04461503 -3.315315e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32      1    0 0.01146188      Gompertz -1.4971038666  0.01465304 -3.191155e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33      1    5 0.38435986   Exponential -0.9561760334  0.14079847  2.435614e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34      1    5 0.38435986 Monomolecular  0.4850926723  0.52228454 -1.379247e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35      1    5 0.38435986      Logistic -0.4710833611  0.22763993  1.567199e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36      1    5 0.38435986      Gompertz  0.0448132476  0.38138754  2.972315e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37      1   10 0.78516524   Exponential -0.2418610805  0.24760180  5.375634e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38      1   10 0.78516524 Monomolecular  1.5378861265  0.86689347 -8.172823e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39      1   10 0.78516524      Logistic  1.2960250460  0.65037138  1.347939e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40      1   10 0.78516524      Gompertz  1.4193917651  0.80250071 -1.733546e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41      1   15 0.96445315   Exponential -0.0361940231  0.43542129  5.290319e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42      1   15 0.96445315 Monomolecular  3.3369037088  0.96291234  1.540807e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43      1   15 0.96445315      Logistic  3.3007096857  0.92150909  4.294406e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44      1   15 0.96445315      Gompertz  3.3188612803  0.95101930  1.343385e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45      1   20 0.98952391   Exponential -0.0105313496  0.76571212  2.238118e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46      1   20 0.98952391 Monomolecular  4.5586598435  0.98966621 -1.423031e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47      1   20 0.98952391      Logistic  4.5481284939  0.98668405  2.839858e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48      1   20 0.98952391      Gompertz  4.5533987899  0.98860235  9.215633e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49      1   25 0.99714065   Exponential -0.0028634491  1.34654661 -3.494060e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50      1   25 0.99714065 Monomolecular  5.8571597687  0.99712068  1.996389e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51      1   25 0.99714065      Logistic  5.8542963196  0.99786627 -7.256184e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52      1   25 0.99714065      Gompertz  5.8557283858  0.99738693 -2.462795e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53      1   30 0.99917978   Exponential -0.0008205569  2.36797578 -1.368796e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54      1   30 0.99917978 Monomolecular  7.1059375918  0.99919773 -1.795210e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55      1   30 0.99917978      Logistic  7.1051170349  0.99966132 -4.815359e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56      1   30 0.99917978      Gompertz  7.1055273414  0.99940295 -2.231746e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57      2    0 0.01222736   Exponential -4.4040789520  0.05667291 -4.444555e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58      2    0 0.01222736 Monomolecular  0.0123027324 -0.58927829  6.015056e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59      2    0 0.01222736      Logistic -4.3917762196  0.03443171 -2.220435e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60      2    0 0.01222736      Gompertz -1.4825311460  0.01038509  1.842273e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61      2    5 0.18241673   Exponential -1.7014614782  0.10487630  7.754043e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62      2    5 0.18241673 Monomolecular  0.2014025234  0.27301583 -9.059910e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63      2    5 0.18241673      Logistic -1.5000589548  0.12607439  5.634234e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64      2    5 0.18241673      Gompertz -0.5314875748  0.18761908 -5.202351e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65      2   10 0.53541286   Exponential -0.6247171298  0.19407929  3.413336e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66      2   10 0.53541286 Monomolecular  0.7666061375  0.66745536 -1.320425e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67      2   10 0.53541286      Logistic  0.1418890077  0.36853488  1.668780e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68      2   10 0.53541286      Gompertz  0.4704563240  0.54169178 -6.278920e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69      2   15 0.82586592   Exponential -0.1913228441  0.35915426  4.667117e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70      2   15 0.82586592 Monomolecular  1.7479296971  0.84788398 -2.201806e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71      2   15 0.82586592      Logistic  1.5566068530  0.70247435  1.233916e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72      2   15 0.82586592      Gompertz  1.6537929947  0.79883199  2.703393e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73      2   20 0.93132287   Exponential -0.0711492613  0.66463447  2.666884e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74      2   20 0.93132287 Monomolecular  2.6783390510  0.93041751  9.053603e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75      2   20 0.93132287      Logistic  2.6071897897  0.90522898  2.609389e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76      2   20 0.93132287      Gompertz  2.6429753372  0.92100680  1.031607e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77      2   25 0.97296399   Exponential -0.0274082105  1.22994217 -2.569782e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78      2   25 0.97296399 Monomolecular  3.6105854617  0.96817086  4.793131e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79      2   25 0.97296399      Logistic  3.5831772512  0.97477424 -1.810251e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80      2   25 0.97296399      Gompertz  3.5969126567  0.97030230  2.661684e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81      2   30 0.99071100   Exponential -0.0093324109  2.27607478 -1.285364e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82      2   30 0.99071100 Monomolecular  4.6789244719  0.98544038  5.270618e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83      2   30 0.99071100      Logistic  4.6695920610  0.99364385 -2.932848e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84      2   30 0.99071100      Gompertz  4.6742618954  0.98901567  1.695333e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85      2    0 0.01154863   Exponential -4.4611884746  0.05667291 -4.512428e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86      2    0 0.01154863 Monomolecular  0.0116158332 -0.58927829  6.008269e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87      2    0 0.01154863      Logistic -4.4495726413  0.03443171 -2.288308e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88      2    0 0.01154863      Gompertz -1.4954152046  0.01038509  1.163539e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89      2    5 0.18600157   Exponential -1.6820001380  0.10487630  8.112527e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90      2    5 0.18600157 Monomolecular  0.2057968478  0.27301583 -8.701426e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91      2    5 0.18600157      Logistic -1.4762032903  0.12607439  5.992719e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92      2    5 0.18600157      Gompertz -0.5199836436  0.18761908 -1.617507e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93      2   10 0.43727245   Exponential -0.8271988280  0.19407929  2.431932e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94      2   10 0.43727245 Monomolecular  0.5749596893  0.66745536 -2.301829e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95      2   10 0.43727245      Logistic -0.2522391387  0.36853488  6.873756e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96      2   10 0.43727245      Gompertz  0.1897101921  0.54169178 -1.044193e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97      2   15 0.81530917   Exponential -0.2041878886  0.35915426  4.561549e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98      2   15 0.81530917 Monomolecular  1.6890720384  0.84788398 -3.257481e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99      2   15 0.81530917      Logistic  1.4848841498  0.70247435  1.128348e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100     2   15 0.81530917      Gompertz  1.5887146865  0.79883199  1.647718e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101     2   20 0.91827755   Exponential -0.0852555908  0.66463447  2.536431e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102     2   20 0.91827755 Monomolecular  2.5044265430  0.93041751 -1.213996e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103     2   20 0.91827755      Logistic  2.4191709522  0.90522898  1.304857e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104     2   20 0.91827755      Gompertz  2.4621015841  0.92100680 -2.729251e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105     2   25 0.96852266   Exponential -0.0319833987  1.22994217 -2.614195e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106     2   25 0.96852266 Monomolecular  3.4584873785  0.96817086  3.518049e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107     2   25 0.96852266      Logistic  3.4265039798  0.97477424 -6.251576e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108     2   25 0.96852266      Gompertz  3.4425383012  0.97030230 -1.779642e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109     2   30 0.98534709   Exponential -0.0147613273  2.27607478 -1.290728e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110     2   30 0.98534709 Monomolecular  4.2231161249  0.98544038 -9.329551e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111     2   30 0.98534709      Logistic  4.2083547976  0.99364385 -8.296762e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112     2   30 0.98534709      Gompertz  4.2157445403  0.98901567 -3.668581e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      curve time          y         model    linearized   predicted</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1    0 0.01000000   Exponential -4.6051701860  0.08006357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1      1    0 0.01000000 Monomolecular  0.0100503359 -0.71473408</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.2      1    0 0.01000000      Logistic -4.5951198501  0.04460869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.3      1    0 0.01000000      Gompertz -1.5271796258  0.01464441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.4      1    5 0.36632219   Exponential -1.0042420282  0.14079662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.5      1    5 0.36632219 Monomolecular  0.4562146422  0.52226118</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.6      1    5 0.36632219      Logistic -0.5480273860  0.22762902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.7      1    5 0.36632219      Gompertz -0.0042330561  0.38136750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.8      1   10 0.76788081   Exponential -0.2641207482  0.24759935</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.9      1   10 0.76788081 Monomolecular  1.4605043059  0.86689809</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.10     1   10 0.76788081      Logistic  1.1963835577  0.65037702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.11     1   10 0.76788081      Gompertz  1.3313489010  0.80250609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.12     1   15 0.96524624   Exponential -0.0353720436  0.43541841</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.13     1   15 0.96524624 Monomolecular  3.3594673895  0.96291673</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.14     1   15 0.96524624      Logistic  3.3240953459  0.92151716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.15     1   15 0.96524624      Gompertz  3.3418334997  0.95102481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.16     1   20 0.98938933   Exponential -0.0106673613  0.76570957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.17     1   20 0.98938933 Monomolecular  4.5458954816  0.98966830</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.18     1   20 0.98938933      Logistic  4.5352281203  0.98668666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.19     1   20 0.98938933      Gompertz  4.5405665423  0.98860462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.20     1   25 0.99703983   Exponential -0.0029645574  1.34654650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.21     1   25 0.99703983 Monomolecular  5.8225094492  0.99712150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.22     1   25 0.99703983      Logistic  5.8195448918  0.99786687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.23     1   25 0.99703983      Gompertz  5.8210275367  0.99738767</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.24     1   30 0.99948719   Exponential -0.0005129370  2.36798333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.25     1   30 0.99948719 Monomolecular  7.5756140202  0.99919803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.26     1   30 0.99948719      Logistic  7.5751010832  0.99966144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.27     1   30 0.99948719      Gompertz  7.5753575627  0.99940318</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.28     1    0 0.01146188   Exponential -4.4687282779  0.08006357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.29     1    0 0.01146188 Monomolecular  0.0115280766 -0.71473408</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.30     1    0 0.01146188      Logistic -4.4572002013  0.04460869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.31     1    0 0.01146188      Gompertz -1.4971038666  0.01464441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.32     1    5 0.38434505   Exponential -0.9562145724  0.14079662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.33     1    5 0.38434505 Monomolecular  0.4850686121  0.52226118</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.34     1    5 0.38434505      Logistic -0.4711459604  0.22762902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.35     1    5 0.38434505      Gompertz  0.0447729430  0.38136750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.36     1   10 0.78515727   Exponential -0.2418712435  0.24759935</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.37     1   10 0.78515727 Monomolecular  1.5378489844  0.86689809</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.38     1   10 0.78515727      Logistic  1.2959777409  0.65037702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.39     1   10 0.78515727      Gompertz  1.4193497461  0.80250609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.40     1   15 0.96445491   Exponential -0.0361921976  0.43541841</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.41     1   15 0.96445491 Monomolecular  3.3369532401  0.96291673</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.42     1   15 0.96445491      Logistic  3.3007610425  0.92151716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.43     1   15 0.96445491      Gompertz  3.3189117189  0.95102481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.44     1   20 0.98952474   Exponential -0.0105305095  0.76570957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.45     1   20 0.98952474 Monomolecular  4.5587392028  0.98966830</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.46     1   20 0.98952474      Logistic  4.5482086933  0.98668666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.47     1   20 0.98952474      Gompertz  4.5534785685  0.98860462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.48     1   25 0.99714093   Exponential -0.0028631608  1.34654650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.49     1   25 0.99714093 Monomolecular  5.8572603292  0.99712150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.50     1   25 0.99714093      Logistic  5.8543971684  0.99786687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51     1   25 0.99714093      Gompertz  5.8558290904  0.99738767</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.52     1   30 0.99918032   Exponential -0.0008200163  2.36798333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.53     1   30 0.99918032 Monomolecular  7.1065962631  0.99919803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.54     1   30 0.99918032      Logistic  7.1057762468  0.99966144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.55     1   30 0.99918032      Gompertz  7.1061862830  0.99940318</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2    0 0.01222736   Exponential -4.4040789520  0.05667141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.1      2    0 0.01222736 Monomolecular  0.0123027324 -0.58934755</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.2      2    0 0.01222736      Logistic -4.3917762196  0.03442938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.3      2    0 0.01222736      Gompertz -1.4825311460  0.01038253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.4      2    5 0.18240791   Exponential -1.7015098299  0.10487403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.5      2    5 0.18240791 Monomolecular  0.2013917356  0.27299867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.6      2    5 0.18240791      Logistic -1.5001180943  0.12606940</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.7      2    5 0.18240791      Gompertz -0.5315159921  0.18760898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.8      2   10 0.53539797   Exponential -0.6247449386  0.19407603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.9      2   10 0.53539797 Monomolecular  0.7665740903  0.66745415</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.10     2   10 0.53539797      Logistic  0.1418291517  0.36853012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.11     2   10 0.53539797      Gompertz  0.4704118108  0.54168836</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.12     2   15 0.82585989   Exponential -0.1913301469  0.35914997</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.13     2   15 0.82585989 Monomolecular  1.7478950627  0.84788646</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.14     2   15 0.82585989      Logistic  1.5565649158  0.70247527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.15     2   15 0.82585989      Gompertz  1.6537548253  0.79883407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.16     2   20 0.93132328   Exponential -0.0711488211  0.66462976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.17     2   20 0.93132328 Monomolecular  2.6783450207  0.93042004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.18     2   20 0.93132328      Logistic  2.6071961996  0.90523149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.19     2   20 0.93132328      Gompertz  2.6429815244  0.92100934</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.20     2   25 0.97296528   Exponential -0.0274068777  1.22993945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.21     2   25 0.97296528 Monomolecular  3.6106334267  0.96817265</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.22     2   25 0.97296528      Logistic  3.5832265490  0.97477557</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.23     2   25 0.97296528      Gompertz  3.5969612850  0.97030392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.24     2   30 0.99071226   Exponential -0.0093311385  2.27608081</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.25     2   30 0.99071226 Monomolecular  4.6790601878  0.98544149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.26     2   30 0.99071226      Logistic  4.6697290493  0.99364435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.27     2   30 0.99071226      Gompertz  4.6743982465  0.98901651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.28     2    0 0.01154863   Exponential -4.4611884746  0.05667141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.29     2    0 0.01154863 Monomolecular  0.0116158332 -0.58934755</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.30     2    0 0.01154863      Logistic -4.4495726413  0.03442938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.31     2    0 0.01154863      Gompertz -1.4954152046  0.01038253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.32     2    5 0.18599262   Exponential -1.6820482788  0.10487403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.33     2    5 0.18599262 Monomolecular  0.2057858478  0.27299867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.34     2    5 0.18599262      Logistic -1.4762624310  0.12606940</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.35     2    5 0.18599262      Gompertz -0.5200122643  0.18760898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.36     2   10 0.43725713   Exponential -0.8272338512  0.19407603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.37     2   10 0.43725713 Monomolecular  0.5749324751  0.66745415</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38     2   10 0.43725713      Logistic -0.2523013761  0.36853012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.39     2   10 0.43725713      Gompertz  0.1896678535  0.54168836</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.40     2   15 0.81530288   Exponential -0.2041956044  0.35914997</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.41     2   15 0.81530288 Monomolecular  1.6890379781  0.84788646</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.42     2   15 0.81530288      Logistic  1.4848423737  0.70247527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.43     2   15 0.81530288      Gompertz  1.5886768995  0.79883407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.44     2   20 0.91827803   Exponential -0.0852550682  0.66462976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.45     2   20 0.91827803 Monomolecular  2.5044324154  0.93042004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.46     2   20 0.91827803      Logistic  2.4191773473  0.90523149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.47     2   20 0.91827803      Gompertz  2.4621077141  0.92100934</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.48     2   25 0.96852416   Exponential -0.0319818477  1.22993945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.49     2   25 0.96852416 Monomolecular  3.4585351034  0.96817265</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.50     2   25 0.96852416      Logistic  3.4265532558  0.97477557</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.51     2   25 0.96852416      Gompertz  3.4425867975  0.97030392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.52     2   30 0.98534907   Exponential -0.0147593195  2.27608081</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.53     2   30 0.98534907 Monomolecular  4.2232511455  0.98544149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.54     2   30 0.98534907      Logistic  4.2084918259  0.99364435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.55     2   30 0.98534907      Gompertz  4.2158805623  0.98901651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           residual</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    -7.006357e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1   7.247341e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.2  -3.460869e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.3  -4.644407e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.4   2.255256e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.5  -1.559390e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.6   1.386932e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.7  -1.504531e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.8   5.202815e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.9  -9.901728e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.10  1.175038e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.11 -3.462527e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.12  5.298278e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.13  2.329507e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.14  4.372907e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.15  1.422142e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.16  2.236798e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.17 -2.789666e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.18  2.702672e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.19  7.847143e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.20 -3.495067e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.21 -8.167195e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.22 -8.270400e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.23 -3.478383e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.24 -1.368496e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.25  2.891667e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.26 -1.742470e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.27  8.401919e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.28 -6.860168e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.29  7.261960e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.30 -3.314680e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.31 -3.182524e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.32  2.435484e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.33 -1.379161e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.34  1.567160e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.35  2.977545e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.36  5.375579e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.37 -8.174082e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.38  1.347802e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.39 -1.734882e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.40  5.290365e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.41  1.538181e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.42  4.293774e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.43  1.343010e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.44  2.238152e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.45 -1.435576e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.46  2.838081e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.47  9.201234e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.48 -3.494056e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.49  1.942961e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.50 -7.259384e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 -2.467368e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.52 -1.368803e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.53 -1.770804e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.54 -4.811218e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.55 -2.228556e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    -4.444404e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.1   6.015749e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.2  -2.220201e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.3   1.844835e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.4   7.753388e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.5  -9.059075e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.6   5.633851e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.7  -5.201072e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.8   3.413219e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.9  -1.320562e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.10  1.668678e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.11 -6.290389e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.12  4.667099e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.13 -2.202657e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.14  1.233846e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.15  2.702582e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.16  2.666935e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.17  9.032451e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.18  2.609179e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.19  1.031394e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.20 -2.569742e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.21  4.792637e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.22 -1.810283e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.23  2.661363e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.24 -1.285369e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.25  5.270769e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.26 -2.932086e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.27  1.695751e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.28 -4.512278e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.29  6.008962e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.30 -2.288075e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.31  1.166102e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.32  8.111859e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.33 -8.700604e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.34  5.992322e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.35 -1.616362e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.36  2.431811e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.37 -2.301970e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38  6.872701e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.39 -1.044312e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.40  4.561529e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.41 -3.258358e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.42  1.128276e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.43  1.646881e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.44  2.536483e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.45 -1.214201e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.46  1.304654e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.47 -2.731306e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.48 -2.614153e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.49  3.515164e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.50 -6.251403e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.51 -1.779757e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.52 -1.290732e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.53 -9.242704e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.54 -8.295282e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.55 -3.667446e-03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">fit_multi</span><span class="op">(</span>time_col <span class="op">=</span> <span class="st">"time"</span>, intensity_col <span class="op">=</span> <span class="st">"random_y"</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     strata best_model         model         r       r_se   r_ci_lwr  r_ci_upr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 all_data          1      Logistic 0.3239974 0.02272449 0.27728651 0.3707082</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 all_data          2      Gompertz 0.2481416 0.01765618 0.21184883 0.2844344</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 all_data          3 Monomolecular 0.2059996 0.01796571 0.16907056 0.2429287</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 all_data          4   Exponential 0.1179977 0.01901990 0.07890177 0.1570937</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           v0     v0_se r_squared       RSE       CCC          y0     y0_ci_lwr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -3.1988912 0.4096715 0.8866016 1.2024667 0.9398928  0.03920747  0.0172764590</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -1.4797559 0.3183014 0.8836780 0.9342775 0.9382474  0.01237752  0.0002141402</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.5012028 0.3238815 0.8348947 0.9506562 0.9100192 -0.65070550 -2.2121828056</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -2.6976884 0.3428862 0.5968272 1.0064387 0.7475164  0.06736104  0.0332899045</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    y0_ci_upr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.08652683</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.10198068</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.15172056</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.13630288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       strata best_model         model         r       r_se   r_ci_lwr  r_ci_upr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   all_data          1      Logistic 0.3240085 0.02272490 0.27729682 0.3707202</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1 all_data          2      Gompertz 0.2481523 0.01765762 0.21185656 0.2844481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.2 all_data          3 Monomolecular 0.2060100 0.01796749 0.16907726 0.2429427</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.3 all_data          4   Exponential 0.1179986 0.01901975 0.07890291 0.1570942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             v0     v0_se r_squared       RSE       CCC          y0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   -3.1990007 0.4096790 0.8866048 1.2024887 0.9398946  0.03920334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1 -1.4798527 0.3183273 0.8836702 0.9343534 0.9382430  0.01237226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.2 -0.5012908 0.3239136 0.8348812 0.9507503 0.9100112 -0.65085082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.3 -2.6977099 0.3428834 0.5968345 1.0064305 0.7475220  0.06735960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         y0_ci_lwr y0_ci_upr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0.0172743385 0.0865194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1  0.0002138691 0.1019705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.2 -2.2126774421 0.1517018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.3  0.0332893816 0.1362992</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       strata time          y         model    linearized   predicted</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   all_data    0 0.01000000   Exponential -4.6051701860  0.06736104</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   all_data    0 0.01000000 Monomolecular  0.0100503359 -0.65070550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   all_data    0 0.01000000      Logistic -4.5951198501  0.03920747</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   all_data    0 0.01000000      Gompertz -1.5271796258  0.01237752</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   all_data    5 0.36633668   Exponential -1.0042024658  0.12151717</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   all_data    5 0.36633668 Monomolecular  0.4562375135  0.41068550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   all_data    5 0.36633668      Logistic -0.5479649523  0.17095070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   all_data    5 0.36633668      Gompertz -0.0041936601  0.28082061</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   all_data   10 0.76788928   Exponential -0.2641097288  0.21921309</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  all_data   10 0.76788928 Monomolecular  1.4605407604  0.78961021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  all_data   10 0.76788928      Logistic  1.1964310316  0.51026914</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  all_data   10 0.76788928      Gompertz  1.3313906230  0.69262322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  all_data   15 0.96524451   Exponential -0.0353738300  0.39545343</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  all_data   15 0.96524451 Monomolecular  3.3594177769  0.92488924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  all_data   15 0.96524451      Logistic  3.3240439469  0.84038147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  all_data   15 0.96524451      Gompertz  3.3417829992  0.89923880</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  all_data   20 0.98938849   Exponential -0.0106682123  0.71338536</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  all_data   20 0.98938849 Monomolecular  4.5458161350  0.97318488</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  all_data   20 0.98938849      Logistic  4.5351479227  0.96377317</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  all_data   20 0.98938849      Gompertz  4.5404867709  0.96975408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21  all_data   25 0.99703953   Exponential -0.0029648559  1.28692442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22  all_data   25 0.99703953 Monomolecular  5.8224088965  0.99042680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23  all_data   25 0.99703953      Logistic  5.8194440405  0.99261610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  all_data   25 0.99703953      Gompertz  5.8209268348  0.99115783</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25  all_data   30 0.99948686   Exponential -0.0005132751  2.32157058</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  all_data   30 0.99948686 Monomolecular  7.5749551934  0.99658229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27  all_data   30 0.99948686      Logistic  7.5744419183  0.99853001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28  all_data   30 0.99948686      Gompertz  7.5746985668  0.99743495</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29  all_data    0 0.01146188   Exponential -4.4687282779  0.06736104</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30  all_data    0 0.01146188 Monomolecular  0.0115280766 -0.65070550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31  all_data    0 0.01146188      Logistic -4.4572002013  0.03920747</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32  all_data    0 0.01146188      Gompertz -1.4971038666  0.01237752</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33  all_data    5 0.38435986   Exponential -0.9561760334  0.12151717</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34  all_data    5 0.38435986 Monomolecular  0.4850926723  0.41068550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35  all_data    5 0.38435986      Logistic -0.4710833611  0.17095070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36  all_data    5 0.38435986      Gompertz  0.0448132476  0.28082061</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37  all_data   10 0.78516524   Exponential -0.2418610805  0.21921309</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38  all_data   10 0.78516524 Monomolecular  1.5378861265  0.78961021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39  all_data   10 0.78516524      Logistic  1.2960250460  0.51026914</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40  all_data   10 0.78516524      Gompertz  1.4193917651  0.69262322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41  all_data   15 0.96445315   Exponential -0.0361940231  0.39545343</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42  all_data   15 0.96445315 Monomolecular  3.3369037088  0.92488924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43  all_data   15 0.96445315      Logistic  3.3007096857  0.84038147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44  all_data   15 0.96445315      Gompertz  3.3188612803  0.89923880</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45  all_data   20 0.98952391   Exponential -0.0105313496  0.71338536</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46  all_data   20 0.98952391 Monomolecular  4.5586598435  0.97318488</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47  all_data   20 0.98952391      Logistic  4.5481284939  0.96377317</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48  all_data   20 0.98952391      Gompertz  4.5533987899  0.96975408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49  all_data   25 0.99714065   Exponential -0.0028634491  1.28692442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50  all_data   25 0.99714065 Monomolecular  5.8571597687  0.99042680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51  all_data   25 0.99714065      Logistic  5.8542963196  0.99261610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52  all_data   25 0.99714065      Gompertz  5.8557283858  0.99115783</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53  all_data   30 0.99917978   Exponential -0.0008205569  2.32157058</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54  all_data   30 0.99917978 Monomolecular  7.1059375918  0.99658229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55  all_data   30 0.99917978      Logistic  7.1051170349  0.99853001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56  all_data   30 0.99917978      Gompertz  7.1055273414  0.99743495</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57  all_data    0 0.01222736   Exponential -4.4040789520  0.06736104</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58  all_data    0 0.01222736 Monomolecular  0.0123027324 -0.65070550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59  all_data    0 0.01222736      Logistic -4.3917762196  0.03920747</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60  all_data    0 0.01222736      Gompertz -1.4825311460  0.01237752</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61  all_data    5 0.18241673   Exponential -1.7014614782  0.12151717</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62  all_data    5 0.18241673 Monomolecular  0.2014025234  0.41068550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63  all_data    5 0.18241673      Logistic -1.5000589548  0.17095070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64  all_data    5 0.18241673      Gompertz -0.5314875748  0.28082061</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65  all_data   10 0.53541286   Exponential -0.6247171298  0.21921309</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66  all_data   10 0.53541286 Monomolecular  0.7666061375  0.78961021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67  all_data   10 0.53541286      Logistic  0.1418890077  0.51026914</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68  all_data   10 0.53541286      Gompertz  0.4704563240  0.69262322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69  all_data   15 0.82586592   Exponential -0.1913228441  0.39545343</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70  all_data   15 0.82586592 Monomolecular  1.7479296971  0.92488924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71  all_data   15 0.82586592      Logistic  1.5566068530  0.84038147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72  all_data   15 0.82586592      Gompertz  1.6537929947  0.89923880</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73  all_data   20 0.93132287   Exponential -0.0711492613  0.71338536</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74  all_data   20 0.93132287 Monomolecular  2.6783390510  0.97318488</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75  all_data   20 0.93132287      Logistic  2.6071897897  0.96377317</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76  all_data   20 0.93132287      Gompertz  2.6429753372  0.96975408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77  all_data   25 0.97296399   Exponential -0.0274082105  1.28692442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78  all_data   25 0.97296399 Monomolecular  3.6105854617  0.99042680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79  all_data   25 0.97296399      Logistic  3.5831772512  0.99261610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80  all_data   25 0.97296399      Gompertz  3.5969126567  0.99115783</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81  all_data   30 0.99071100   Exponential -0.0093324109  2.32157058</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82  all_data   30 0.99071100 Monomolecular  4.6789244719  0.99658229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83  all_data   30 0.99071100      Logistic  4.6695920610  0.99853001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84  all_data   30 0.99071100      Gompertz  4.6742618954  0.99743495</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85  all_data    0 0.01154863   Exponential -4.4611884746  0.06736104</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86  all_data    0 0.01154863 Monomolecular  0.0116158332 -0.65070550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87  all_data    0 0.01154863      Logistic -4.4495726413  0.03920747</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88  all_data    0 0.01154863      Gompertz -1.4954152046  0.01237752</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89  all_data    5 0.18600157   Exponential -1.6820001380  0.12151717</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90  all_data    5 0.18600157 Monomolecular  0.2057968478  0.41068550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91  all_data    5 0.18600157      Logistic -1.4762032903  0.17095070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92  all_data    5 0.18600157      Gompertz -0.5199836436  0.28082061</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93  all_data   10 0.43727245   Exponential -0.8271988280  0.21921309</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94  all_data   10 0.43727245 Monomolecular  0.5749596893  0.78961021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95  all_data   10 0.43727245      Logistic -0.2522391387  0.51026914</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96  all_data   10 0.43727245      Gompertz  0.1897101921  0.69262322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97  all_data   15 0.81530917   Exponential -0.2041878886  0.39545343</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98  all_data   15 0.81530917 Monomolecular  1.6890720384  0.92488924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99  all_data   15 0.81530917      Logistic  1.4848841498  0.84038147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100 all_data   15 0.81530917      Gompertz  1.5887146865  0.89923880</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101 all_data   20 0.91827755   Exponential -0.0852555908  0.71338536</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102 all_data   20 0.91827755 Monomolecular  2.5044265430  0.97318488</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103 all_data   20 0.91827755      Logistic  2.4191709522  0.96377317</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104 all_data   20 0.91827755      Gompertz  2.4621015841  0.96975408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105 all_data   25 0.96852266   Exponential -0.0319833987  1.28692442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106 all_data   25 0.96852266 Monomolecular  3.4584873785  0.99042680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107 all_data   25 0.96852266      Logistic  3.4265039798  0.99261610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108 all_data   25 0.96852266      Gompertz  3.4425383012  0.99115783</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109 all_data   30 0.98534709   Exponential -0.0147613273  2.32157058</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110 all_data   30 0.98534709 Monomolecular  4.2231161249  0.99658229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111 all_data   30 0.98534709      Logistic  4.2083547976  0.99853001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112 all_data   30 0.98534709      Gompertz  4.2157445403  0.99743495</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          residual</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   -0.0573610415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    0.6607054954</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   -0.0292074696</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   -0.0023775159</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    0.2448195155</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   -0.0443488167</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7    0.1953859876</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    0.0855160714</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    0.5486761812</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  -0.0217209368</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   0.2576201327</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   0.0752660527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13   0.5697910858</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14   0.0403552763</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   0.1248630425</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16   0.0660057073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17   0.2760031326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18   0.0162036093</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19   0.0256153229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20   0.0196344153</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21  -0.2898848836</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22   0.0066127373</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23   0.0044234300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24   0.0058817098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25  -1.3220837208</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26   0.0029045631</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27   0.0009568453</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28   0.0020519073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29  -0.0558991585</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30   0.6621673783</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31  -0.0277455867</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32  -0.0009156330</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33   0.2628426897</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34  -0.0263256424</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35   0.2134091619</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36   0.1035392456</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37   0.5659521504</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38  -0.0044449676</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39   0.2748961019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40   0.0925420219</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41   0.5689997234</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42   0.0395639139</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43   0.1240716801</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44   0.0652143449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45   0.2761385522</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46   0.0163390289</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47   0.0257507425</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48   0.0197698350</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49  -0.2897837719</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50   0.0067138490</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51   0.0045245417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52   0.0059828215</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53  -1.3223907977</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54   0.0025974863</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55   0.0006497684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56   0.0017448305</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57  -0.0551336782</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58   0.6629328586</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59  -0.0269801064</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60  -0.0001501527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61   0.0608995622</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62  -0.2282687700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63   0.0114660343</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64  -0.0984038819</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65   0.3161997651</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66  -0.2541973529</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67   0.0251437166</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68  -0.1572103634</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69   0.4304124935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70  -0.0990233160</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71  -0.0145155498</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72  -0.0733728850</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73   0.2179375126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74  -0.0418620106</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75  -0.0324502970</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76  -0.0384312046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77  -0.3139604322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78  -0.0174628112</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79  -0.0196521186</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80  -0.0181938388</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81  -1.3308595765</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82  -0.0058712925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83  -0.0078190104</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84  -0.0067239483</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85  -0.0558124116</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86   0.6622541253</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87  -0.0276588397</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88  -0.0008288860</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89   0.0644844060</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90  -0.2246839262</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91   0.0150508781</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92  -0.0948190381</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93   0.2180593534</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94  -0.3523377646</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95  -0.0729966951</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96  -0.2553507751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97   0.4198557438</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98  -0.1095800657</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99  -0.0250722995</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100 -0.0839296347</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101  0.2048921925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102 -0.0549073308</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103 -0.0454956172</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104 -0.0514765248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105 -0.3184017579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106 -0.0219041369</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107 -0.0240934442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108 -0.0226351644</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109 -1.3362234904</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110 -0.0112352064</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111 -0.0131829243</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112 -0.0120878622</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         strata time          y         model    linearized   predicted</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     all_data    0 0.01000000   Exponential -4.6051701860  0.06735960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1   all_data    0 0.01000000 Monomolecular  0.0100503359 -0.65085082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.2   all_data    0 0.01000000      Logistic -4.5951198501  0.03920334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.3   all_data    0 0.01000000      Gompertz -1.5271796258  0.01237226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.4   all_data    5 0.36632219   Exponential -1.0042420282  0.12151505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.5   all_data    5 0.36632219 Monomolecular  0.4562146422  0.41066414</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.6   all_data    5 0.36632219      Logistic -0.5480273860  0.17094309</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.7   all_data    5 0.36632219      Gompertz -0.0042330561  0.28080515</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.8   all_data   10 0.76788081   Exponential -0.2641207482  0.21921017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.9   all_data   10 0.76788081 Monomolecular  1.4605043059  0.78961348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.10  all_data   10 0.76788081      Logistic  1.1963835577  0.51026969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.11  all_data   10 0.76788081      Gompertz  1.3313489010  0.69262579</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.12  all_data   15 0.96524624   Exponential -0.0353720436  0.39544976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.13  all_data   15 0.96524624 Monomolecular  3.3594673895  0.92489429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.14  all_data   15 0.96524624      Logistic  3.3240953459  0.84038925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.15  all_data   15 0.96524624      Gompertz  3.3418334997  0.89924487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.16  all_data   20 0.98938933   Exponential -0.0106673613  0.71338164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.17  all_data   20 0.98938933 Monomolecular  4.5458954816  0.97318807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.18  all_data   20 0.98938933      Logistic  4.5352281203  0.96377714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.19  all_data   20 0.98938933      Gompertz  4.5405665423  0.96975756</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.20  all_data   25 0.99703983   Exponential -0.0029645574  1.28692294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.21  all_data   25 0.99703983 Monomolecular  5.8225094492  0.99042843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.22  all_data   25 0.99703983      Logistic  5.8195448918  0.99261735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.23  all_data   25 0.99703983      Gompertz  5.8210275367  0.99115932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.24  all_data   30 0.99948719   Exponential -0.0005129370  2.32157735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.25  all_data   30 0.99948719 Monomolecular  7.5756140202  0.99658305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.26  all_data   30 0.99948719      Logistic  7.5751010832  0.99853034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.27  all_data   30 0.99948719      Gompertz  7.5753575627  0.99743552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.28  all_data    0 0.01146188   Exponential -4.4687282779  0.06735960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.29  all_data    0 0.01146188 Monomolecular  0.0115280766 -0.65085082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.30  all_data    0 0.01146188      Logistic -4.4572002013  0.03920334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.31  all_data    0 0.01146188      Gompertz -1.4971038666  0.01237226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.32  all_data    5 0.38434505   Exponential -0.9562145724  0.12151505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.33  all_data    5 0.38434505 Monomolecular  0.4850686121  0.41066414</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.34  all_data    5 0.38434505      Logistic -0.4711459604  0.17094309</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.35  all_data    5 0.38434505      Gompertz  0.0447729430  0.28080515</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.36  all_data   10 0.78515727   Exponential -0.2418712435  0.21921017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.37  all_data   10 0.78515727 Monomolecular  1.5378489844  0.78961348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.38  all_data   10 0.78515727      Logistic  1.2959777409  0.51026969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.39  all_data   10 0.78515727      Gompertz  1.4193497461  0.69262579</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.40  all_data   15 0.96445491   Exponential -0.0361921976  0.39544976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.41  all_data   15 0.96445491 Monomolecular  3.3369532401  0.92489429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.42  all_data   15 0.96445491      Logistic  3.3007610425  0.84038925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.43  all_data   15 0.96445491      Gompertz  3.3189117189  0.89924487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.44  all_data   20 0.98952474   Exponential -0.0105305095  0.71338164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.45  all_data   20 0.98952474 Monomolecular  4.5587392028  0.97318807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.46  all_data   20 0.98952474      Logistic  4.5482086933  0.96377714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.47  all_data   20 0.98952474      Gompertz  4.5534785685  0.96975756</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.48  all_data   25 0.99714093   Exponential -0.0028631608  1.28692294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.49  all_data   25 0.99714093 Monomolecular  5.8572603292  0.99042843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.50  all_data   25 0.99714093      Logistic  5.8543971684  0.99261735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51  all_data   25 0.99714093      Gompertz  5.8558290904  0.99115932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.52  all_data   30 0.99918032   Exponential -0.0008200163  2.32157735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.53  all_data   30 0.99918032 Monomolecular  7.1065962631  0.99658305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.54  all_data   30 0.99918032      Logistic  7.1057762468  0.99853034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.55  all_data   30 0.99918032      Gompertz  7.1061862830  0.99743552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.56  all_data    0 0.01222736   Exponential -4.4040789520  0.06735960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.57  all_data    0 0.01222736 Monomolecular  0.0123027324 -0.65085082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.58  all_data    0 0.01222736      Logistic -4.3917762196  0.03920334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.59  all_data    0 0.01222736      Gompertz -1.4825311460  0.01237226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.60  all_data    5 0.18240791   Exponential -1.7015098299  0.12151505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.61  all_data    5 0.18240791 Monomolecular  0.2013917356  0.41066414</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.62  all_data    5 0.18240791      Logistic -1.5001180943  0.17094309</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.63  all_data    5 0.18240791      Gompertz -0.5315159921  0.28080515</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.64  all_data   10 0.53539797   Exponential -0.6247449386  0.21921017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.65  all_data   10 0.53539797 Monomolecular  0.7665740903  0.78961348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.66  all_data   10 0.53539797      Logistic  0.1418291517  0.51026969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.67  all_data   10 0.53539797      Gompertz  0.4704118108  0.69262579</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.68  all_data   15 0.82585989   Exponential -0.1913301469  0.39544976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.69  all_data   15 0.82585989 Monomolecular  1.7478950627  0.92489429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.70  all_data   15 0.82585989      Logistic  1.5565649158  0.84038925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.71  all_data   15 0.82585989      Gompertz  1.6537548253  0.89924487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.72  all_data   20 0.93132328   Exponential -0.0711488211  0.71338164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.73  all_data   20 0.93132328 Monomolecular  2.6783450207  0.97318807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.74  all_data   20 0.93132328      Logistic  2.6071961996  0.96377714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.75  all_data   20 0.93132328      Gompertz  2.6429815244  0.96975756</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.76  all_data   25 0.97296528   Exponential -0.0274068777  1.28692294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.77  all_data   25 0.97296528 Monomolecular  3.6106334267  0.99042843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.78  all_data   25 0.97296528      Logistic  3.5832265490  0.99261735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.79  all_data   25 0.97296528      Gompertz  3.5969612850  0.99115932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.80  all_data   30 0.99071226   Exponential -0.0093311385  2.32157735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.81  all_data   30 0.99071226 Monomolecular  4.6790601878  0.99658305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.82  all_data   30 0.99071226      Logistic  4.6697290493  0.99853034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.83  all_data   30 0.99071226      Gompertz  4.6743982465  0.99743552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.84  all_data    0 0.01154863   Exponential -4.4611884746  0.06735960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.85  all_data    0 0.01154863 Monomolecular  0.0116158332 -0.65085082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.86  all_data    0 0.01154863      Logistic -4.4495726413  0.03920334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.87  all_data    0 0.01154863      Gompertz -1.4954152046  0.01237226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.88  all_data    5 0.18599262   Exponential -1.6820482788  0.12151505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.89  all_data    5 0.18599262 Monomolecular  0.2057858478  0.41066414</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.90  all_data    5 0.18599262      Logistic -1.4762624310  0.17094309</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.91  all_data    5 0.18599262      Gompertz -0.5200122643  0.28080515</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.92  all_data   10 0.43725713   Exponential -0.8272338512  0.21921017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.93  all_data   10 0.43725713 Monomolecular  0.5749324751  0.78961348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.94  all_data   10 0.43725713      Logistic -0.2523013761  0.51026969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95  all_data   10 0.43725713      Gompertz  0.1896678535  0.69262579</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.96  all_data   15 0.81530288   Exponential -0.2041956044  0.39544976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.97  all_data   15 0.81530288 Monomolecular  1.6890379781  0.92489429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.98  all_data   15 0.81530288      Logistic  1.4848423737  0.84038925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.99  all_data   15 0.81530288      Gompertz  1.5886768995  0.89924487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.100 all_data   20 0.91827803   Exponential -0.0852550682  0.71338164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.101 all_data   20 0.91827803 Monomolecular  2.5044324154  0.97318807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.102 all_data   20 0.91827803      Logistic  2.4191773473  0.96377714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.103 all_data   20 0.91827803      Gompertz  2.4621077141  0.96975756</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.104 all_data   25 0.96852416   Exponential -0.0319818477  1.28692294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.105 all_data   25 0.96852416 Monomolecular  3.4585351034  0.99042843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.106 all_data   25 0.96852416      Logistic  3.4265532558  0.99261735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.107 all_data   25 0.96852416      Gompertz  3.4425867975  0.99115932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.108 all_data   30 0.98534907   Exponential -0.0147593195  2.32157735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.109 all_data   30 0.98534907 Monomolecular  4.2232511455  0.99658305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.110 all_data   30 0.98534907      Logistic  4.2084918259  0.99853034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.111 all_data   30 0.98534907      Gompertz  4.2158805623  0.99743552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            residual</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     -0.0573595952</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1    0.6608508174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.2   -0.0292033448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.3   -0.0023722563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.4    0.2448071377</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.5   -0.0443419440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.6    0.1953790997</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.7    0.0855170369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.8    0.5486706440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.9   -0.0217326645</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.10   0.2576111256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.11   0.0752550256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.12   0.5697964783</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.13   0.0403519457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.14   0.1248569833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.15   0.0660013660</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.16   0.2760076921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.17   0.0162012583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.18   0.0256121894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.19   0.0196317746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.20  -0.2898831108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.21   0.0066113995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.22   0.0044224839</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.23   0.0058805079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.24  -1.3220901588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.25   0.0029041403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.26   0.0009568522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.27   0.0020516721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.28  -0.0558977123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.29   0.6623127003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.30  -0.0277414618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.31  -0.0009103733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.32   0.2628299923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.33  -0.0263190895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.34   0.2134019542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.35   0.1035398914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.36   0.5659470953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.37  -0.0044562132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.38   0.2748875769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.39   0.0925314769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.40   0.5690051523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.41   0.0395606196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.42   0.1240656573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.43   0.0652100400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.44   0.2761431011</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.45   0.0163366673</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.46   0.0257475984</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.47   0.0197671836</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.48  -0.2897820093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.49   0.0067125010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.50   0.0045235855</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51   0.0059816094</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.52  -1.3223970336</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.53   0.0025972655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.54   0.0006499775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.55   0.0017447973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.56  -0.0551322320</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.57   0.6630781806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.58  -0.0269759815</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.59  -0.0001448930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.60   0.0608928573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.61  -0.2282562244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.62   0.0114648193</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.63  -0.0983972435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.64   0.3161878006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.65  -0.2542155079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.66   0.0251282822</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.67  -0.1572278178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.68   0.4304101306</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.69  -0.0990344020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.70  -0.0145293644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.71  -0.0733849817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.72   0.2179416402</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.73  -0.0418647936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.74  -0.0324538625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.75  -0.0384342773</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.76  -0.3139576603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.77  -0.0174631500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.78  -0.0196520656</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.79  -0.0181940416</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.80  -1.3308650919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.81  -0.0058707928</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.82  -0.0078180808</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.83  -0.0067232610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.84  -0.0558109653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.85   0.6623994473</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.86  -0.0276547149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.87  -0.0008236264</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.88   0.0644775671</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.89  -0.2246715146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.90   0.0150495291</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.91  -0.0948125338</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.92   0.2180469635</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.93  -0.3523563451</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.94  -0.0730125550</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95  -0.2553686549</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.96   0.4198531213</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.97  -0.1095914113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.98  -0.0250863737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.99  -0.0839419910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.100  0.2048963899</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.101 -0.0549100439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.102 -0.0454991128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.103 -0.0514795276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.104 -0.3183987805</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.105 -0.0219042702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.106 -0.0240931858</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.107 -0.0226351618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.108 -1.3362282880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.109 -0.0112339889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.110 -0.0131812770</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.111 -0.0120864572</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -22,15 +22,24 @@ equal to `y0` and less than or equal to 1.}
 
 \item{n}{Number of replicated curves. Must be a positive whole number.}
 
-\item{alpha}{Non-negative noise level applied to replicated observations.}
+\item{alpha}{Non-negative noise multiplier. Before clipping, observations
+are normal draws centered on `y`, with standard deviation
+`alpha * y * (1 - y)`.}
 }
 \value{
-A data frame with simulated disease progress values and replicated
-  noisy observations.
+A data frame with columns `replicates`, `time`, `y` (the underlying
+  curve), and `random_y` (noisy observations).
 }
 \description{
 Simulate disease progress data under the logistic epidemic model, with
 optional replicated observations.
+}
+\details{
+The curve is evaluated analytically at `seq(0, N, by = dt)`.
+  Replicates share the same curve parameters. Draws above 1 are replaced
+  with 0.999, then draws below `y0` are replaced with `y0`. Clipping changes
+  the observation distribution near these bounds. Observations can exceed
+  `K`, which bounds the underlying curve. Set `alpha = 0` for noiseless data.
 }
 \examples{
 sim_logistic(N = 30, dt = 5, y0 = 0.01, r = 0.05, K = 1, n = 4)

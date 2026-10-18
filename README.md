@@ -47,12 +47,27 @@ library(epifitter)
 
 set.seed(1)
 epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.2, n = 4)
-fit <- fit_lin(time = epi$time, y = epi$y)
+fit <- fit_lin(time = epi$time, y = epi$random_y)
 
 plot_fit(fit)
 ```
 
-For more complete workflows, see the package articles on model fitting, area summaries, simulation, and the bundled experimental dataset in the documentation site.
+The simulator returns the underlying curve in `y` and noisy observations in `random_y`. Fit `random_y` when checking how well a method recovers the simulated epidemic.
+
+## Find the right workflow
+
+| Goal | Article |
+|---|---|
+| Run a first analysis | [Getting started](https://alvesks.github.io/epifitter/articles/getting-started.html) |
+| Choose models, starting values, and weights | [Model fitting](https://alvesks.github.io/epifitter/articles/model-fitting.html) |
+| Add uncertainty intervals | [Confidence intervals](https://alvesks.github.io/epifitter/articles/confidence-intervals.html) |
+| Calculate areas for mean curves or individual replicates | [AUDPC and AUDPS](https://alvesks.github.io/epifitter/articles/area-under-curve.html) |
+| Understand simulated curves and observation noise | [Simulation workflows](https://alvesks.github.io/epifitter/articles/simulation-workflows.html) |
+| Analyze experimental data | [Powdery mildew example](https://alvesks.github.io/epifitter/articles/powdery-mildew-data.html) |
+
+For nonlinear fits, `multistart = TRUE` compares all available starting values instead of accepting the first converged attempt. The [starting-value guide](https://alvesks.github.io/epifitter/articles/model-fitting.html#compare-starting-values-with-multistart) explains when this can help, its computational cost, and what to check if fitting fails.
+
+The website may describe features newer than your installed release. Check `packageVersion("epifitter")` and the local function help if an argument is unavailable.
 
 ## Article and citation
 

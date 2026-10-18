@@ -19,6 +19,13 @@ A list with fit statistics, parameter estimates, and prediction
 Fit exponential, monomolecular, logistic, and Gompertz models to disease
 progress data using linearized forms of each model.
 }
+\details{
+Disease intensity must be a proportion between 0 and 1. Exact
+  zeros are replaced with 0.0001 and exact ones with 0.999, with a warning,
+  before linearization. The returned observation data contain these adjusted
+  values. Nonlinear fitting functions accept observed zeros and ones without
+  these replacements.
+}
 \examples{
 set.seed(1)
 epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.2, n = 4)

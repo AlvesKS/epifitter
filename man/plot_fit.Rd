@@ -35,9 +35,13 @@ curves.}
 \item{ci_method}{Method used to estimate confidence bands. Use
 `"bootstrap"` for residual bootstrap intervals, or `"wild"` for wild
 residual bootstrap intervals. The older `"case"` option is accepted as a
-deprecated alias for `"wild"`.}
+deprecated alias for `"wild"`.
+Wild bootstrap multiplies each centered residual by an independent random
+sign, keeping that residual at its original observation.}
 
-\item{nsim}{Number of bootstrap samples used when `conf_int = TRUE`.}
+\item{nsim}{Number of bootstrap samples used when `conf_int = TRUE`. Must
+be at least 2. Each model needs at least two successful, finite bootstrap
+predictions to receive a confidence band.}
 
 \item{level}{Confidence level for the interval.}
 
@@ -60,6 +64,7 @@ A `ggplot2` object.
 Create a faceted `ggplot2` panel showing observed and fitted values for the
 selected epidemic models. Optionally, add confidence bands around the fitted
 curves.
+Nonlinear bootstrap refits retain the `multistart` setting of `object`.
 }
 \examples{
 epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.2, n = 4)

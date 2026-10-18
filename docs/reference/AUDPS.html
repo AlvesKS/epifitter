@@ -9,7 +9,7 @@ AUDPC that gives more balanced weight to the first and last observations."><meta
 
     <a class="navbar-brand me-2" href="../index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,8 @@ AUDPC that gives more balanced weight to the first and last observations.</p>
 <dt id="arg-aggregate">aggregate<a class="anchor" aria-label="anchor" href="#arg-aggregate"></a></dt>
 <dd><p>How to handle multiple observations at the same time point.
 The default, `"mean"`, averages replicated observations before calculating
-area. `"median"` uses the median and `"none"` requires unique time values.</p></dd>
+area. `"median"` uses the median and `"none"` requires unique time values.
+A warning is issued when repeated time values are aggregated.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -98,7 +99,7 @@ stairs: Calculation, advantage, and application. <em>Phytopathology</em>,
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">epi</span> <span class="op">&lt;-</span> <span class="fu"><a href="sim_logistic.html">sim_logistic</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">30</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.3</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">AUDPS</span><span class="op">(</span>time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>, y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">y</span>, y_proportion <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 17.2859</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 17.18593</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

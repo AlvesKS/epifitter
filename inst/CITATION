@@ -25,6 +25,6 @@ bibentry(
     person(given = "Adam H.", family = "Sparks")
   ),
   year = "2026",
-  note = "R package version 1.0.0",
+  note = paste("R package version", meta$Version),
   url = "https://alvesks.github.io/epifitter/"
 )

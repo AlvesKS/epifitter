@@ -17,6 +17,5 @@ mono_fun(t, y, par)
 A list containing the rate of change.
 }
 \description{
-Internal helper used by the simulation functions to solve the monomolecular
-epidemic model with `deSolve::ode()`.
+Monomolecular epidemic derivative function that can be passed to an ODE solver.
 }

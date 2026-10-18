@@ -19,15 +19,23 @@ or equal to `N`.}
 
 \item{n}{Number of replicated curves. Must be a positive whole number.}
 
-\item{alpha}{Non-negative noise level applied to replicated observations.}
+\item{alpha}{Non-negative noise multiplier. Before clipping, observations
+are normal draws centered on `y`, with standard deviation `alpha * y`.}
 }
 \value{
-A data frame with simulated disease progress values and replicated
-  noisy observations.
+A data frame with columns `replicates`, `time`, `y` (the underlying
+  curve), and `random_y` (noisy observations).
 }
 \description{
 Simulate disease progress data under the exponential epidemic model, with
 optional replicated observations.
+}
+\details{
+The curve is evaluated analytically at `seq(0, N, by = dt)`.
+  Replicates share the same curve parameters. Draws below `y0` are replaced
+  with `y0`; values above 1 are allowed. Set `alpha = 0` for noiseless data.
+  If the curve or noise exceeds the finite numeric range, reduce `N`, `r`,
+  or `alpha`.
 }
 \examples{
 sim_exponential(N = 30, dt = 5, y0 = 0.01, r = 0.05, n = 4)

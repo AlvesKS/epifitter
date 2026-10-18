@@ -170,7 +170,7 @@ AUDPC(time = epi_rep$time, y = epi_rep$random_y)
 AUDPS(time = epi_rep$time, y = epi_rep$random_y)
 ```
 
-To obtain one value per replicate, group the data and compute the areas within each experimental unit. In this case, use `aggregate = "none"` because each replicate should contribute only one observation per time point.
+To obtain one value per replicate, group the data and compute the areas within each experimental unit. Here `aggregate = "none"` checks that each replicate contributes only one observation per time point. If a replicate has repeated assessments at the same time, choose the appropriate aggregation within that replicate.
 
 ```{r}
 epi_rep %>%
@@ -221,17 +221,24 @@ audps_rel
 
 `AUDPC_2_points()` is helpful when only the initial and final disease intensities are available and a logistic epidemic shape is assumed.
 
+Supply the elapsed time between the observations, not the final calendar time.
+Both endpoint intensities must be strictly between 0 and 1. Use the same
+observation period when comparing with a full-curve area:
+
 ```{r}
 audpc_two_points <- AUDPC_2_points(
-  time = epi$time[7],
+  time = diff(range(epi$time)),
   y0 = epi$y[1],
-  yT = epi$y[7]
+  yT = tail(epi$y, 1)
 )
 
 audpc_two_points
 ```
 
-For simulated logistic data, this estimate should be close to the full-curve AUDPC computed from all intermediate observations.
+The two-point function integrates the assumed logistic curve analytically.
+`AUDPC()` approximates the area with trapezoids, so the results can differ
+even for noiseless logistic data; closer assessment spacing reduces that
+approximation error.
 
 ```{r}
 full_curve_audpc <- AUDPC(
@@ -245,6 +252,17 @@ c(
   AUDPC_two_points = audpc_two_points
 )
 ```
+
+Equal endpoints use the constant-curve limit, elapsed time multiplied by
+disease intensity. Nearly equal endpoints are also supported:
+
+```{r constant-area}
+AUDPC_2_points(time = 20, y0 = 0.2, yT = 0.2)
+```
+
+Two equal observations alone do not establish that the disease remained
+constant between assessments; that interpretation is an assumption of this
+summary.
 
 ## Absolute versus relative measures
 
@@ -261,4 +279,4 @@ disease scale, time interval, and interpretation are compatible.
 - Use `AUDPS()` when endpoint weighting matters and you want an alternative to the trapezoidal summary.
 - Use `AUDPC_2_points()` only when two observations are available and the logistic assumption is justified.
 - When you have replicated observations at the same time point, keep the default `aggregate = "mean"` or choose `aggregate = "median"` explicitly.
-- When you need one value per replicate or plot, calculate the summaries inside each group and use `aggregate = "none"` within that group.
+- When you need one value per replicate or plot, calculate the summaries inside each group. Use `aggregate = "none"` only when times are unique within that group.

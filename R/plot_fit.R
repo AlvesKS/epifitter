@@ -3,6 +3,7 @@
 #' Create a faceted `ggplot2` panel showing observed and fitted values for the
 #' selected epidemic models. Optionally, add confidence bands around the fitted
 #' curves.
+#' Nonlinear bootstrap refits retain the `multistart` setting of `object`.
 #'
 #' @param object A fitted object returned by `fit_lin()`, `fit_nlin()`, or
 #'   `fit_nlin2()`.
@@ -15,7 +16,11 @@
 #'   `"bootstrap"` for residual bootstrap intervals, or `"wild"` for wild
 #'   residual bootstrap intervals. The older `"case"` option is accepted as a
 #'   deprecated alias for `"wild"`.
-#' @param nsim Number of bootstrap samples used when `conf_int = TRUE`.
+#'   Wild bootstrap multiplies each centered residual by an independent random
+#'   sign, keeping that residual at its original observation.
+#' @param nsim Number of bootstrap samples used when `conf_int = TRUE`. Must
+#'   be at least 2. Each model needs at least two successful, finite bootstrap
+#'   predictions to receive a confidence band.
 #' @param level Confidence level for the interval.
 #' @param seed Optional random seed used for interval estimation.
 #' @param n_grid Number of time points used to draw fitted curves and
@@ -239,6 +244,9 @@ plot_fit <- function(object,
 }
 
 .plot_fit_bootstrap_ci <- function(object, models, nsim, level, seed, n_grid, wild = FALSE) {
+  if (nsim < 2) {
+    stop("`nsim` must be at least 2 for bootstrap confidence intervals.", call. = FALSE)
+  }
   if (is.null(object$input) || is.null(object$input$time) || is.null(object$input$y)) {
     stop(
       "Confidence intervals require fitted objects created with this version of epifitter. Refit the model and try again.",
@@ -265,6 +273,11 @@ plot_fit <- function(object,
 
   boot_predictions <- vector("list", length(models) * nsim)
   list_id <- 1L
+  time_grid <- seq(min(object$data$time), max(object$data$time), length.out = n_grid)
+  refit_object <- object
+  if (is.numeric(object$control$weights)) {
+    refit_object$control$weights <- object$control$weights[order(object$input$time)]
+  }
 
   for (model_name in models) {
     model_data <- object$data[object$data$model == model_name, , drop = FALSE]
@@ -293,13 +306,19 @@ plot_fit <- function(object,
 
       pseudo_y <- .plot_fit_apply_bounds(pseudo_y, c(.Machine$double.eps, 1 - .Machine$double.eps))
 
-      boot_fit <- tryCatch(
-        suppressWarnings(.plot_fit_refit(object, model_data$time, pseudo_y)),
+      boot_prediction <- tryCatch(
+        suppressWarnings({
+          boot_fit <- .plot_fit_refit(refit_object, model_data$time, pseudo_y, model_name)
+          predicted <- as.numeric(stats::predict(boot_fit, newdata = data.frame(time = time_grid)))
+          if (inherits(boot_fit, "lm")) {
+            predicted <- .plot_fit_inverse_link(model_name, predicted)
+          }
+          data.frame(model = model_name, time = time_grid, predicted = predicted)
+        }),
         error = function(e) NULL
       )
 
-      if (!is.null(boot_fit)) {
-        boot_prediction <- .plot_fit_predict_grid(boot_fit, model_name, n_grid = n_grid)
+      if (!is.null(boot_prediction) && all(is.finite(boot_prediction$predicted))) {
         boot_predictions[[list_id]] <- boot_prediction
         list_id <- list_id + 1L
       }
@@ -308,30 +327,39 @@ plot_fit <- function(object,
 
   boot_predictions <- boot_predictions[!vapply(boot_predictions, is.null, logical(1))]
 
-  if (length(boot_predictions) < 2) {
+  successful_fits <- table(factor(
+    vapply(boot_predictions, function(x) x$model[1], character(1)),
+    levels = models
+  ))
+  valid_models <- models[successful_fits >= 2]
+  if (length(valid_models) == 0L) {
     stop("Bootstrap confidence intervals could not be estimated. Try increasing 'nsim' or checking model convergence.", call. = FALSE)
   }
 
-  expected_fits <- length(models) * nsim
-  if (length(boot_predictions) < expected_fits * 0.5) {
+  unstable_models <- models[successful_fits >= 2 & successful_fits < nsim * 0.5]
+  if (length(unstable_models) > 0L) {
     warning(
-      "More than half of bootstrap model fits failed to converge. Confidence intervals may be unstable.",
+      sprintf(
+        "More than half of bootstrap fits failed for model(s): %s. Confidence intervals may be unstable.",
+        paste(unstable_models, collapse = ", ")
+      ),
       call. = FALSE
     )
   }
 
-  boot_data <- dplyr::bind_rows(boot_predictions, .id = "simulation")
-  missing_models <- setdiff(models, unique(boot_data$model))
+  missing_models <- setdiff(models, valid_models)
   if (length(missing_models) > 0L) {
     warning(
       sprintf(
-        "Bootstrap confidence intervals could not be estimated for model(s): %s.",
+        "Fewer than two successful finite bootstrap fits for model(s): %s. Their confidence intervals were omitted.",
         paste(missing_models, collapse = ", ")
       ),
       call. = FALSE
     )
   }
 
+  boot_data <- dplyr::bind_rows(boot_predictions, .id = "simulation")
+  boot_data <- boot_data[boot_data$model %in% valid_models, , drop = FALSE]
   alpha <- (1 - level) / 2
 
   boot_data %>%
@@ -351,7 +379,10 @@ plot_fit <- function(object,
   residual <- residual - mean(residual, na.rm = TRUE)
 
   if (isTRUE(wild)) {
-    return(sample(c(-1, 1), size = size, replace = TRUE) * sample(residual, size = size, replace = TRUE))
+    if (length(residual) != size) {
+      stop("Wild bootstrap requires one residual per observation.", call. = FALSE)
+    }
+    return(sample(c(-1, 1), size = size, replace = TRUE) * residual)
   }
 
   sample(residual, size = size, replace = TRUE)
@@ -376,36 +407,34 @@ plot_fit <- function(object,
   pmin(pmax(x, bounds[1]), bounds[2])
 }
 
-.plot_fit_refit <- function(object, time, y) {
+.plot_fit_refit <- function(object, time, y, model) {
+  .validate_epidemic_inputs(time, y, allow_boundary = TRUE)
   fitter <- object$control$fitter
+  estimate_K <- identical(fitter, "fit_nlin2") || inherits(object, "fit_nlin2")
 
-  if (identical(fitter, "fit_nlin2") || inherits(object, "fit_nlin2")) {
-    return(fit_nlin2(
-      time = time,
-      y = y,
+  if (estimate_K || identical(fitter, "fit_nlin") || inherits(object, "fit_nlin")) {
+    return(.fit_epidemic_nls(
+      data = data.frame(time = time, y = y),
+      model = model,
       starting_par = object$control$starting_par,
       maxiter = object$control$maxiter,
       weights = object$control$weights,
       weight_method = .plot_fit_refit_weight_method(object),
       weight_eps = .plot_fit_control_value(object, "weight_eps", 0.01),
-      weight_power = .plot_fit_control_value(object, "weight_power", 1)
+      weight_power = .plot_fit_control_value(object, "weight_power", 1),
+      estimate_K = estimate_K,
+      multistart = .plot_fit_control_value(object, "multistart", FALSE)
     ))
   }
 
-  if (identical(fitter, "fit_nlin") || inherits(object, "fit_nlin")) {
-    return(fit_nlin(
-      time = time,
-      y = y,
-      starting_par = object$control$starting_par,
-      maxiter = object$control$maxiter,
-      weights = object$control$weights,
-      weight_method = .plot_fit_refit_weight_method(object),
-      weight_eps = .plot_fit_control_value(object, "weight_eps", 0.01),
-      weight_power = .plot_fit_control_value(object, "weight_power", 1)
-    ))
-  }
-
-  fit_lin(time = time, y = y)
+  y <- .sanitize_boundary_proportions(y)
+  linearized <- switch(model,
+    Exponential = log(y),
+    Monomolecular = log(1 / (1 - y)),
+    Logistic = log(y / (1 - y)),
+    Gompertz = -log(-log(y))
+  )
+  stats::lm(linearized ~ time, data = data.frame(time = time, linearized = linearized))
 }
 
 .plot_fit_control_value <- function(object, name, default) {

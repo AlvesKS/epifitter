@@ -7,7 +7,9 @@
 #' @param intensity_col Character name specifying the disease intensity column.
 #' @param data A data frame containing the variables for model fitting.
 #' @param strata_cols Character vector specifying grouping columns. Use `NULL`
-#'   to fit all rows as a single epidemic. Defaults to `NULL`.
+#'   to fit all rows as a single epidemic. Defaults to `NULL`. Group labels
+#'   retain their types, and missing values are distinct from literal text.
+#'   Grouping column names must not conflict with model output column names.
 #' @param starting_par Named list of starting values for model parameters.
 #' @param maxiter Maximum number of iterations for nonlinear fitting. Must be a
 #'   positive number.
@@ -23,6 +25,9 @@
 #' @param weight_eps Small positive constant used by
 #'   fitted-value weighting methods to keep weights finite near 0 and 1.
 #' @param weight_power Non-negative power used when `weight_method = "power"`.
+#' @param multistart Logical passed to [fit_nlin()] or [fit_nlin2()] to compare
+#'   all available starting values. Defaults to `FALSE`. Used only when
+#'   `nlin = TRUE`.
 #'
 #' @return A list with grouped parameter estimates and prediction data.
 #'
@@ -46,7 +51,8 @@ fit_multi <- function(time_col,
                       weights_col = NULL,
                       weight_method = c("none", "binomial", "mean", "cv", "power"),
                       weight_eps = 0.01,
-                      weight_power = 1) {
+                      weight_power = 1,
+                      multistart = FALSE) {
   if (missing(data)) {
     stop("Missing `data` argument.", call. = FALSE)
   }
@@ -69,6 +75,7 @@ fit_multi <- function(time_col,
   .validate_positive_count(maxiter, "maxiter")
   .validate_flag(nlin, "nlin")
   .validate_flag(estimate_K, "estimate_K")
+  .validate_flag(multistart, "multistart")
   .validate_weight_eps(weight_eps)
   .validate_weight_power(weight_power)
   weight_method <- match.arg(weight_method)
@@ -82,6 +89,10 @@ fit_multi <- function(time_col,
       "`estimate_K` is ignored when `nlin = FALSE`. Use both `nlin = TRUE` and `estimate_K = TRUE` to estimate K.",
       call. = FALSE
     )
+  }
+
+  if (!isTRUE(nlin) && multistart) {
+    warning("`multistart` is ignored when `nlin = FALSE`.", call. = FALSE)
   }
 
   if (!isTRUE(nlin) && (!is.null(weights_col) || !identical(weight_method, "none"))) {
@@ -111,29 +122,20 @@ fit_multi <- function(time_col,
     stop("`data` must contain at least one row.", call. = FALSE)
   }
 
-  box <- data.frame()
-  pred_box <- data.frame()
-
-  strata_col <- strata_cols
-  if (is.null(strata_col)) {
-    data_uni <- data %>%
-      dplyr::mutate(strata = "all_data")
-    strata_col <- "strata"
+  if (is.null(strata_cols) || length(strata_cols) == 0L) {
+    groups <- list(data)
+    group_values <- data.frame(strata = "all_data")
   } else {
-    data_uni <- data %>%
-      dplyr::mutate(
-        strata = do.call(
-          paste,
-          c(dplyr::pick(dplyr::all_of(strata_col)), sep = "\r")
-        )
-      )
+    grouped <- dplyr::group_by(data, dplyr::across(dplyr::all_of(strata_cols)))
+    group_order <- unique(dplyr::group_indices(grouped))
+    groups <- dplyr::group_split(grouped)[group_order]
+    group_values <- as.data.frame(dplyr::group_keys(grouped))[group_order, , drop = FALSE]
   }
 
-  strata <- unique(as.character(data_uni[["strata"]]))
+  parameters <- predictions <- vector("list", length(groups))
 
-  for (i in seq_along(strata)) {
-    rowi <- data_uni[["strata"]] == strata[i]
-    datai <- data_uni[rowi, , drop = FALSE]
+  for (i in seq_along(groups)) {
+    datai <- groups[[i]]
 
     if (isTRUE(nlin) && isTRUE(estimate_K)) {
       model <- fit_nlin2(
@@ -144,7 +146,8 @@ fit_multi <- function(time_col,
         weights = if (!is.null(weights_col)) datai[[weights_col]] else NULL,
         weight_method = weight_method,
         weight_eps = weight_eps,
-        weight_power = weight_power
+        weight_power = weight_power,
+        multistart = multistart
       )
     }
 
@@ -157,7 +160,8 @@ fit_multi <- function(time_col,
         weights = if (!is.null(weights_col)) datai[[weights_col]] else NULL,
         weight_method = weight_method,
         weight_eps = weight_eps,
-        weight_power = weight_power
+        weight_power = weight_power,
+        multistart = multistart
       )
     }
 
@@ -168,43 +172,25 @@ fit_multi <- function(time_col,
       )
     }
 
-    lil_pred_box <- model$data %>%
-      dplyr::mutate(strata = strata[i])
-    pred_box <- pred_box %>%
-      dplyr::bind_rows(lil_pred_box)
+    conflicting_names <- intersect(names(group_values), union(names(model$stats_all), names(model$data)))
+    if (length(conflicting_names) > 0L) {
+      stop(
+        sprintf("Grouping columns conflict with model output columns: %s. Rename these grouping columns.",
+                paste(conflicting_names, collapse = ", ")),
+        call. = FALSE
+      )
+    }
 
-    lil_box <- model$stats_all %>%
-      dplyr::mutate(strata = strata[i])
-    box <- box %>%
-      dplyr::bind_rows(lil_box)
-  }
-
-  colnames <- colnames(lil_box)[colnames(lil_box) != "strata"]
-  colnames_prbox <- colnames(lil_pred_box)[colnames(lil_pred_box) != "strata"]
-
-  if (is.null(strata_cols)) {
-    box2 <- box %>%
-      dplyr::select("strata", dplyr::all_of(colnames))
-
-    pred_box2 <- pred_box %>%
-      dplyr::select("strata", dplyr::all_of(colnames_prbox))
-  } else {
-    strata_lookup <- data_uni %>%
-      dplyr::distinct(strata, dplyr::across(dplyr::all_of(strata_cols)))
-
-    box2 <- box %>%
-      dplyr::select("strata", dplyr::all_of(colnames)) %>%
-      dplyr::left_join(strata_lookup, by = "strata") %>%
-      dplyr::select(dplyr::all_of(strata_cols), dplyr::all_of(colnames))
-
-    pred_box2 <- pred_box %>%
-      dplyr::select("strata", dplyr::all_of(colnames_prbox)) %>%
-      dplyr::left_join(strata_lookup, by = "strata") %>%
-      dplyr::select(dplyr::all_of(strata_cols), dplyr::all_of(colnames_prbox))
+    parameters[[i]] <- dplyr::bind_cols(
+      group_values[rep(i, nrow(model$stats_all)), , drop = FALSE], model$stats_all
+    )
+    predictions[[i]] <- dplyr::bind_cols(
+      group_values[rep(i, nrow(model$data)), , drop = FALSE], model$data
+    )
   }
 
   list(
-    Parameters = box2,
-    Data = pred_box2
+    Parameters = dplyr::bind_rows(parameters),
+    Data = dplyr::bind_rows(predictions)
   )
 }

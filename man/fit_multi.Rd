@@ -16,7 +16,8 @@ fit_multi(
   weights_col = NULL,
   weight_method = c("none", "binomial", "mean", "cv", "power"),
   weight_eps = 0.01,
-  weight_power = 1
+  weight_power = 1,
+  multistart = FALSE
 )
 }
 \arguments{
@@ -27,7 +28,9 @@ fit_multi(
 \item{data}{A data frame containing the variables for model fitting.}
 
 \item{strata_cols}{Character vector specifying grouping columns. Use `NULL`
-to fit all rows as a single epidemic. Defaults to `NULL`.}
+to fit all rows as a single epidemic. Defaults to `NULL`. Group labels
+retain their types, and missing values are distinct from literal text.
+Grouping column names must not conflict with model output column names.}
 
 \item{starting_par}{Named list of starting values for model parameters.}
 
@@ -51,6 +54,10 @@ weighting approximations.}
 fitted-value weighting methods to keep weights finite near 0 and 1.}
 
 \item{weight_power}{Non-negative power used when `weight_method = "power"`.}
+
+\item{multistart}{Logical passed to [fit_nlin()] or [fit_nlin2()] to compare
+all available starting values. Defaults to `FALSE`. Used only when
+`nlin = TRUE`.}
 }
 \value{
 A list with grouped parameter estimates and prediction data.

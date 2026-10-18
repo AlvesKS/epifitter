@@ -45,11 +45,40 @@ test_that("AUDPC_2_points errors when yT == 1", {
   )
 })
 
-test_that("AUDPC_2_points errors when y0 == yT", {
-  expect_error(
-    AUDPC_2_points(time = 10, y0 = 0.1, yT = 0.1),
-    "strictly between 0 and 1"
-  )
+test_that("AUDPC_2_points integrates a constant curve", {
+  expect_equal(AUDPC_2_points(time = 10, y0 = 0.1, yT = 0.1), 1)
+})
+
+test_that("AUDPC_2_points is stable for nearly constant and decreasing curves", {
+  for (y0 in c(1e-10, 0.01, 0.5, 0.99, 1 - 1e-10)) {
+    yT <- y0 + min(y0, 1 - y0) * 1e-5
+    for (ends in list(c(y0, yT), c(yT, y0))) {
+      expected <- stats::integrate(function(t) {
+        stats::plogis(stats::qlogis(ends[1]) +
+                        (stats::qlogis(ends[2]) - stats::qlogis(ends[1])) * t / 10)
+      }, 0, 10, rel.tol = 1e-12, abs.tol = 0)$value
+      expect_equal(AUDPC_2_points(10, ends[1], ends[2]) / expected, 1, tolerance = 1e-10)
+    }
+  }
+  expect_equal(AUDPC_2_points(10, 0.01, 0.01 + 1e-16), 0.1, tolerance = 1e-12)
+})
+
+test_that("AUDPC_2_points remains finite across extreme endpoint ratios", {
+  for (ends in list(c(5e-324, 0.9), c(0.9, 5e-324),
+                   c(1e-10, 1 - .Machine$double.eps),
+                   c(1 - .Machine$double.eps, 1e-10))) {
+    area <- AUDPC_2_points(1e308, ends[1], ends[2])
+    expect_true(is.finite(area))
+    expect_true(area >= min(ends) * 1e308 && area <= max(ends) * 1e308)
+  }
+})
+
+test_that("AUDPC_2_points retains precision when time rescales subnormal intensities", {
+  for (y0 in c(5e-324, 1e-320)) {
+    expected <- (1e308 * y0) / log(2)
+    expect_equal(AUDPC_2_points(1e308, y0, 2 * y0) / expected, 1, tolerance = 1e-12)
+    expect_equal(AUDPC_2_points(1e308, 2 * y0, y0) / expected, 1, tolerance = 1e-12)
+  }
 })
 
 test_that("AUDPC_2_points errors when time <= 0", {

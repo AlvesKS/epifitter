@@ -9,7 +9,7 @@ progress data using nonlinear regression."><meta property="og:image" content="ht
 
     <a class="navbar-brand me-2" href="../index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,8 @@ progress data using nonlinear regression.</p>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  weight_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"binomial"</span>, <span class="st">"mean"</span>, <span class="st">"cv"</span>, <span class="st">"power"</span><span class="op">)</span>,</span>
 <span>  weight_eps <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>  weight_power <span class="op">=</span> <span class="fl">1</span></span>
+<span>  weight_power <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  multistart <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -107,6 +108,13 @@ approximations to keep weights finite near 0 and 1.</p></dd>
 <dd><p>Non-negative power \(\theta\) used only when
 `weight_method = "power"`.</p></dd>
 
+
+<dt id="arg-multistart">multistart<a class="anchor" aria-label="anchor" href="#arg-multistart"></a></dt>
+<dd><p>Logical. If `FALSE` (default), accept the first converged
+attempt, trying the remaining starting values only after a failure. If
+`TRUE`, compare all available starting values and keep the converged fit
+with the smallest residual sum of squares (weighted when applicable).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -120,6 +128,13 @@ likelihood. `weight_method` options other than `"none"` use a two-step
 working approximation: first fit the model without weights, derive weights
 from the fitted values, and then refit the model. Report the selected
 weighting rule as an assumption.</p>
+<p>Monomolecular fits allow `y0 = 0`. Parameter confidence intervals are
+unconstrained Wald approximations and require caution when an estimate
+reaches a parameter bound.</p>
+<p>With `multistart = TRUE`, all available starting values are evaluated in
+each fitting stage. The converged fit with the smallest residual sum of
+squares is retained, using fixed weights within each weighted stage.
+This takes more time and does not guarantee a global optimum.</p>
     </div>
 
     <div class="section level2">
@@ -127,29 +142,31 @@ weighting rule as an assumption.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">epi</span> <span class="op">&lt;-</span> <span class="fu"><a href="sim_logistic.html">sim_logistic</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">30</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, dt <span class="op">=</span> <span class="fl">5</span>, r <span class="op">=</span> <span class="fl">0.3</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">fit_nlin</span><span class="op">(</span>time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>, y <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">random_y</span>, starting_par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>y0 <span class="op">=</span> <span class="fl">0.01</span>, r <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following nonlinear model(s) did not converge and will be returned as NA: Monomolecular.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Results of fitting population models </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Starting values: first converged attempt.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Use `multistart = TRUE` to compare all available starting values.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Stats:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  CCC r_squared    RSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Gompertz      0.9986    0.9981 0.0217</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Logistic      0.9986    0.9974 0.0220</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Exponential   0.9038    0.8493 0.1665</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular     NA        NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular 0.8739    0.8624 0.1800</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Infection rate:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate   Std.error      Lower     Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gompertz      0.22500335 0.006307726 0.21203764 0.2379691</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logistic      0.31571569 0.009477990 0.29623341 0.3351980</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Exponential   0.06632831 0.007801830 0.05029142 0.0823652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular         NA          NA         NA        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate   Std.error      Lower      Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gompertz      0.22499915 0.006307267 0.21203438 0.23796393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logistic      0.31571120 0.009477311 0.29623030 0.33519209</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Exponential   0.06633008 0.007801850 0.05029315 0.08236701</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular 0.06191129 0.009009223 0.04339256 0.08043001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Initial inoculum:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   Estimate    Std.error         Lower        Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gompertz      1.279015e-08 2.122676e-08 -3.084208e-08 5.642237e-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logistic      8.926801e-03 1.286286e-03  6.282802e-03 1.157080e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Exponential   1.560581e-01 3.149510e-02  9.131899e-02 2.207972e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular           NA           NA            NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gompertz      1.278541e-08 2.121834e-08 -3.082952e-08 5.640033e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logistic      8.926334e-03 1.286158e-03  6.282597e-03 1.157007e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Exponential   1.560492e-01 3.149354e-02  9.131336e-02 2.207851e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular 0.000000e+00 7.827469e-02 -1.608959e-01 1.608959e-01</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

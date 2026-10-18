@@ -76,12 +76,16 @@ head(fit$data)
 The default bootstrap method resamples residuals from the fitted curve, creates
 new plausible disease progress curves at the observed assessment times, refits
 the model many times, and builds the band from the distribution of fitted
-curves.
+curves. Residuals are centered before resampling. With `fit_lin()`, resampling
+takes place on each model's transformed scale, followed by the inverse
+transformation. With nonlinear fits, it takes place on the original disease
+intensity scale. Simulated responses are clipped just inside 0 and 1 before
+refitting.
 
-This approach assumes that the residual pattern is a reasonable basis for
-generating plausible alternative curves. It is useful for visualization, but it
-should still be checked against the biology of the system and the assessment
-design.
+Ordinary residual resampling pools residuals across observations and assumes
+they are exchangeable on the fitting scale. Neither method implements a
+cluster or time-series bootstrap. Consider dependence among assessments or
+experimental units when deciding whether these intervals suit your data.
 
 ```{r fig.alt="Fitted logistic disease progress curve with a bootstrap confidence band."}
 plot_fit(
@@ -102,15 +106,31 @@ plot_fit(fit, conf_int = TRUE, ci_method = "bootstrap", nsim = 500)
 
 Larger values of `nsim` make the interval more stable, but also make the plot
 slower to compute.
+At least two samples are required. Each model must produce at least two
+successful, finite bootstrap predictions; otherwise its band is omitted with
+a warning. A separate warning identifies models for which more than half of
+the bootstrap fits failed. If no selected model has at least two successful,
+finite predictions, interval construction stops with an error.
+Two successful samples are only a computational
+minimum, not enough for a stable interval. Increase `nsim` and check stability
+across seeds for results you intend to report.
+
+The limits are pointwise quantiles of the successful refitted curves. They do
+not provide simultaneous coverage of the entire curve or account for
+uncertainty from choosing the model family.
 
 ## Wild bootstrap confidence bands
 
-The wild bootstrap method randomly changes the sign of resampled residuals
-before refitting the model. This keeps the original assessment times intact and
-is available with `ci_method = "wild"`.
+The wild bootstrap method multiplies each centered residual by an independent
+random sign before refitting the model. Each residual stays at its original
+observation, preserving differences in residual magnitude across assessment
+times. This method is available with `ci_method = "wild"`.
 
 Wild bootstrap intervals are often useful as a sensitivity check when residual
 variation changes across the range of fitted values.
+
+The deprecated `ci_method = "case"` redirects to `"wild"` with a warning; it
+does not resample rows or implement a case bootstrap.
 
 ```{r fig.alt="Fitted logistic disease progress curve with a wild bootstrap confidence band."}
 plot_fit(
@@ -150,6 +170,16 @@ can be asymmetric when the model is nonlinear or poorly matched to the data.
 
 The same interface works with nonlinear fits returned by `fit_nlin()` and
 `fit_nlin2()`.
+Bootstrap refits inherit the original fit's `multistart` setting. To compare
+all available starting values in both the original fit and its bootstrap
+samples, set `multistart = TRUE` when calling the nonlinear fitter. This
+increases the computation time.
+
+Numeric observation weights remain attached to the same observations during
+bootstrap refitting. Built-in two-step weights and custom weight functions are
+recomputed for each sample. Within a sample's final multistart comparison,
+the weights remain fixed. See the [weighting guide](model-fitting.html#weighted-nonlinear-fitting)
+for these assumptions.
 
 ```{r fig.alt="Nonlinear fitted logistic disease progress curve with a bootstrap confidence band."}
 nlin_fit <- fit_nlin(
@@ -198,3 +228,6 @@ proportion scale from 0 to 1. To inspect unconstrained fitted values, use:
 ```r
 plot_fit(fit, conf_int = TRUE, y_bounds = NULL)
 ```
+
+`y_bounds` clips the displayed line and band; it does not change the fitted
+model. Setting it to `NULL` also leaves bootstrap response clipping in place.

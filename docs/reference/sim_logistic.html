@@ -9,7 +9,7 @@ optional replicated observations."><meta property="og:image" content="https://al
 
     <a class="navbar-brand me-2" href="../index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,47 +83,57 @@ equal to `y0` and less than or equal to 1.</p></dd>
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
-<dd><p>Non-negative noise level applied to replicated observations.</p></dd>
+<dd><p>Non-negative noise multiplier. Before clipping, observations
+are normal draws centered on `y`, with standard deviation
+`alpha * y * (1 - y)`.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with simulated disease progress values and replicated
-  noisy observations.</p>
+    <p>A data frame with columns `replicates`, `time`, `y` (the underlying
+  curve), and `random_y` (noisy observations).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>The curve is evaluated analytically at `seq(0, N, by = dt)`.
+  Replicates share the same curve parameters. Draws above 1 are replaced
+  with 0.999, then draws below `y0` are replaced with `y0`. Clipping changes
+  the observation distribution near these bounds. Observations can exceed
+  `K`, which bounds the underlying curve. Set `alpha = 0` for noiseless data.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">sim_logistic</span><span class="op">(</span>N <span class="op">=</span> <span class="fl">30</span>, dt <span class="op">=</span> <span class="fl">5</span>, y0 <span class="op">=</span> <span class="fl">0.01</span>, r <span class="op">=</span> <span class="fl">0.05</span>, K <span class="op">=</span> <span class="fl">1</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    replicates time          y   random_y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1    0 0.01000000 0.01193947</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1    5 0.01280525 0.01344186</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           1   10 0.01638399 0.01848616</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1   15 0.02094122 0.01554351</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           1   20 0.02673115 0.02868450</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6           1   25 0.03406581 0.03277957</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7           1   30 0.04332302 0.04554951</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8           2    0 0.01000000 0.01048391</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9           2    5 0.01280525 0.01272673</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10          2   10 0.01638399 0.01672375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11          2   15 0.02094122 0.01901935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12          2   20 0.02673115 0.02157482</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13          2   25 0.03406581 0.04644417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14          2   30 0.04332302 0.04485410</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1    0 0.01000000 0.01117601</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1    5 0.01280389 0.01364558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           1   10 0.01638095 0.01980681</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1   15 0.02093614 0.01968912</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           1   20 0.02672363 0.02864843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           1   25 0.03405533 0.03581261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           1   30 0.04330901 0.03881332</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           2    0 0.01000000 0.01239158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           2    5 0.01280389 0.01573737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          2   10 0.01638095 0.01863740</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          2   15 0.02093614 0.02744147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          2   20 0.02672363 0.02962882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13          2   25 0.03405533 0.02565649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14          2   30 0.04330901 0.03855855</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15          3    0 0.01000000 0.01000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16          3    5 0.01280525 0.01286273</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17          3   10 0.01638399 0.01900716</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18          3   15 0.02094122 0.02310570</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19          3   20 0.02673115 0.03134748</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20          3   25 0.03406581 0.03158061</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21          3   30 0.04332302 0.04426866</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22          4    0 0.01000000 0.01000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23          4    5 0.01280525 0.01468549</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24          4   10 0.01638399 0.01352917</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25          4   15 0.02094122 0.02228050</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26          4   20 0.02673115 0.01784140</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27          4   25 0.03406581 0.02315644</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28          4   30 0.04332302 0.03855410</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16          3    5 0.01280389 0.01160714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          3   10 0.01638095 0.01438180</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18          3   15 0.02093614 0.02110880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19          3   20 0.02672363 0.02198511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20          3   25 0.03405533 0.03509502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21          3   30 0.04330901 0.03788468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22          4    0 0.01000000 0.01349923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23          4    5 0.01280389 0.01461572</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24          4   10 0.01638095 0.01931400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25          4   15 0.02093614 0.02251114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26          4   20 0.02672363 0.03547414</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27          4   25 0.03405533 0.02987275</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28          4   30 0.04330901 0.03948351</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

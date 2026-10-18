@@ -1,7 +1,6 @@
 #' Exponential model differential equation
 #'
-#' Internal helper used by the simulation functions to solve the exponential
-#' epidemic model with `deSolve::ode()`.
+#' Exponential epidemic derivative function that can be passed to an ODE solver.
 #'
 #' @param t Time.
 #' @param y State variable.

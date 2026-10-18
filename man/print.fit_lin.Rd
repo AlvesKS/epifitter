@@ -13,4 +13,6 @@
 }
 \description{
 Print method for objects returned by [fit_lin()] and compatible fitters.
+For nonlinear fits that record a starting-value strategy, also show the
+strategy and how to enable comparison with `multistart = TRUE`.
 }

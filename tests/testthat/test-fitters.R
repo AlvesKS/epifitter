@@ -146,15 +146,17 @@ test_that("nonlinear fitters support optional weighting strategies", {
 })
 
 test_that("plot_fit returns a ggplot object for fitted models", {
+  set.seed(1)
   epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.2, n = 1)
-  fit <- fit_lin(time = epi$time, y = epi$y)
+  fit <- fit_lin(time = epi$time, y = epi$random_y)
 
   expect_s3_class(plot_fit(fit), "ggplot")
 })
 
 test_that("plot_fit can draw bootstrap confidence intervals", {
+  set.seed(1)
   epi <- sim_logistic(N = 20, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.1, n = 1)
-  fit <- fit_lin(time = epi$time, y = epi$y)
+  fit <- fit_lin(time = epi$time, y = epi$random_y)
 
   plot <- plot_fit(
     fit,
@@ -227,11 +229,12 @@ test_that("fit_multi validates required columns and returns split outputs", {
 })
 
 test_that("fit_multi can fit all rows when strata_cols is omitted", {
+  set.seed(1)
   epi <- sim_logistic(N = 20, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.2, n = 1)
 
   fit <- fit_multi(
     time_col = "time",
-    intensity_col = "y",
+    intensity_col = "random_y",
     data = epi
   )
 

@@ -2,6 +2,7 @@
 #'
 #' Estimate the area under the disease progress curve from only the initial and
 #' final observations under a logistic epidemic assumption.
+#' Equal intensities represent a constant curve, with area `time * y0`.
 #'
 #' @param time Time elapsed between the two assessments.
 #' @param y0 Initial disease intensity as a proportion.
@@ -44,17 +45,28 @@ AUDPC_2_points = function(time, y0, yT) {
   }
 
   # Combined range validation
-  if (y0 <= 0 || y0 >= 1 || yT <= 0 || yT >= 1 || y0 == yT || time <= 0) {
+  if (y0 <= 0 || y0 >= 1 || yT <= 0 || yT >= 1 || time <= 0) {
     stop(
       "y0 and yT must be strictly between 0 and 1 (exclusive), ",
-      "must not be equal, and time must be positive",
+      "and time must be positive",
       call. = FALSE
     )
   }
 
-  # eqn. 3 from Jeger and Viljanen-Rollinson (2001), rate parameter r
-  r = (log(yT / (1 - yT)) - log(y0 / (1 - y0))) / time
+  if (y0 == yT) {
+    return(time * y0)
+  }
 
-  # eqn. 2 from Jeger and Viljanen-Rollinson (2001), AUDPC estimation
-  return(time + log(y0 / yT) / r)
+  # Evaluate the logistic integral without subtracting nearly equal terms.
+  change <- yT - y0
+  log_growth <- log1p(change / y0)
+  log_decline <- -log1p(-change / (1 - y0))
+  if (!is.finite(log_growth)) log_growth <- log(yT) - log(y0)
+  if (!is.finite(log_decline)) log_decline <- log1p(-y0) - log1p(-yT)
+
+  mean_y <- log_decline / (log_growth + log_decline)
+  if (mean_y < .Machine$double.xmin) {
+    return((time * log_decline) / (log_growth + log_decline))
+  }
+  time * mean_y
 }

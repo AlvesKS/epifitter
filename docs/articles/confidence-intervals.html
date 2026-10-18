@@ -124,12 +124,12 @@ to inspect.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   time          y         model  linearized     predicted      residual</span></span>
-<span><span class="co">#&gt; 1    0 0.01000000   Exponential -4.60517019  0.0184182273 -8.418227e-03</span></span>
-<span><span class="co">#&gt; 2    0 0.01000000 Monomolecular  0.01005034 -0.8327456690  8.427457e-01</span></span>
-<span><span class="co">#&gt; 3    0 0.01000000      Logistic -4.59511985  0.0099495389  5.046107e-05</span></span>
-<span><span class="co">#&gt; 4    0 0.01000000      Gompertz -1.52717963  0.0004464615  9.553538e-03</span></span>
-<span><span class="co">#&gt; 5    5 0.03102984   Exponential -3.47280593  0.0400754198 -9.045579e-03</span></span>
-<span><span class="co">#&gt; 6    5 0.03102984 Monomolecular  0.03152146 -0.0538461759  8.487602e-02</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    0 0.01000000   Exponential -4.60517019  0.0184167692 -8.416769e-03</span></span>
+<span><span class="co">#&gt; 2    0 0.01000000 Monomolecular  0.01005034 -0.8327293670  8.427294e-01</span></span>
+<span><span class="co">#&gt; 3    0 0.01000000      Logistic -4.59511985  0.0099488468  5.115325e-05</span></span>
+<span><span class="co">#&gt; 4    0 0.01000000      Gompertz -1.52717963  0.0004464055  9.553595e-03</span></span>
+<span><span class="co">#&gt; 5    5 0.03102661   Exponential -3.47291015  0.0400725889 -9.045982e-03</span></span>
+<span><span class="co">#&gt; 6    5 0.03102661 Monomolecular  0.03151813 -0.0538583773  8.488498e-02</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="residual-bootstrap-confidence-bands">Residual bootstrap confidence bands<a class="anchor" aria-label="anchor" href="#residual-bootstrap-confidence-bands"></a>
@@ -137,11 +137,17 @@ to inspect.</p>
 <p>The default bootstrap method resamples residuals from the fitted
 curve, creates new plausible disease progress curves at the observed
 assessment times, refits the model many times, and builds the band from
-the distribution of fitted curves.</p>
-<p>This approach assumes that the residual pattern is a reasonable basis
-for generating plausible alternative curves. It is useful for
-visualization, but it should still be checked against the biology of the
-system and the assessment design.</p>
+the distribution of fitted curves. Residuals are centered before
+resampling. With <code><a href="../reference/fit_lin.html">fit_lin()</a></code>, resampling takes place on each
+model’s transformed scale, followed by the inverse transformation. With
+nonlinear fits, it takes place on the original disease intensity scale.
+Simulated responses are clipped just inside 0 and 1 before
+refitting.</p>
+<p>Ordinary residual resampling pools residuals across observations and
+assumes they are exchangeable on the fitting scale. Neither method
+implements a cluster or time-series bootstrap. Consider dependence among
+assessments or experimental units when deciding whether these intervals
+suit your data.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span></span>
 <span>  <span class="va">fit</span>,</span>
@@ -151,21 +157,37 @@ system and the assessment design.</p>
 <span>  nsim <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="confidence-intervals_files/figure-html/unnamed-chunk-3-1.png" alt="Fitted logistic disease progress curve with a bootstrap confidence band." width="672" style="display: block; margin: auto;"></p>
+<p><img src="confidence-intervals_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="Fitted logistic disease progress curve with a bootstrap confidence band." width="672" style="display: block; margin: auto;"></p>
 <p>For final analyses, increase <code>nsim</code>, for example:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">fit</span>, conf_int <span class="op">=</span> <span class="cn">TRUE</span>, ci_method <span class="op">=</span> <span class="st">"bootstrap"</span>, nsim <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
 <p>Larger values of <code>nsim</code> make the interval more stable, but
-also make the plot slower to compute.</p>
+also make the plot slower to compute. At least two samples are required.
+Each model must produce at least two successful, finite bootstrap
+predictions; otherwise its band is omitted with a warning. A separate
+warning identifies models for which more than half of the bootstrap fits
+failed. If no selected model has at least two successful, finite
+predictions, interval construction stops with an error. Two successful
+samples are only a computational minimum, not enough for a stable
+interval. Increase <code>nsim</code> and check stability across seeds
+for results you intend to report.</p>
+<p>The limits are pointwise quantiles of the successful refitted curves.
+They do not provide simultaneous coverage of the entire curve or account
+for uncertainty from choosing the model family.</p>
 </div>
 <div class="section level2">
 <h2 id="wild-bootstrap-confidence-bands">Wild bootstrap confidence bands<a class="anchor" aria-label="anchor" href="#wild-bootstrap-confidence-bands"></a>
 </h2>
-<p>The wild bootstrap method randomly changes the sign of resampled
-residuals before refitting the model. This keeps the original assessment
-times intact and is available with <code>ci_method = "wild"</code>.</p>
+<p>The wild bootstrap method multiplies each centered residual by an
+independent random sign before refitting the model. Each residual stays
+at its original observation, preserving differences in residual
+magnitude across assessment times. This method is available with
+<code>ci_method = "wild"</code>.</p>
 <p>Wild bootstrap intervals are often useful as a sensitivity check when
 residual variation changes across the range of fitted values.</p>
+<p>The deprecated <code>ci_method = "case"</code> redirects to
+<code>"wild"</code> with a warning; it does not resample rows or
+implement a case bootstrap.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span></span>
 <span>  <span class="va">fit</span>,</span>
@@ -175,7 +197,7 @@ residual variation changes across the range of fitted values.</p>
 <span>  nsim <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="confidence-intervals_files/figure-html/unnamed-chunk-4-1.png" alt="Fitted logistic disease progress curve with a wild bootstrap confidence band." width="672" style="display: block; margin: auto;"></p>
+<p><img src="confidence-intervals_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="Fitted logistic disease progress curve with a wild bootstrap confidence band." width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="compare-multiple-models">Compare multiple models<a class="anchor" aria-label="anchor" href="#compare-multiple-models"></a>
@@ -192,7 +214,7 @@ time.</p>
 <span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
 <span>  y_bounds <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="confidence-intervals_files/figure-html/unnamed-chunk-5-1.png" alt="Fitted exponential, logistic, and Gompertz disease progress curves with bootstrap confidence bands." width="672" style="display: block; margin: auto;"></p>
+<p><img src="confidence-intervals_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="Fitted exponential, logistic, and Gompertz disease progress curves with bootstrap confidence bands." width="672" style="display: block; margin: auto;"></p>
 <p>Here <code>y_bounds = NULL</code> leaves fitted values on their
 natural model scale. This is useful when comparing model forms because
 the exponential model can extrapolate above 1, which is a warning sign
@@ -205,7 +227,16 @@ model is nonlinear or poorly matched to the data.</p>
 <h2 id="nonlinear-fits">Nonlinear fits<a class="anchor" aria-label="anchor" href="#nonlinear-fits"></a>
 </h2>
 <p>The same interface works with nonlinear fits returned by
-<code><a href="../reference/fit_nlin.html">fit_nlin()</a></code> and <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code>.</p>
+<code><a href="../reference/fit_nlin.html">fit_nlin()</a></code> and <code><a href="../reference/fit_nlin2.html">fit_nlin2()</a></code>. Bootstrap refits
+inherit the original fit’s <code>multistart</code> setting. To compare
+all available starting values in both the original fit and its bootstrap
+samples, set <code>multistart = TRUE</code> when calling the nonlinear
+fitter. This increases the computation time.</p>
+<p>Numeric observation weights remain attached to the same observations
+during bootstrap refitting. Built-in two-step weights and custom weight
+functions are recomputed for each sample. Within a sample’s final
+multistart comparison, the weights remain fixed. See the <a href="model-fitting.html#weighted-nonlinear-fitting">weighting guide</a>
+for these assumptions.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nlin_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_nlin.html">fit_nlin</a></span><span class="op">(</span></span>
 <span>  time <span class="op">=</span> <span class="va">epi</span><span class="op">$</span><span class="va">time</span>,</span>
@@ -213,8 +244,6 @@ model is nonlinear or poorly matched to the data.</p>
 <span>  starting_par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>y0 <span class="op">=</span> <span class="fl">0.01</span>, r <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,</span>
 <span>  maxiter <span class="op">=</span> <span class="fl">200</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: The following nonlinear model(s) did not converge and will be returned</span></span>
-<span><span class="co">#&gt; as NA: Monomolecular.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span></span>
 <span>  <span class="va">nlin_fit</span>,</span>
@@ -224,7 +253,7 @@ model is nonlinear or poorly matched to the data.</p>
 <span>  nsim <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="confidence-intervals_files/figure-html/unnamed-chunk-6-1.png" alt="Nonlinear fitted logistic disease progress curve with a bootstrap confidence band." width="672" style="display: block; margin: auto;"></p>
+<p><img src="confidence-intervals_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="Nonlinear fitted logistic disease progress curve with a bootstrap confidence band." width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="choosing-a-method">Choosing a method<a class="anchor" aria-label="anchor" href="#choosing-a-method"></a>
@@ -250,6 +279,9 @@ the disease proportion scale from 0 to 1. To inspect unconstrained
 fitted values, use:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_fit.html">plot_fit</a></span><span class="op">(</span><span class="va">fit</span>, conf_int <span class="op">=</span> <span class="cn">TRUE</span>, y_bounds <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<p><code>y_bounds</code> clips the displayed line and band; it does not
+change the fitted model. Setting it to <code>NULL</code> also leaves
+bootstrap response clipping in place.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

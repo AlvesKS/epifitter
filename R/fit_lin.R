@@ -9,6 +9,12 @@
 #' @return A list with fit statistics, parameter estimates, and prediction
 #'   data.
 #'
+#' @details Disease intensity must be a proportion between 0 and 1. Exact
+#'   zeros are replaced with 0.0001 and exact ones with 0.999, with a warning,
+#'   before linearization. The returned observation data contain these adjusted
+#'   values. Nonlinear fitting functions accept observed zeros and ones without
+#'   these replacements.
+#'
 #' @examples
 #' set.seed(1)
 #' epi <- sim_logistic(N = 30, y0 = 0.01, dt = 5, r = 0.3, alpha = 0.2, n = 4)
@@ -16,7 +22,7 @@
 #'
 #' @export
 fit_lin <- function(time, y) {
-.validate_epidemic_inputs(time, y, allow_boundary = TRUE)
+  .validate_epidemic_inputs(time, y, allow_boundary = TRUE)
   y <- .sanitize_boundary_proportions(y)
   input_time <- time
   input_y <- y
@@ -24,7 +30,7 @@ fit_lin <- function(time, y) {
   model = value = v0 = v0_se = v0_ci_lwr = v0_ci_upr = CCC = best_model =
     linear = linearized = name = r = r_se = r_ci_lwr = r_ci_upr = y0 =
     y0_ci_lwr = y0_ci_upr = df = y0_se = time = y = residual = predicted =
-    rep = type = exponit = monit = logit = gompit = NULL
+    rep = type = exponit = monit = logit = gompit = fit = fit_summary = fit_ci = NULL
   epi$exponit <- log(epi$y)
   epi$monit <- log(1 / (1 - epi$y))
   epi$logit <- log(epi$y / (1 - epi$y))
@@ -40,20 +46,23 @@ fit_lin <- function(time, y) {
     ) %>%
     dplyr::group_by(model) %>%
     dplyr::summarise(
-      r = summary(stats::lm(value ~ time))$coefficients[2, 1],
-      r_se = summary(stats::lm(value ~ time))$coefficients[2, 2],
-      r_ci_lwr = as.numeric(as.matrix(stats::confint(stats::lm(value ~ time)))[2, 1]),
-      r_ci_upr = as.numeric(as.matrix(stats::confint(stats::lm(value ~ time)))[2, 2]),
-
-      v0 = as.numeric(as.matrix((stats::lm(value ~ time))$coefficients)[1, 1]),
-      v0_se = summary(stats::lm(value ~ time))$coefficients[1, 2],
-      v0_ci_lwr = as.numeric(as.matrix(stats::confint(stats::lm(value ~ time)))[1, 1]),
-      v0_ci_upr = as.numeric(as.matrix(stats::confint(stats::lm(value ~ time)))[1, 2]),
-      r_squared = summary(stats::lm(value ~ time))$r.squared,
-      RSE = summary(stats::lm(value ~ time))$sigma,
-      CCC = DescTools::CCC(stats::lm(value ~ time)$fitted.values, value)$rho.c$est,
+      fit = list(stats::lm(value ~ time)),
+      fit_summary = list(summary(fit[[1]])),
+      fit_ci = list(stats::confint(fit[[1]])),
+      r = fit_summary[[1]]$coefficients[2, 1],
+      r_se = fit_summary[[1]]$coefficients[2, 2],
+      r_ci_lwr = fit_ci[[1]][2, 1],
+      r_ci_upr = fit_ci[[1]][2, 2],
+      v0 = unname(stats::coef(fit[[1]])[1]),
+      v0_se = fit_summary[[1]]$coefficients[1, 2],
+      v0_ci_lwr = fit_ci[[1]][1, 1],
+      v0_ci_upr = fit_ci[[1]][1, 2],
+      r_squared = fit_summary[[1]]$r.squared,
+      RSE = fit_summary[[1]]$sigma,
+      CCC = DescTools::CCC(stats::fitted(fit[[1]]), value)$rho.c$est,
       .groups = "drop"
     ) %>%
+    dplyr::select(-fit, -fit_summary, -fit_ci) %>%
     dplyr::mutate(
       y0 = dplyr::case_when(
         model == "exponit" ~ exp(v0),

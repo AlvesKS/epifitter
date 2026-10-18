@@ -17,6 +17,6 @@ logi_fun(t, y, par)
 A list containing the rate of change.
 }
 \description{
-Internal helper used by the simulation functions to solve the logistic
-epidemic model with `deSolve::ode()`: \eqn{dy/dt = r y (1 - y / K)}.
+Logistic epidemic derivative function that can be passed to an ODE solver:
+\eqn{dy/dt = r y (1 - y / K)}.
 }

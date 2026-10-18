@@ -9,7 +9,7 @@ progress data using linearized forms of each model."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">epifitter</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,6 +68,14 @@ progress data using linearized forms of each model.</p>
     <p>A list with fit statistics, parameter estimates, and prediction
   data.</p>
     </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Disease intensity must be a proportion between 0 and 1. Exact
+  zeros are replaced with 0.0001 and exact ones with 0.999, with a warning,
+  before linearization. The returned observation data contain these adjusted
+  values. Nonlinear fitting functions accept observed zeros and ones without
+  these replacements.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -80,22 +88,22 @@ progress data using linearized forms of each model.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  CCC r_squared    RSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Logistic      0.9982    0.9964 0.1848</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Gompertz      0.9786    0.9581 0.4304</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Exponential   0.9326    0.8737 0.5983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Exponential   0.9326    0.8738 0.5983</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular 0.9318    0.8723 0.5743</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Infection rate:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                Estimate   Std.error     Lower     Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logistic      0.2963172 0.003491710 0.2891399 0.3034946</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gompertz      0.1984260 0.008134087 0.1817061 0.2151458</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Exponential   0.1516750 0.011307165 0.1284328 0.1749172</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular 0.1446423 0.010852569 0.1223345 0.1669500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logistic      0.2963169 0.003491662 0.2891397 0.3034941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gompertz      0.1984242 0.008134559 0.1817034 0.2151451</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Exponential   0.1516769 0.011306773 0.1284355 0.1749183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular 0.1446400 0.010852914 0.1223315 0.1669484</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Initial inoculum:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    Estimate Linearized     lin.SE         Lower        Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logistic       0.0108173681 -4.5157260 0.06294769  0.0095169644  0.012293254</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gompertz       0.0002387652 -2.1210668 0.14663934  0.0000127004  0.002091927</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Exponential    0.0231954412 -3.7637995 0.20384281  0.0152556644  0.035267457</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular -1.1210822598 -0.7519265 0.19564748 -2.1711224375 -0.418737384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logistic       0.0108165376 -4.5158036 0.06294683  9.516250e-03  0.012292290</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gompertz       0.0002387052 -2.1210970 0.14664785  1.269358e-05  0.002091763</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Exponential    0.0231938183 -3.7638695 0.20383575  1.525482e-02  0.035264478</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Monomolecular -1.1210984754 -0.7519341 0.19565368 -2.171187e+00 -0.418730126</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
